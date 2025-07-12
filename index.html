@@ -10,10 +10,11 @@
       font-family: 'Lucida Console', Monaco, monospace;
       margin: 0;
       padding: 0;
-      background-image: url('https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif');
+      background-image: url('https://i.gifer.com/7VE.gif');
       background-size: cover;
       background-attachment: fixed;
       background-blend-mode: multiply;
+      cursor: url('https://cur.cursors-4u.net/cursors/cur-13/cur1174.cur'), auto;
     }
     header {
       background-color: rgba(20, 20, 20, 0.95);
@@ -63,9 +64,24 @@
       line-height: 1.7;
       font-size: 15px;
     }
+    .section-img {
+      width: 100%;
+      border-radius: 6px;
+      margin-top: 20px;
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
+  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_bbe8d3079f.mp3?filename=click-classic-7-190099.mp3"></audio>
+  <script>
+    document.addEventListener('click', () => {
+      const sound = document.getElementById('clickSound');
+      sound.currentTime = 0;
+      sound.play();
+    });
+  </script>
+
   <header>
     <h1>Моль Демьен</h1>
   </header>
@@ -80,23 +96,29 @@
     <section id="space">
       <h2>Космос</h2>
       <p>Чёрные дыры, теория всего, квантовое бессмертие и другие способы не пойти в армию.</p>
+      <img class="section-img" src="https://i.pinimg.com/originals/98/92/6e/98926e9e2ecb83e33f96eb9d7d8a9614.gif" alt="dark space">
     </section>
     <section id="psy">
       <h2>Психиатрия</h2>
-      <p>Размышления о твоей психике.</p>
+      <p>Диагнозы, которых ты не просила. Всё по-честному, с тенью и без соплей.</p>
+      <img class="section-img" src="https://64.media.tumblr.com/8741983ab9a70dcabbec95b18672cfed/tumblr_inline_pkf5swBx5l1qhwjx5_1280.gif" alt="psych darkness">
     </section>
     <section id="rant">
       <h2>Размышления</h2>
       <p>То, что вылезло ночью между сигаретой и бессонницей. Не пытайся спорить — тебя тут не ждали.</p>
+      <img class="section-img" src="https://i.pinimg.com/originals/eb/18/c4/eb18c4db6264ec1056a28a37ce9d2408.gif" alt="night thinking">
     </section>
     <section id="stories">
       <h2>Проза</h2>
       <p>Сюжеты, где никто не спасается, а если и спасается — зря. Вдохновлено вещами, которые не отпускают.</p>
+      <img class="section-img" src="https://media.tenor.com/6s_B0qxq-9sAAAAC/gothic-raven.gif" alt="goth raven">
     </section>
     <section id="trash">
       <h2>Мракоблог</h2>
-      <p>Здесь всё то, что должно было остаться в черновиках.</p>
+      <p>Статьи, которые неприлично читать при свете. Здесь всё то, что должно было остаться в черновиках.</p>
+      <img class="section-img" src="https://64.media.tumblr.com/f5e9db004cd7e896cf0db56c4e01fc0a/5d9cf2d4f46d37cd-df/s640x960/97d1a84525e3363b2d650ebd0736bce7f8a0c1a3.gif" alt="decay gif">
     </section>
   </main>
 </body>
 </html>
+
