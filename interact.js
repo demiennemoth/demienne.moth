@@ -285,3 +285,23 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 </script>
+// --- Cursor trail ---
+document.addEventListener('mousemove', (e) => {
+  const trail = document.createElement('div');
+  trail.className = 'cursor-trail';
+  trail.style.position = 'fixed';
+  trail.style.left = `${e.clientX}px`;
+  trail.style.top = `${e.clientY}px`;
+  trail.style.width = '8px';
+  trail.style.height = '8px';
+  trail.style.borderRadius = '50%';
+  trail.style.background = 'rgba(200, 20, 20, 0.4)';
+  trail.style.pointerEvents = 'none';
+  trail.style.zIndex = '9999';
+  trail.style.boxShadow = '0 0 6px rgba(255,0,0,0.4)';
+  document.body.appendChild(trail);
+
+  setTimeout(() => {
+    trail.remove();
+  }, 800); // исчезает через 0.8 сек
+});
