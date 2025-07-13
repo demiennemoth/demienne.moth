@@ -274,3 +274,13 @@ footer, #chatbox, #chat {
   z-index: 2;
   position: relative;
 }
+
+
+.drifting {
+  animation: drift 6s infinite ease-in-out alternate;
+}
+
+@keyframes drift {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(10px); }
+}
