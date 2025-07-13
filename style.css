@@ -127,3 +127,79 @@ footer {
 }
 
 .chao
+.site-title {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+.site-title h1 {
+  font-size: 60px;
+  text-transform: uppercase;
+  text-shadow: 0 0 8px #ff0000;
+  letter-spacing: 6px;
+  color: #eeeeee;
+  margin: 0;
+}
+
+.site-cross {
+  width: 80px;
+  height: auto;
+  filter: brightness(0.9) contrast(180%) grayscale(100%);
+  mix-blend-mode: lighten;
+}
+
+/* Горизонтальная навигация */
+.horizontal-nav {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  background-color: rgba(10, 10, 10, 0.95);
+  padding: 10px 20px;
+  border-top: 1px solid #111;
+  border-bottom: 1px solid #111;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.horizontal-nav a {
+  color: #eeeeee;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: 14px;
+  letter-spacing: 1px;
+  padding: 6px 10px;
+  position: relative;
+  overflow: hidden;
+  transition: color 0.3s ease;
+}
+
+.horizontal-nav a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: repeating-linear-gradient(
+    to right,
+    #ff0000,
+    #ff0000 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.horizontal-nav a:hover::after {
+  transform: scaleX(1);
+}
+
+.horizontal-nav a:hover {
+  color: #ff0000;
+}
