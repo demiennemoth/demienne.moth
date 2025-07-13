@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Moth Damien</title>
+  <title>Moth Damienne</title>
   <link rel="stylesheet" href="style.css">
   <script src="interact.js" defer></script>
 
@@ -32,10 +32,8 @@
 </head>
 <body>
 
-  <!-- КАНВАС-МАТРИЦА -->
   <canvas id="matrix"></canvas>
 
-  <!-- Фоновые фразы -->
   <div class="background-phrases">
     <div class="floating-text" data-random>you are already dead</div>
     <div class="floating-text" data-random>404: meaning not found</div>
@@ -45,20 +43,17 @@
     <div class="floating-text" data-random>[undefined]</div>
   </div>
 
-  <!-- Хаотичные изображения -->
   <div class="chaotic-images">
     <img src="images/giant-doll.jpg" alt="giant doll" class="chaotic-image" style="top: 60px; left: 8%;">
     <img src="images/green-screens.jpg" alt="green screens" class="chaotic-image" style="top: 200px; left: 65%;">
     <img src="images/digital-crucifix.jpg" alt="digital crucifix" class="chaotic-image" style="top: 350px; left: 35%;">
   </div>
 
-  <!-- Заголовок с крестом -->
   <div class="site-title">
     <img src="images/painted-cross.png" alt="cross" class="site-cross">
     <h1 class="glitch-title">Moth Damien</h1>
   </div>
 
-  <!-- Навигация -->
   <nav class="horizontal-nav">
     <a href="skull.html">🧠 Inside the Skull</a>
     <a href="diagnosis.html">🩸 Diagnosis</a>
@@ -101,7 +96,6 @@
     </section>
   </main>
 
-  <!-- Скрипт живой матрицы -->
   <script>
     const canvas = document.getElementById("matrix");
     const ctx = canvas.getContext("2d");
