@@ -182,3 +182,11 @@ document.addEventListener('DOMContentLoaded', () => {
   chatSection.appendChild(graveBtn);
   chatSection.appendChild(graveText);
 });
+window.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll('[data-random]').forEach(el => {
+    const x = Math.floor(Math.random() * 90); // %
+    const y = Math.floor(Math.random() * 90); // %
+    el.style.top = `${y}vh`;
+    el.style.left = `${x}vw`;
+  });
+});
