@@ -219,7 +219,7 @@ footer {
 }
 
 /* Матричный дождь */
-.matrix-column {
+/* removed .matrix-column */ {
   position: fixed;
   top: 0;
   width: 80px;
@@ -234,25 +234,44 @@ footer {
   opacity: 0.07;
 }
 
-.matrix-left {
+/* removed .matrix-left */ {
   left: 0;
   padding-left: 10px;
   background: linear-gradient(to right, rgba(0, 0, 0, 0.8), transparent);
 }
 
-.matrix-right {
+/* removed .matrix-right */ {
   right: 0;
   padding-right: 10px;
   background: linear-gradient(to left, rgba(0, 0, 0, 0.8), transparent);
 }
 
-.matrix-line {
+/* removed .matrix-line */ {
   display: block;
   animation: fallMatrix 6s linear infinite;
 }
 
-@keyframes fallMatrix {
+/* removed @keyframes fallMatrix */ {
   0% { transform: translateY(-100%); opacity: 0.1; }
   50% { opacity: 0.3; }
   100% { transform: translateY(100%); opacity: 0.1; }
 }
+
+canvas#matrix-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+#content-wrapper {
+  position: relative;
+  z-index: 1;
+}
+
+footer, #chatbox, #chat {
+  z-index: 2;
+  position: relative;
+}
+
