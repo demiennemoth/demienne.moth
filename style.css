@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #050505;
+  background-image: url('https://i.ibb.co/1dFH9Nn/dark-texture.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  font-family: 'UnifrakturCook', cursive;
+  color: #d4d4d4;
+  text-shadow: 0 0 2px #a10000;
+  cursor: url('https://cur.cursors-4u.net/cursors/cur-13/cur1174.cur'), auto;
+}
+
+h1, h2, nav a {
+  font-size: 20px;
+  letter-spacing: 2px;
+  color: #eeeeee;
+  text-transform: uppercase;
+  font-weight: normal;
+  text-shadow: 0 0 4px #ff0000;
+}
+
+nav {
+  background-color: rgba(10, 10, 10, 0.95);
+  padding: 10px;
+  border-top: 1px solid #111;
+  border-bottom: 1px solid #111;
+}
+
+nav ul {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 800px;
+}
+
+nav li {
+  margin: 10px 0;
+}
+
+nav a {
+  text-decoration: none;
+  display: block;
+  padding: 10px 15px;
+  border-left: 3px solid #ff0000;
+  transition: background 0.3s;
+}
+
+nav a:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+  text-shadow: 0 0 6px #ff0000;
+}
+
+main {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: rgba(15, 15, 15, 0.85);
+  border-radius: 6px;
+  box-shadow: 0 0 10px #111;
+}
+
+input, button {
+  background-color: #111;
+  border: 1px solid #333;
+  color: #f1f1f1;
+  padding: 8px 12px;
+  font-family: monospace;
+}
+
+button:hover {
+  background-color: #330000;
+  border-color: #ff0000;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  margin-top: 50px;
+  padding: 30px;
+  border-top: 1px solid #222;
+  color: #777;
+  font-size: 13px;
+}
+
+#chatResponse {
+  margin-top: 10px;
+  font-style: italic;
+  color: #aaa;
+  text-shadow: 0 0 2px #a10000;
+}
