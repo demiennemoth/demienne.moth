@@ -234,3 +234,49 @@ footer {
   0%   { transform: translateY(0); }
   100% { transform: translateY(-100%); }
 }
+.matrix-column {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  width: 100px;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.05;
+  font-family: monospace;
+  color: #ccc;
+  font-size: 16px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.matrix-left {
+  left: 0;
+  padding-left: 10px;
+  background: linear-gradient(to right, rgba(0,0,0,0.8), transparent);
+}
+
+.matrix-right {
+  right: 0;
+  padding-right: 10px;
+  background: linear-gradient(to left, rgba(0,0,0,0.8), transparent);
+}
+
+.matrix-line {
+  display: block;
+  animation: fallMatrix 10s linear infinite;
+}
+
+@keyframes fallMatrix {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0.05;
+  }
+  50% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translateY(100%);
+    opacity: 0.05;
+  }
+}
