@@ -5,19 +5,29 @@
   <title>Moth Damien</title>
   <link rel="stylesheet" href="style.css">
   <script src="interact.js" defer></script>
+  <script>
+    window.addEventListener("DOMContentLoaded", () => {
+      document.querySelectorAll('[data-random]').forEach(el => {
+        const x = Math.floor(Math.random() * 90);
+        const y = Math.floor(Math.random() * 90);
+        el.style.top = `${y}vh`;
+        el.style.left = `${x}vw`;
+      });
+    });
+  </script>
 </head>
 <body>
 
   <!-- Амбиграмма/фоновые фразы -->
-<div class="background-phrases">
-  <div class="ambigram">THE BODY IS A VESSEL</div>
-  <div class="floating-text" data-random>you are already dead</div>
-  <div class="floating-text" data-random>404: meaning not found</div>
-  <div class="floating-text" data-random>sleep.exe running</div>
-  <div class="floating-text" data-random>echoes in blood</div>
-  <div class="floating-text" data-random>null memory</div>
-  <div class="floating-text" data-random>[undefined]</div>
-</div>
+  <div class="background-phrases">
+    <div class="ambigram">THE BODY IS A VESSEL</div>
+    <div class="floating-text" data-random>you are already dead</div>
+    <div class="floating-text" data-random>404: meaning not found</div>
+    <div class="floating-text" data-random>sleep.exe running</div>
+    <div class="floating-text" data-random>echoes in blood</div>
+    <div class="floating-text" data-random>null memory</div>
+    <div class="floating-text" data-random>[undefined]</div>
+  </div>
 
   <!-- Хаотично расположенные изображения -->
   <div class="chaotic-images">
@@ -76,4 +86,3 @@
   </main>
 </body>
 </html>
-
