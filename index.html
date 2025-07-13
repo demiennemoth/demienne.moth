@@ -5,51 +5,7 @@
   <title>Moth Damien</title>
   <link rel="stylesheet" href="style.css">
   <script src="interact.js" defer></script>
-  <style>
-    /* Matrix animation (backup if not in CSS file) */
-    .matrix-column {
-      position: fixed;
-      top: 0;
-      bottom: 0;
-      width: 100px;
-      overflow: hidden;
-      pointer-events: none;
-      z-index: 1;
-      opacity: 0.05;
-      font-family: monospace;
-      color: #ccc;
-      font-size: 16px;
-      line-height: 20px;
-      white-space: nowrap;
-    }
-    .matrix-left {
-      left: 0;
-      padding-left: 10px;
-      background: linear-gradient(to right, rgba(0,0,0,0.8), transparent);
-    }
-    .matrix-right {
-      right: 0;
-      padding-right: 10px;
-      background: linear-gradient(to left, rgba(0,0,0,0.8), transparent);
-    }
-    .matrix-line {
-      display: block;
-      animation: fallMatrix 10s linear infinite;
-    }
-    @keyframes fallMatrix {
-      0% {
-        transform: translateY(-100%);
-        opacity: 0.05;
-      }
-      50% {
-        opacity: 0.15;
-      }
-      100% {
-        transform: translateY(100%);
-        opacity: 0.05;
-      }
-    }
-  </style>
+
   <script>
     window.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll('[data-random]').forEach(el => {
@@ -61,8 +17,23 @@
       });
     });
   </script>
+
+  <style>
+    #matrix {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
+
+  <!-- КАНВАС-МАТРИЦА -->
+  <canvas id="matrix"></canvas>
 
   <!-- Фоновые фразы -->
   <div class="background-phrases">
@@ -130,20 +101,45 @@
     </section>
   </main>
 
-  <!-- Матричный дождь по бокам -->
-  <div class="matrix-column matrix-left">
-    <span class="matrix-line">0101010101 ███ █ █ █ 001100</span>
-    <span class="matrix-line">dead.log // loading...</span>
-    <span class="matrix-line">error: undefined_null_0x0</span>
-    <span class="matrix-line">ጀ ☠ ☰ ☵ ☠ ☾ ⛧ </span>
-  </div>
+  <!-- Скрипт живой матрицы -->
+  <script>
+    const canvas = document.getElementById("matrix");
+    const ctx = canvas.getContext("2d");
 
-  <div class="matrix-column matrix-right">
-    <span class="matrix-line">~ process dreaming...</span>
-    <span class="matrix-line">! run.sleep().eternal()</span>
-    <span class="matrix-line">✞ ✞ ✞ ███ ✞ ✞ ✞</span>
-    <span class="matrix-line">#fragment[null] → .</span>
-  </div>
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const letters = "アァイィウヴエェオカガキギクグケゲコゴサザシジスズセゼソゾタダチッヂツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポ".split("");
+    const fontSize = 14;
+    const columns = Math.floor(canvas.width / fontSize);
+    const drops = Array(columns).fill(1);
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#aaa";
+      ctx.font = `${fontSize}px monospace`;
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = letters[Math.floor(Math.random() * letters.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 40);
+
+    window.addEventListener("resize", () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
 
 </body>
 </html>
