@@ -52,3 +52,13 @@
   </main>
 </body>
 </html>
+<div id="content-placeholder"></div>
+
+<script>
+  fetch('content.html')
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById('content-placeholder').innerHTML = data;
+    });
+</script>
+
