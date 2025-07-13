@@ -5,6 +5,51 @@
   <title>Moth Damien</title>
   <link rel="stylesheet" href="style.css">
   <script src="interact.js" defer></script>
+  <style>
+    /* Matrix animation (backup if not in CSS file) */
+    .matrix-column {
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      width: 100px;
+      overflow: hidden;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.05;
+      font-family: monospace;
+      color: #ccc;
+      font-size: 16px;
+      line-height: 20px;
+      white-space: nowrap;
+    }
+    .matrix-left {
+      left: 0;
+      padding-left: 10px;
+      background: linear-gradient(to right, rgba(0,0,0,0.8), transparent);
+    }
+    .matrix-right {
+      right: 0;
+      padding-right: 10px;
+      background: linear-gradient(to left, rgba(0,0,0,0.8), transparent);
+    }
+    .matrix-line {
+      display: block;
+      animation: fallMatrix 10s linear infinite;
+    }
+    @keyframes fallMatrix {
+      0% {
+        transform: translateY(-100%);
+        opacity: 0.05;
+      }
+      50% {
+        opacity: 0.15;
+      }
+      100% {
+        transform: translateY(100%);
+        opacity: 0.05;
+      }
+    }
+  </style>
   <script>
     window.addEventListener("DOMContentLoaded", () => {
       document.querySelectorAll('[data-random]').forEach(el => {
@@ -12,6 +57,7 @@
         const y = Math.floor(Math.random() * 90);
         el.style.top = `${y}vh`;
         el.style.left = `${x}vw`;
+        el.style.position = 'absolute';
       });
     });
   </script>
@@ -46,9 +92,9 @@
     <a href="skull.html">🧠 Inside the Skull</a>
     <a href="diagnosis.html">🩸 Diagnosis</a>
     <a href="simulation.html">🪐 Simulation</a>
-    <a href="lobotomy.html">🧷 Lobotomy Bandage</a>
+    <a href="lobotomy.html">🩷 Lobotomy Bandage</a>
     <a href="darklog.html">☠️ Darklog</a>
-    <a href="noise.html">📼 Noise</a>
+    <a href="noise.html">📀 Noise</a>
     <a href="archive.html">📓 Archive</a>
     <a href="chat.html">🤖 Chat: "I heard you"</a>
   </nav>
@@ -89,7 +135,7 @@
     <span class="matrix-line">0101010101 ███ █ █ █ 001100</span>
     <span class="matrix-line">dead.log // loading...</span>
     <span class="matrix-line">error: undefined_null_0x0</span>
-    <span class="matrix-line">𓂀 ☠ ☰ ☵ ☠ ☾ ⛧ </span>
+    <span class="matrix-line">ጀ ☠ ☰ ☵ ☠ ☾ ⛧ </span>
   </div>
 
   <div class="matrix-column matrix-right">
