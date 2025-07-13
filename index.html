@@ -4,84 +4,104 @@
   <meta charset="UTF-8">
   <title>Моль Демьен</title>
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
+
     body {
-      background-color: #0b0b0b;
-      color: #d8d8d8;
-      font-family: 'Lucida Console', Monaco, monospace;
+      background-color: #000;
+      color: #e0e0e0;
+      font-family: 'UnifrakturCook', cursive;
       margin: 0;
       padding: 0;
-      background-image: url('https://i.gifer.com/7VE.gif');
+      background-image: url('https://i.gifer.com/YlWC.gif');
       background-size: cover;
       background-attachment: fixed;
-      background-blend-mode: multiply;
+      background-blend-mode: darken;
       cursor: url('https://cur.cursors-4u.net/cursors/cur-13/cur1174.cur'), auto;
     }
     header {
-      background-color: rgba(20, 20, 20, 0.95);
+      background-color: rgba(0, 0, 0, 0.8);
       padding: 20px;
       text-align: center;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #222;
     }
     header h1 {
       margin: 0;
-      font-size: 26px;
-      letter-spacing: 1px;
-      text-transform: uppercase;
+      font-size: 34px;
+      text-shadow: 0 0 8px #666;
+      color: #eee;
     }
     nav {
       display: flex;
       justify-content: center;
-      background-color: rgba(15, 15, 15, 0.9);
-      border-bottom: 1px solid #333;
+      background-color: rgba(10, 10, 10, 0.95);
+      border-bottom: 1px solid #222;
     }
     nav a {
-      color: #d8d8d8;
-      padding: 15px 20px;
+      color: #ccc;
+      padding: 15px 25px;
       text-decoration: none;
-      transition: background-color 0.2s;
-      font-size: 14px;
+      transition: background-color 0.3s;
+      font-size: 16px;
     }
     nav a:hover {
-      background-color: #2b2b2b;
+      background-color: #111;
     }
     main {
       padding: 40px;
-      max-width: 900px;
+      max-width: 1000px;
       margin: auto;
-      background-color: rgba(10, 10, 10, 0.8);
-      border-radius: 4px;
+      background-color: rgba(5, 5, 5, 0.9);
+      border-radius: 8px;
     }
     section {
-      margin-bottom: 50px;
+      margin-bottom: 60px;
     }
     h2 {
-      border-bottom: 1px dashed #555;
-      padding-bottom: 8px;
-      font-size: 18px;
-      color: #bfbfbf;
+      border-bottom: 1px dashed #444;
+      padding-bottom: 6px;
+      font-size: 22px;
+      color: #f0f0f0;
+      text-shadow: 0 0 5px #666;
     }
     p {
-      line-height: 1.7;
-      font-size: 15px;
+      font-size: 16px;
+      line-height: 1.8;
     }
     .section-img {
       width: 100%;
-      border-radius: 6px;
+      border-radius: 4px;
       margin-top: 20px;
-      opacity: 0.8;
+      opacity: 0.9;
+    }
+    #chatbox {
+      background: rgba(20, 20, 20, 0.9);
+      padding: 20px;
+      border: 1px solid #444;
+      margin-top: 80px;
+    }
+    #chatbox input {
+      width: 80%;
+      padding: 10px;
+      font-family: monospace;
+      background: #000;
+      color: #ccc;
+      border: 1px solid #666;
+    }
+    #chatbox button {
+      padding: 10px 20px;
+      background: #111;
+      color: #ccc;
+      border: 1px solid #555;
+      margin-left: 10px;
+    }
+    #chat-response {
+      margin-top: 20px;
+      font-style: italic;
+      color: #888;
     }
   </style>
 </head>
 <body>
-  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_bbe8d3079f.mp3?filename=click-classic-7-190099.mp3"></audio>
-  <script>
-    document.addEventListener('click', () => {
-      const sound = document.getElementById('clickSound');
-      sound.currentTime = 0;
-      sound.play();
-    });
-  </script>
-
   <header>
     <h1>Моль Демьен</h1>
   </header>
@@ -95,30 +115,48 @@
   <main>
     <section id="space">
       <h2>Космос</h2>
-      <p>Чёрные дыры, теория всего, квантовое бессмертие и другие способы не пойти в армию.</p>
-      <img class="section-img" src="https://i.pinimg.com/originals/98/92/6e/98926e9e2ecb83e33f96eb9d7d8a9614.gif" alt="dark space">
+      <p>Глубина, симуляция, обнуление. Вселенная как ошибка, а ты как баг с душой.</p>
+      <img class="section-img" src="https://media.tenor.com/0IAPMPkUNOsAAAAC/glitch-void.gif" alt="dark simulation">
     </section>
     <section id="psy">
       <h2>Психиатрия</h2>
-      <p>Диагнозы, которых ты не просила. Всё по-честному, с тенью и без соплей.</p>
-      <img class="section-img" src="https://64.media.tumblr.com/8741983ab9a70dcabbec95b18672cfed/tumblr_inline_pkf5swBx5l1qhwjx5_1280.gif" alt="psych darkness">
+      <p>Шизоидные паттерны, углы восприятия, медикаментозное бессмертие. Всё, что шепчет тишина в палате.</p>
+      <img class="section-img" src="https://media.tenor.com/PNRaTUBvPHMAAAAC/broken-inside.gif" alt="shizo gif">
     </section>
     <section id="rant">
       <h2>Размышления</h2>
-      <p>То, что вылезло ночью между сигаретой и бессонницей. Не пытайся спорить — тебя тут не ждали.</p>
-      <img class="section-img" src="https://i.pinimg.com/originals/eb/18/c4/eb18c4db6264ec1056a28a37ce9d2408.gif" alt="night thinking">
+      <p>Если бы ты мог выкричать это в потолок — выкрикнул бы. Но ты пишешь, потому что чернила дешевле крика.</p>
+      <img class="section-img" src="https://media.tenor.com/T_gj8aUwR4sAAAAd/writing.gif" alt="dark thinking">
     </section>
     <section id="stories">
       <h2>Проза</h2>
-      <p>Сюжеты, где никто не спасается, а если и спасается — зря. Вдохновлено вещами, которые не отпускают.</p>
-      <img class="section-img" src="https://media.tenor.com/6s_B0qxq-9sAAAAC/gothic-raven.gif" alt="goth raven">
+      <p>Молчаливые персонажи. Темные улицы. Финалы без морали. Это не выдумка — это отражение.</p>
+      <img class="section-img" src="https://media.tenor.com/OAiRmuBQwVIAAAAd/gothic-window.gif" alt="goth silhouette">
     </section>
     <section id="trash">
       <h2>Мракоблог</h2>
-      <p>Статьи, которые неприлично читать при свете. Здесь всё то, что должно было остаться в черновиках.</p>
-      <img class="section-img" src="https://64.media.tumblr.com/f5e9db004cd7e896cf0db56c4e01fc0a/5d9cf2d4f46d37cd-df/s640x960/97d1a84525e3363b2d650ebd0736bce7f8a0c1a3.gif" alt="decay gif">
+      <p>Здесь всё, что не надо было писать. Но ты написал. Потому что внутри уже всё было написано.</p>
+      <img class="section-img" src="https://media.tenor.com/CnWRRVQJKZAAAAAC/glitch-dark.gif" alt="vhs decay">
     </section>
+
+    <div id="chatbox">
+      <h2>Напиши мне</h2>
+      <input type="text" id="userInput" placeholder="Скажи что-нибудь...">
+      <button onclick="respondToUser()">Отправить</button>
+      <div id="chat-response"></div>
+    </div>
   </main>
+
+  <script>
+    function respondToUser() {
+      const responseBox = document.getElementById("chat-response");
+      const input = document.getElementById("userInput").value;
+      if (input.trim()) {
+        responseBox.innerText = 'я тебя услышал.';
+      }
+    }
+  </script>
 </body>
 </html>
+
 
