@@ -285,23 +285,32 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 </script>
-// --- Cursor trail ---
-document.addEventListener('mousemove', (e) => {
-  const trail = document.createElement('div');
-  trail.className = 'cursor-trail';
-  trail.style.position = 'fixed';
-  trail.style.left = `${e.clientX}px`;
-  trail.style.top = `${e.clientY}px`;
-  trail.style.width = '8px';
-  trail.style.height = '8px';
-  trail.style.borderRadius = '50%';
-  trail.style.background = 'rgba(200, 20, 20, 0.4)';
-  trail.style.pointerEvents = 'none';
-  trail.style.zIndex = '9999';
-  trail.style.boxShadow = '0 0 6px rgba(255,0,0,0.4)';
-  document.body.appendChild(trail);
-
+// === Cursor Trail ===
+const createTrail = (x, y) => {
+  const dot = document.createElement('div');
+  dot.style.position = 'fixed';
+  dot.style.left = `${x}px`;
+  dot.style.top = `${y}px`;
+  dot.style.width = '10px';
+  dot.style.height = '10px';
+  dot.style.borderRadius = '50%';
+  dot.style.background = 'rgba(150, 0, 0, 0.4)';
+  dot.style.pointerEvents = 'none';
+  dot.style.zIndex = '9999';
+  dot.style.boxShadow = '0 0 10px rgba(255,0,0,0.5)';
+  document.body.appendChild(dot);
   setTimeout(() => {
-    trail.remove();
-  }, 800); // исчезает через 0.8 сек
+    dot.remove();
+  }, 1000);
+};
+
+let lastX = 0, lastY = 0;
+document.addEventListener('mousemove', (e) => {
+  const dx = Math.abs(e.clientX - lastX);
+  const dy = Math.abs(e.clientY - lastY);
+  if (dx > 2 || dy > 2) {
+    createTrail(e.clientX, e.clientY);
+    lastX = e.clientX;
+    lastY = e.clientY;
+  }
 });
