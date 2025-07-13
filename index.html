@@ -1,6 +1,43 @@
-<link rel="stylesheet" href="style.css">
-<script src="effects.js" defer></script>
-<script src="interact.js" defer></script>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Моль Демьен</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="effects.js" defer></script>
+  <script src="interact.js" defer></script>
+</head>
+<body>
+  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_bbe8d3079f.mp3?filename=click-classic-7-190099.mp3"></audio>
 
+  <header>
+    <h1>Моль Демьен</h1>
+  </header>
 
+  <nav>
+    <ul>
+      <li><a href="#mind">🧠 В черепе</a></li>
+      <li><a href="#diagnosis">🩸 Диагноз</a></li>
+      <li><a href="#sim">🪐 Симуляция</a></li>
+      <li><a href="#psych">🧷 Пластырь на лоботомию</a></li>
+      <li><a href="#trash">☠️ Мракоблог</a></li>
+      <li><a href="#vhs">📼 Шум</a></li>
+      <li><a href="#archive">📓 Архив</a></li>
+      <li><a href="#chat">🤖 Чат: «я тебя услышал»</a></li>
+    </ul>
+  </nav>
 
+  <main id="main-content">
+    <!-- Контент подгружается отсюда -->
+  </main>
+
+  <footer>
+    <section id="chat">
+      <h2>Чёрный чат</h2>
+      <input type="text" id="userInput" placeholder="Напиши сюда что-нибудь">
+      <button onclick="getResponse()">спросить</button>
+      <p id="chatResponse">...</p>
+    </section>
+  </footer>
+</body>
+</html>
