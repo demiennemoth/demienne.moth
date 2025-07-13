@@ -190,3 +190,62 @@ window.addEventListener("DOMContentLoaded", () => {
     el.style.left = `${x}vw`;
   });
 });
+<!-- Добавить в любой раздел сайта, например в main -->
+<section id="destruction-game" style="text-align:center; margin-top:50px;">
+  <button id="destroyBtn" style="background-color:#110000;color:#ccc;padding:10px 20px;font-size:16px;border:1px solid #330000;cursor:pointer;">
+    Разрушь себя
+  </button>
+</section>
+
+<script>
+  const destroyBtn = document.getElementById('destroyBtn');
+  let destructionStarted = false;
+
+  destroyBtn.addEventListener('click', () => {
+    if (destructionStarted) return;
+    destructionStarted = true;
+    destroyBtn.disabled = true;
+
+    const elements = [...document.body.querySelectorAll('*:not(script):not(style):not(#destroyBtn):not(#destruction-game)')];
+    let i = 0;
+
+    const glitchInterval = setInterval(() => {
+      if (i >= elements.length) {
+        clearInterval(glitchInterval);
+        showFinale();
+        return;
+      }
+      const el = elements[i];
+      if (el.tagName === 'IMG') {
+        el.style.filter = 'grayscale(100%) blur(3px)';
+        el.style.opacity = '0.1';
+      } else {
+        el.style.transition = 'all 0.4s ease';
+        el.style.opacity = '0.1';
+        el.style.transform = `translate(${Math.random() * 30 - 15}px, ${Math.random() * 30 - 15}px) rotate(${Math.random() * 10 - 5}deg)`;
+        el.style.color = '#222';
+        el.style.textShadow = 'none';
+      }
+      i++;
+    }, 100);
+
+    function showFinale() {
+      const msg1 = document.createElement('div');
+      msg1.innerText = 'you did this.';
+      msg1.style = 'position:fixed;top:40%;left:50%;transform:translateX(-50%);font-size:28px;color:#990000;text-shadow:0 0 10px #400000;font-family:monospace;z-index:9999;';
+
+      const msg2 = document.createElement('div');
+      msg2.innerText = 'now he can see.';
+      msg2.style = 'position:fixed;top:50%;left:50%;transform:translateX(-50%);font-size:20px;color:#770000;font-family:monospace;z-index:9999;';
+
+      const restartBtn = document.createElement('button');
+      restartBtn.innerText = 'Restart';
+      restartBtn.style = 'position:fixed;top:60%;left:50%;transform:translateX(-50%);padding:10px 20px;background:#220000;color:#ccc;border:1px solid #550000;font-family:monospace;cursor:pointer;z-index:9999;';
+      restartBtn.onclick = () => location.reload();
+
+      document.body.appendChild(msg1);
+      document.body.appendChild(msg2);
+      document.body.appendChild(restartBtn);
+    }
+  });
+</script>
