@@ -1,4 +1,4 @@
-// Чат-бот 'я тебя услышал'
+// Chatbot: 'I heard you.'
 document.addEventListener('DOMContentLoaded', () => {
   const chatSection = document.createElement('section');
   chatSection.id = 'chat';
@@ -10,12 +10,12 @@ document.addEventListener('DOMContentLoaded', () => {
   chatSection.style.borderRadius = '6px';
 
   const title = document.createElement('h2');
-  title.textContent = '🤖 Чат: «я тебя услышал»';
+  title.textContent = '🤖 Chat: "I heard you"';
   title.style.color = '#c66';
 
   const input = document.createElement('input');
   input.type = 'text';
-  input.placeholder = 'Говори, чёрт';
+  input.placeholder = 'Speak, freak';
   input.style.width = '80%';
   input.style.padding = '10px';
   input.style.marginRight = '10px';
@@ -36,16 +36,16 @@ document.addEventListener('DOMContentLoaded', () => {
   response.style.fontStyle = 'italic';
 
   const phrases = [
-    'ммм...',
-    'тоже так чувствую...',
-    'ебать...',
-    'ну не знаю, брат...',
-    'держись.',
-    'шум внутри усиливается...',
-    'я рядом, но без лица.',
-    'это звучит знакомо.',
-    'мрак понял тебя.',
-    'я тебя услышал.'
+    'mmm...',
+    'same here...',
+    'damn...',
+    'don’t know, bro...',
+    'hold on.',
+    'the noise is getting louder...',
+    'I’m here, faceless.',
+    'that sounds familiar.',
+    'darkness got you.',
+    'I heard you.'
   ];
 
   button.addEventListener('click', () => {
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.body.appendChild(chatSection);
 
-  // Шёпоты при наведении на заголовки
+  // Whispers on hover (titles)
   const whisperAudio = new Audio('https://cdn.pixabay.com/download/audio/2021/08/04/audio_69f8415e17.mp3');
   document.querySelectorAll('h2').forEach(h => {
     h.addEventListener('mouseenter', () => {
@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // VHS-глитчи при скролле
+  // VHS glitch effect on scroll
   window.addEventListener('scroll', () => {
     document.body.style.filter = 'contrast(1.2) brightness(0.9)';
     setTimeout(() => {
@@ -78,9 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 150);
   });
 
-  // Мини-игра: тест на психоз
+  // Mini game: Psychosis test
   const quizBtn = document.createElement('button');
-  quizBtn.textContent = '🧪 Пройти тест на психоз';
+  quizBtn.textContent = '🧪 Take the Psychosis Test';
   quizBtn.style.marginTop = '30px';
   quizBtn.style.background = '#111';
   quizBtn.style.color = '#c55';
@@ -92,11 +92,11 @@ document.addEventListener('DOMContentLoaded', () => {
   quizResult.style.marginTop = '10px';
 
   const quizOutcomes = [
-    'У вас элегантный бред величия. Поздравляем!',
-    'Вы — профессиональный галлюцинатор.',
-    'Психоз легкой степени, но с потенциалом.',
-    'Шизотипическое великолепие зашкаливает.',
-    'Вы уже давно не в себе — и это видно.'
+    'You have an elegant delusion of grandeur. Congrats!',
+    'Certified hallucinator.',
+    'Mild psychosis with high potential.',
+    'Schizotypal brilliance is off the charts.',
+    'You’ve been out of your mind for a while — and it shows.'
   ];
 
   quizBtn.addEventListener('click', () => {
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
   chatSection.appendChild(quizBtn);
   chatSection.appendChild(quizResult);
 
-  // Прятки с тенью
+  // Shadow figure hiding game
   const shadow = document.createElement('div');
   shadow.style.width = '40px';
   shadow.style.height = '40px';
