@@ -230,12 +230,7 @@ window.addEventListener("DOMContentLoaded", () => {
     el.style.left = `${x}vw`;
   });
 });
-<!-- Добавить в любой раздел сайта, например в main -->
-<section id="destruction-game" style="text-align:center; margin-top:50px;">
-  <button id="destroyBtn" style="background-color:#110000;color:#ccc;padding:10px 20px;font-size:16px;border:1px solid #330000;cursor:pointer;">
-    Разрушь себя
-  </button>
-</section>
+
 
 <script>
   const destroyBtn = document.getElementById('destroyBtn');
@@ -289,4 +284,3 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 </script>
-
