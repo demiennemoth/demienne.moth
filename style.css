@@ -4,23 +4,10 @@ body {
   margin: 0;
   padding: 0;
   background-color: #000;
-  background-size: cover;
-  background-attachment: fixed;
   font-family: 'UnifrakturCook', cursive;
   color: #d4d4d4;
   text-shadow: 0 0 2px #a10000;
   cursor: url('https://cur.cursors-4u.net/cursors/cur-13/cur1174.cur'), auto;
-  overflow-x: hidden;
-  overflow-y: auto;
-}
-
-h2 {
-  font-size: 20px;
-  letter-spacing: 2px;
-  color: #eeeeee;
-  text-transform: uppercase;
-  font-weight: normal;
-  text-shadow: 0 0 4px #ff0000;
 }
 
 main {
@@ -34,53 +21,25 @@ main {
   z-index: 2;
 }
 
-input, button {
-  background-color: #111;
-  border: 1px solid #333;
-  color: #f1f1f1;
-  padding: 8px 12px;
-  font-family: monospace;
+h2 {
+  font-size: 20px;
+  color: #eeeeee;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  text-shadow: 0 0 4px #ff0000;
+  font-weight: normal;
 }
 
-button:hover {
-  background-color: #330000;
-  border-color: #ff0000;
-  cursor: pointer;
+.flicker {
+  animation: flicker 3s infinite alternate;
+  color: #ff5555;
 }
 
-footer {
-  text-align: center;
-  margin-top: 50px;
-  padding: 30px;
-  border-top: 1px solid #222;
-  color: #777;
-  font-size: 13px;
-}
-
-#chatResponse {
-  margin-top: 10px;
-  font-style: italic;
-  color: #aaa;
-  text-shadow: 0 0 2px #a10000;
-}
-
-.chaotic-images {
-  position: relative;
-  width: 100%;
-  height: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-.chaotic-image {
-  position: absolute;
-  width: 90px;
-  max-width: 15vw;
-  height: auto;
-  opacity: 0.6;
-  filter: contrast(120%) brightness(0.9) saturate(1.2);
-  transition: transform 0.3s ease;
-  z-index: 0;
+@keyframes flicker {
+  0% { opacity: 0.2; }
+  30% { opacity: 1; text-shadow: 0 0 4px #ff0000; }
+  60% { opacity: 0.3; }
+  100% { opacity: 1; text-shadow: 0 0 2px #ff0000; }
 }
 
 .site-title {
@@ -99,8 +58,21 @@ footer {
   text-transform: uppercase;
   text-shadow: 0 0 8px #ff0000;
   letter-spacing: 6px;
-  color: #eeeeee;
   margin: 0;
+  color: #eeeeee;
+}
+
+.site-title h1:hover {
+  animation: glitch 0.35s infinite;
+}
+
+@keyframes glitch {
+  0%   { text-shadow: 2px 0 red; }
+  20%  { text-shadow: -2px 0 blue; }
+  40%  { text-shadow: 2px 0 green; }
+  60%  { text-shadow: -1px 0 purple; }
+  80%  { text-shadow: 2px 0 red; }
+  100% { text-shadow: 0 0 white; }
 }
 
 .site-cross {
@@ -119,9 +91,8 @@ footer {
   border-top: 1px solid #111;
   border-bottom: 1px solid #111;
   gap: 15px;
-  margin-bottom: 20px;
-  position: relative;
   z-index: 2;
+  position: relative;
 }
 
 .horizontal-nav a {
@@ -163,21 +134,6 @@ footer {
   transform: scaleX(1);
 }
 
-/* Глитч-анимация заголовка */
-.glitch-title:hover {
-  animation: glitch 0.35s infinite;
-}
-
-@keyframes glitch {
-  0%   { text-shadow: 2px 0 red; }
-  20%  { text-shadow: -2px 0 blue; }
-  40%  { text-shadow: 2px 0 green; }
-  60%  { text-shadow: -1px 0 purple; }
-  80%  { text-shadow: 2px 0 red; }
-  100% { text-shadow: 0 0 white; }
-}
-
-/* Мерцающие фразы */
 .background-phrases {
   position: absolute;
   width: 100%;
@@ -189,7 +145,6 @@ footer {
 }
 
 .background-phrases .floating-text {
-  position: absolute;
   font-size: 16px;
   color: rgba(255, 255, 255, 0.05);
   animation: floatText 12s infinite ease-in-out;
@@ -198,62 +153,28 @@ footer {
 }
 
 @keyframes floatText {
-  0% { transform: translateY(100vh) translateX(0); opacity: 0; }
+  0% { transform: translateY(100vh); opacity: 0; }
   10% { opacity: 0.05; }
   50% { opacity: 0.08; }
   90% { opacity: 0.05; }
   100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
 }
 
-/* Эффект мигания */
-.flicker {
-  animation: flicker 3s infinite alternate;
-  color: #ff5555;
-}
-
-@keyframes flicker {
-  0% { opacity: 0.2; text-shadow: none; }
-  30% { opacity: 1; text-shadow: 0 0 4px #ff0000; }
-  60% { opacity: 0.3; }
-  100% { opacity: 1; text-shadow: 0 0 2px #ff0000; }
-}
-
-/* Матричный дождь */
-.matrix-column {
-  position: fixed;
-  top: 0;
-  width: 80px;
-  height: 100%;
-  overflow: hidden;
+.chaotic-images {
+  position: relative;
+  width: 100%;
+  height: 0;
   pointer-events: none;
-  z-index: 1;
-  font-family: monospace;
-  font-size: 14px;
-  line-height: 18px;
-  color: #6fcf97;
-  opacity: 0.07;
+  z-index: 0;
 }
 
-.matrix-left {
-  left: 0;
-  padding-left: 10px;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.8), transparent);
+.chaotic-image {
+  position: absolute;
+  width: 90px;
+  max-width: 15vw;
+  height: auto;
+  opacity: 0.6;
+  filter: contrast(120%) brightness(0.9) saturate(1.2);
+  transition: transform 0.3s ease;
+  z-index: 0;
 }
-
-.matrix-right {
-  right: 0;
-  padding-right: 10px;
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.8), transparent);
-}
-
-.matrix-line {
-  display: block;
-  animation: fallMatrix 6s linear infinite;
-}
-
-@keyframes fallMatrix {
-  0% { transform: translateY(-100%); opacity: 0.1; }
-  50% { opacity: 0.3; }
-  100% { transform: translateY(100%); opacity: 0.1; }
-}
-
