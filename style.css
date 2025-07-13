@@ -101,13 +101,17 @@ footer {
   z-index: 0;
 }
 
-.chaos-img {
+.chaotic-image {
   position: absolute;
-  width: 90px;
-  opacity: 0.35;
+  width: 80px;
+  max-width: 15vw;
+  height: auto;
+  opacity: 0.6;
+  filter: contrast(120%) brightness(0.9) saturate(1.2);
+  transition: transform 0.3s ease;
   z-index: 0;
-  transform: rotateZ(var(--angle));
-  filter: contrast(120%) grayscale(20%) brightness(0.8);
+}
+
 }
 
 .chaos1 {
