@@ -1,3 +1,4 @@
+console.log("interact.js connected");
 // Chatbot + Interact Features (English)
 document.addEventListener('DOMContentLoaded', () => {
   const chatSection = document.createElement('section');
