@@ -2,12 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Moth Damienne</title>
+  <title>Moth Damien</title>
   <link rel="stylesheet" href="style.css">
   <script src="interact.js" defer></script>
-
+  <style>
+    canvas.matrix-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  </style>
   <script>
     window.addEventListener("DOMContentLoaded", () => {
+      // Случайные фразы
       document.querySelectorAll('[data-random]').forEach(el => {
         const x = Math.floor(Math.random() * 90);
         const y = Math.floor(Math.random() * 90);
@@ -15,24 +26,44 @@
         el.style.left = `${x}vw`;
         el.style.position = 'absolute';
       });
+
+      // МАТРИЦА (canvas)
+      const canvas = document.createElement('canvas');
+      canvas.className = 'matrix-canvas';
+      document.body.appendChild(canvas);
+      const ctx = canvas.getContext('2d');
+      let width = canvas.width = window.innerWidth;
+      let height = canvas.height = window.innerHeight;
+      let columns = Math.floor(width / 20);
+      let drops = Array(columns).fill(1);
+
+      function drawMatrix() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+        ctx.fillRect(0, 0, width, height);
+        ctx.fillStyle = '#0F0';
+        ctx.font = '16px monospace';
+
+        for (let i = 0; i < drops.length; i++) {
+          const text = String.fromCharCode(0x30A0 + Math.random() * 96);
+          ctx.fillText(text, i * 20, drops[i] * 20);
+          if (drops[i] * 20 > height && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i]++;
+        }
+      }
+
+      setInterval(drawMatrix, 35);
+      window.addEventListener('resize', () => {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+        columns = Math.floor(width / 20);
+        drops = Array(columns).fill(1);
+      });
     });
   </script>
-
-  <style>
-    #matrix {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-    }
-  </style>
 </head>
 <body>
-
-  <canvas id="matrix"></canvas>
 
   <div class="background-phrases">
     <div class="floating-text" data-random>you are already dead</div>
@@ -95,45 +126,6 @@
       <p>Dump of thoughts, mistakes and exhaustion. Old drafts, forgotten fragments — like a post-depression brain: <span class="flicker">everything’s there, nothing makes sense</span>.</p>
     </section>
   </main>
-
-  <script>
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const letters = "アァイィウヴエェオカガキギクグケゲコゴサザシジスズセゼソゾタダチッヂツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポ".split("");
-    const fontSize = 14;
-    const columns = Math.floor(canvas.width / fontSize);
-    const drops = Array(columns).fill(1);
-
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = "#aaa";
-      ctx.font = `${fontSize}px monospace`;
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters[Math.floor(Math.random() * letters.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-
-        drops[i]++;
-      }
-    }
-
-    setInterval(draw, 40);
-
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-  </script>
 
 </body>
 </html>
