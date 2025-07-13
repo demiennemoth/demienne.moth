@@ -62,6 +62,10 @@
       font-size: 22px;
       color: #f0f0f0;
       text-shadow: 0 0 5px #666;
+      transition: all 0.3s ease;
+    }
+    h2:hover {
+      color: #ff0044;
     }
     p {
       font-size: 16px;
@@ -102,6 +106,58 @@
   </style>
 </head>
 <body>
+  <audio id="hoverSound" src="https://cdn.pixabay.com/download/audio/2022/03/30/audio_655b4f4460.mp3?filename=creepy-whisper-1-7052.mp3"></audio>
+  <audio id="chatClick" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_bbe8d3079f.mp3?filename=click-classic-7-190099.mp3"></audio>
+
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const h2s = document.querySelectorAll('h2');
+      const hoverSound = document.getElementById('hoverSound');
+
+      h2s.forEach(h2 => {
+        h2.addEventListener('mouseenter', () => {
+          hoverSound.currentTime = 0;
+          hoverSound.play();
+        });
+      });
+
+      // Загрузка фразы
+      const phrases = [
+        "ты не должен был вернуться",
+        "здесь кто-то уже был до тебя",
+        "ничего не закончено",
+        "пиши... пока есть чернила",
+        "я всё ещё слушаю",
+        "молчание — тоже ответ"
+      ];
+      const random = phrases[Math.floor(Math.random() * phrases.length)];
+      const quote = document.createElement('div');
+      quote.innerText = random;
+      quote.style.textAlign = 'center';
+      quote.style.marginTop = '10px';
+      quote.style.color = '#666';
+      quote.style.fontStyle = 'italic';
+      document.body.insertBefore(quote, document.body.children[1]);
+    });
+
+    function respondToUser() {
+      const clickSound = document.getElementById("chatClick");
+      clickSound.play();
+      const responseBox = document.getElementById("chat-response");
+      const input = document.getElementById("userInput").value;
+      const replies = [
+        "я тебя услышал.",
+        "это останется между нами.",
+        "не здесь. не сейчас.",
+        "я записал это в пыль.",
+        "твой голос остался в стенах."
+      ];
+      if (input.trim()) {
+        responseBox.innerText = replies[Math.floor(Math.random() * replies.length)];
+      }
+    }
+  </script>
+
   <header>
     <h1>Моль Демьен</h1>
   </header>
@@ -146,17 +202,8 @@
       <div id="chat-response"></div>
     </div>
   </main>
-
-  <script>
-    function respondToUser() {
-      const responseBox = document.getElementById("chat-response");
-      const input = document.getElementById("userInput").value;
-      if (input.trim()) {
-        responseBox.innerText = 'я тебя услышал.';
-      }
-    }
-  </script>
 </body>
 </html>
+
 
 
