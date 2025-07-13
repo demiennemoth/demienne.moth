@@ -92,6 +92,7 @@ footer {
   color: #aaa;
   text-shadow: 0 0 2px #a10000;
 }
+
 .image-chaos {
   position: relative;
   width: 100%;
@@ -121,9 +122,4 @@ footer {
   --angle: 8deg;
 }
 
-.chaos3 {
-  top: 150px;
-  left: 40%;
-  --angle: 4deg;
-}
-
+.chao
