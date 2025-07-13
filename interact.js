@@ -1,4 +1,4 @@
-// Chatbot: 'I heard you.'
+// Chatbot + Interact Features (English)
 document.addEventListener('DOMContentLoaded', () => {
   const chatSection = document.createElement('section');
   chatSection.id = 'chat';
@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const input = document.createElement('input');
   input.type = 'text';
-  input.placeholder = 'Speak, freak';
+  input.placeholder = 'Say something...';
   input.style.width = '80%';
   input.style.padding = '10px';
   input.style.marginRight = '10px';
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.body.appendChild(chatSection);
 
-  // Whispers on hover (titles)
+  // Whisper audio on hover
   const whisperAudio = new Audio('https://cdn.pixabay.com/download/audio/2021/08/04/audio_69f8415e17.mp3');
   document.querySelectorAll('h2').forEach(h => {
     h.addEventListener('mouseenter', () => {
@@ -123,4 +123,62 @@ document.addEventListener('DOMContentLoaded', () => {
     shadow.style.left = `${x}px`;
     shadow.style.top = `${y}px`;
   });
+
+  // Random floating dark quotes
+  const darkQuotes = [
+    'everything echoes in the void',
+    'you are watched, not seen',
+    'dreams rot quietly in corners',
+    'madness never knocks, it lives here',
+    'hope is a glitch',
+    'you blinked. it stayed.'
+  ];
+
+  setInterval(() => {
+    const quote = document.createElement('div');
+    quote.textContent = darkQuotes[Math.floor(Math.random() * darkQuotes.length)];
+    quote.style.position = 'fixed';
+    quote.style.left = `${Math.random() * 80 + 10}%`;
+    quote.style.top = `${Math.random() * 80 + 10}%`;
+    quote.style.color = '#991111';
+    quote.style.fontSize = '12px';
+    quote.style.opacity = '0.6';
+    quote.style.zIndex = '999';
+    quote.style.pointerEvents = 'none';
+    document.body.appendChild(quote);
+    setTimeout(() => {
+      quote.remove();
+    }, 5000);
+  }, 10000);
+
+  // Tombstone generator
+  const graveBtn = document.createElement('button');
+  graveBtn.textContent = '⚰ Generate Epitaph';
+  graveBtn.style.marginTop = '30px';
+  graveBtn.style.background = '#111';
+  graveBtn.style.color = '#aaa';
+  graveBtn.style.border = '1px solid #333';
+  graveBtn.style.padding = '10px';
+
+  const graveText = document.createElement('p');
+  graveText.style.color = '#666';
+  graveText.style.marginTop = '10px';
+  graveText.style.fontStyle = 'italic';
+
+  const epitaphs = [
+    'Here lies someone who tried.',
+    'Born tired. Died exhausted.',
+    'Ctrl+C. Ctrl+V. Ctrl+Alt+Del.',
+    'Was it ever real?',
+    '404: soul not found.',
+    'Finally stopped pretending to be okay.'
+  ];
+
+  graveBtn.addEventListener('click', () => {
+    const quote = epitaphs[Math.floor(Math.random() * epitaphs.length)];
+    graveText.textContent = `🪦 ${quote}`;
+  });
+
+  chatSection.appendChild(graveBtn);
+  chatSection.appendChild(graveText);
 });
