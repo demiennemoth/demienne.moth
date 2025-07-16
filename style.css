@@ -1,7 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap');
 
 body {
-  cursor: url('https://cur.cursors-4u.net/cursors/cur-13/cur1174.cur'), auto;
   margin: 0;
   padding: 0;
   background-color: #000;
@@ -284,4 +283,44 @@ footer, #chatbox, #chat {
 @keyframes drift {
   0% { transform: translateY(0px); }
   100% { transform: translateY(10px); }
+}
+
+/* === DEMON DIRECTORY CARDS === */
+.demon-directory {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 40px;
+}
+
+.demon-tab {
+  flex: 1 1 30%;
+  background-color: rgba(20, 20, 20, 0.9);
+  border: 1px solid #333;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px #111;
+  transition: transform 0.3s ease, background 0.3s ease;
+  cursor: pointer;
+}
+
+.demon-tab:hover {
+  background-color: #1e0000;
+  transform: scale(1.02);
+  box-shadow: 0 0 12px #aa0000;
+}
+
+.demon-tab h3 {
+  margin-top: 0;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: #ff4444;
+  font-family: monospace;
+}
+
+.demon-tab p {
+  font-size: 14px;
+  color: #ccc;
+  font-family: monospace;
 }
