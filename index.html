@@ -4,27 +4,53 @@
   <meta charset="UTF-8">
   <title>Moth Damien</title>
   <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <script src="interact.js" defer></script>
 </head>
 <body>
-  <div class="container">
-    <aside class="menu-panel">
-      <button>Talk</button>
-      <button>Bag</button>
-      <button>Notes</button>
-      <button>Vitals</button>
-      <button>Look</button>
-      <button>Exit</button>
-    </aside>
-    <main class="dialogue-panel">
-      <div class="avatar-frame">
+  <div class="interface-container">
+    <header class="site-header">
+      <h1 class="site-title">MOTH DAMIEN</h1>
+    </header>
+
+    <div class="main-frame">
+      <aside class="menu-panel">
+        <button class="menu-btn">TALK</button>
+        <button class="menu-btn">BAG</button>
+        <button class="menu-btn">NOTES</button>
+        <button class="menu-btn">VITALS</button>
+        <button class="menu-btn">LOOK</button>
+        <button class="menu-btn">EXIT</button>
+      </aside>
+
+      <section class="dialogue-panel">
+        <div class="portrait-frame">
+          <img src="images/char_jester.png.png" alt="The Fool">
+        </div>
+        <div class="dialogue-box">
+          <h2 class="char-name">THE FOOL</h2>
+          <p class="char-text">You've opened it again... <strong>Why?</strong></p>
+        </div>
+      </section>
+    </div>
+
+    <div class="character-cards">
+      <div class="char-card">
         <img src="images/char_jester.png.png" alt="The Fool">
+        <p class="card-label">THE FOOL</p>
       </div>
-      <div class="dialogue-box">
-        <h2>THE FOOL</h2>
-        <p>You've opened it again... <span class="glitch">Why?</span></p>
+      <div class="char-card">
+        <img src="images/char_brokenboy.png.png" alt="Broken Vessel">
+        <p class="card-label">BROKEN VESSEL</p>
       </div>
-    </main>
+      <div class="char-card">
+        <img src="images/char_smiletear.png.png" alt="Laughing Pain">
+        <p class="card-label">LAUGHING PAIN</p>
+      </div>
+      <div class="char-card">
+        <img src="images/char_brain.png.png" alt="Simulated Consciousness">
+        <p class="card-label">SIMULATED CONSCIOUSNESS</p>
+      </div>
+    </div>
   </div>
 </body>
 </html>
