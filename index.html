@@ -1,47 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Moth Damien</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
+  <script src="interact.js" defer></script>
 </head>
 <body>
+  <div class="vn-container">
+    <div class="vn-sidebar">
+      <button class="vn-button">TALK</button>
+      <button class="vn-button">BAG</button>
+      <button class="vn-button">NOTES</button>
+      <button class="vn-button">VITALS</button>
+      <button class="vn-button">LOOK</button>
+      <button class="vn-button">EXIT</button>
+    </div>
+    <div class="vn-portrait">
+      <img src="images/char_jester.png" alt="The Fool" />
+    </div>
+    <div class="vn-dialogue-box">
+      <div class="vn-name">THE FOOL</div>
+      <p class="vn-line">You've opened it again... Why?</p>
+    </div>
+  </div>
 
-<main>
-  <section class="interface-dialogue">
-    <div class="dialogue-portrait">
-      <img src="images/char_jester.png" alt="portrait">
+  <div class="vn-cards">
+    <div class="vn-card">
+      <img src="images/char_jester.png" alt="Fool" />
+      <p>THE FOOL</p>
     </div>
-    <div class="dialogue-text">
-      <p class="interface-line">"You've opened it again... Why?"</p>
-      <ul class="dialogue-options">
-        <li>🔹 Talk</li>
-        <li>🔹 Look</li>
-        <li>🔹 Notes</li>
-        <li>🔹 Exit</li>
-      </ul>
+    <div class="vn-card">
+      <img src="images/char_brokenboy.png" alt="Broken Vessel" />
+      <p>BROKEN VESSEL</p>
     </div>
-  </section>
-
-  <section class="character-gallery">
-    <div class="character-card">
-      <img src="images/char_jester.png" alt="Jester">
-      <p class="char-label">THE FOOL</p>
+    <div class="vn-card">
+      <img src="images/char_smiletear.png" alt="Laughing Pain" />
+      <p>LAUGHING PAIN</p>
     </div>
-    <div class="character-card">
-      <img src="images/char_brokenboy.png" alt="Sad Boy">
-      <p class="char-label">BROKEN VESSEL</p>
+    <div class="vn-card">
+      <img src="images/char_brain.png" alt="Simulated Consciousness" />
+      <p>SIMULATED CONSCIOUSNESS</p>
     </div>
-    <div class="character-card">
-      <img src="images/char_smiletear.png" alt="Crying Girl">
-      <p class="char-label">LAUGHING PAIN</p>
-    </div>
-    <div class="character-card">
-      <img src="images/char_brain.png" alt="Brain">
-      <p class="char-label">SIMULATED CONSCIOUSNESS</p>
-    </div>
-  </section>
-</main>
-
+  </div>
 </body>
 </html>
