@@ -2,55 +2,56 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Moth Damien</title>
+  <title>MOTH DAMIEN</title>
   <link rel="stylesheet" href="style.css">
-  <script src="interact.js" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="interface-container">
-    <header class="site-header">
-      <h1 class="site-title">MOTH DAMIEN</h1>
-    </header>
+  <div class="site-title-box">
+    <h1 class="site-title">MOTH DAMIEN</h1>
+  </div>
 
-    <div class="main-frame">
-      <aside class="menu-panel">
-        <button class="menu-btn">TALK</button>
-        <button class="menu-btn">BAG</button>
-        <button class="menu-btn">NOTES</button>
-        <button class="menu-btn">VITALS</button>
-        <button class="menu-btn">LOOK</button>
-        <button class="menu-btn">EXIT</button>
-      </aside>
+  <div class="interface-grid">
+    <aside class="side-panel">
+      <div class="panel-header">MENU</div>
+      <button>TALK</button>
+      <button>BAG</button>
+      <button>NOTES</button>
+      <button>VITALS</button>
+      <button>LOOK</button>
+      <button>EXIT</button>
+    </aside>
 
-      <section class="dialogue-panel">
-        <div class="portrait-frame">
-          <img src="images/char_jester.png.png" alt="The Fool">
+    <main class="main-panel">
+      <section class="dialogue-box">
+        <div class="portrait">
+          <img src="images/char_jester.png.png" alt="portrait">
         </div>
-        <div class="dialogue-box">
-          <h2 class="char-name">THE FOOL</h2>
-          <p class="char-text">You've opened it again... <strong>Why?</strong></p>
+        <div class="dialogue-text">
+          <h2>THE FOOL</h2>
+          <p>You’ve opened it again... <strong>Why?</strong></p>
         </div>
       </section>
-    </div>
 
-    <div class="character-cards">
-      <div class="char-card">
-        <img src="images/char_jester.png.png" alt="The Fool">
-        <p class="card-label">THE FOOL</p>
-      </div>
-      <div class="char-card">
-        <img src="images/char_brokenboy.png.png" alt="Broken Vessel">
-        <p class="card-label">BROKEN VESSEL</p>
-      </div>
-      <div class="char-card">
-        <img src="images/char_smiletear.png.png" alt="Laughing Pain">
-        <p class="card-label">LAUGHING PAIN</p>
-      </div>
-      <div class="char-card">
-        <img src="images/char_brain.png.png" alt="Simulated Consciousness">
-        <p class="card-label">SIMULATED CONSCIOUSNESS</p>
-      </div>
-    </div>
+      <section class="cards-grid">
+        <div class="card">
+          <img src="images/char_jester.png.png" alt="Fool">
+          <p>THE FOOL</p>
+        </div>
+        <div class="card">
+          <img src="images/char_brokenboy.png.png" alt="Broken Vessel">
+          <p>BROKEN VESSEL</p>
+        </div>
+        <div class="card">
+          <img src="images/char_smiletear.png.png" alt="Laughing Pain">
+          <p>LAUGHING PAIN</p>
+        </div>
+        <div class="card">
+          <img src="images/char_brain.png.png" alt="Simulated Consciousness">
+          <p>SIMULATED CONSCIOUSNESS</p>
+        </div>
+      </section>
+    </main>
   </div>
 </body>
 </html>
