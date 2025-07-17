@@ -1,107 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 body {
   background-color: #000;
+  color: #d22;
+  font-family: 'Press Start 2P', monospace;
   margin: 0;
-  font-family: monospace;
+  padding: 0;
 }
 
-/* ==== GAME INTERFACE STYLE ==== */
-.interface-dialogue {
+.vn-container {
   display: flex;
-  justify-content: space-between;
-  background-color: rgba(10, 0, 0, 0.8);
-  border: 1px solid #300;
+  border: 2px solid #300;
   padding: 20px;
-  margin: 40px auto 20px auto;
-  border-radius: 6px;
-  box-shadow: 0 0 10px #400;
+  margin: 30px auto;
   max-width: 900px;
+  background: #100;
 }
 
-.dialogue-portrait img {
-  width: 120px;
-  height: auto;
-  image-rendering: pixelated;
-  border: 2px solid #700;
-  box-shadow: 0 0 8px #a00;
-}
-
-.dialogue-text {
-  flex: 1;
-  margin-left: 20px;
+.vn-sidebar {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 10px;
+  margin-right: 20px;
 }
 
-.interface-line {
-  color: #ddd;
+.vn-button {
+  background-color: #000;
+  color: #d22;
+  border: 2px solid #600;
+  padding: 6px 10px;
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.vn-button:hover {
+  background-color: #200;
+}
+
+.vn-portrait img {
+  width: 180px;
+  border: 2px solid #400;
+}
+
+.vn-dialogue-box {
+  flex-grow: 1;
   background-color: #111;
   padding: 10px;
-  margin-bottom: 12px;
-  border: 1px solid #600;
-  box-shadow: inset 0 0 6px #000;
+  margin-left: 20px;
+  border: 2px solid #400;
+  color: #eee;
 }
 
-.dialogue-options {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+.vn-name {
+  color: #f33;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.vn-line {
+  font-size: 10px;
+}
+
+.vn-cards {
   display: flex;
-  gap: 12px;
-}
-
-.dialogue-options li {
-  padding: 6px 10px;
-  background-color: #200;
-  color: #ccc;
-  font-size: 14px;
-  border: 1px solid #600;
-  cursor: pointer;
-  transition: background 0.3s ease;
-}
-
-.dialogue-options li:hover {
-  background-color: #600;
-  color: #fff;
-}
-
-/* === CHARACTER GALLERY === */
-.character-gallery {
-  display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 30px;
-  margin: 60px auto;
-  max-width: 1000px;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 40px;
 }
 
-.character-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: #111;
-  border: 1px solid #400;
-  padding: 12px;
-  border-radius: 6px;
-  width: 180px;
-  box-shadow: 0 0 10px #200;
-  transition: transform 0.3s ease;
-}
-
-.character-card:hover {
-  transform: scale(1.05);
-}
-
-.character-card img {
-  width: 100%;
-  height: auto;
-  image-rendering: pixelated;
-  border: 2px solid #800;
-}
-
-.char-label {
-  color: #c33;
-  font-size: 14px;
-  margin-top: 10px;
+.vn-card {
+  border: 2px solid #500;
+  padding: 10px;
   text-align: center;
+  background: #111;
+  width: 180px;
+}
+
+.vn-card img {
+  width: 100%;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.vn-card p {
+  margin: 0;
+  font-size: 10px;
+  color: #f44;
 }
