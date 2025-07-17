@@ -4,161 +4,44 @@
   <meta charset="UTF-8">
   <title>Moth Damien</title>
   <link rel="stylesheet" href="style.css">
-  <script src="interact.js" defer></script>
-
-  <script>
-    window.addEventListener("DOMContentLoaded", () => {
-      document.querySelectorAll('[data-random]').forEach(el => {
-        const x = Math.floor(Math.random() * 90);
-        const y = Math.floor(Math.random() * 90);
-        el.style.top = `${y}vh`;
-        el.style.left = `${x}vw`;
-        el.style.position = 'absolute';
-      });
-    });
-  </script>
-
-  <style>
-    #matrix {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
-    }
-  </style>
 </head>
 <body>
-<canvas id="matrix"></canvas>
-<canvas id="matrix-canvas"></canvas>
-<div id="content-wrapper">
 
-  <div class="background-phrases">
-    <div class="floating-text" data-random>you are already dead</div>
-    <div class="floating-text" data-random>404: meaning not found</div>
-    <div class="floating-text" data-random>sleep.exe running</div>
-    <div class="floating-text" data-random>echoes in blood</div>
-    <div class="floating-text" data-random>null memory</div>
-    <div class="floating-text" data-random>[undefined]</div>
-  </div>
+<main>
+  <section class="interface-dialogue">
+    <div class="dialogue-portrait">
+      <img src="images/char_jester.png" alt="portrait">
+    </div>
+    <div class="dialogue-text">
+      <p class="interface-line">"You've opened it again... Why?"</p>
+      <ul class="dialogue-options">
+        <li>🔹 Talk</li>
+        <li>🔹 Look</li>
+        <li>🔹 Notes</li>
+        <li>🔹 Exit</li>
+      </ul>
+    </div>
+  </section>
 
-  <div class="chaotic-images">
-    <img src="images/flamegator.png" alt="flamegator" class="chaotic-image drifting" data-random>
-    <img src="images/toilet_entity.png" alt="toilet_entity" class="chaotic-image drifting" data-random>
-    <img src="images/blackslime_face.png" alt="blackslime_face" class="chaotic-image drifting" data-random>
-    <img src="images/skeletopool.png" alt="skeletopool" class="chaotic-image drifting" data-random>
-    <img src="images/vodka_warrior.png" alt="vodka_warrior" class="chaotic-image drifting" data-random>
-    <img src="images/grimbeach.png" alt="grimbeach" class="chaotic-image drifting" data-random>
-
-    <img src="images/giant-doll.jpg" alt="giant doll" class="chaotic-image" style="top: 60px; left: 8%;">
-    <img src="images/green-screens.jpg" alt="green screens" class="chaotic-image" style="top: 200px; left: 65%;">
-    <img src="images/digital-crucifix.jpg" alt="digital crucifix" class="chaotic-image" style="top: 350px; left: 35%;">
-  </div>
-
-  <div class="site-title">
-    <img src="images/painted-cross.png" alt="cross" class="site-cross">
-    <h1 class="glitch-title">Moth Damien</h1>
-  </div>
-
-  <nav class="horizontal-nav">
-    <a href="skull.html">🧠 Inside the Skull</a>
-    <a href="diagnosis.html">🩸 Diagnosis</a>
-    <a href="simulation.html">🪐 Simulation</a>
-    <a href="lobotomy.html">🩷 Lobotomy Bandage</a>
-    <a href="darklog.html">☠️ Darklog</a>
-    <a href="noise.html">📀 Noise</a>
-    <a href="archive.html">📓 Archive</a>
-    <a href="chat.html">🤖 Chat: "I heard you"</a>
-  </nav>
-
-  <main>
-    <section>
-      <h2>Inside the Skull</h2>
-      <p>This is where thoughts live and die under the screen’s light. <span class="flicker">Pseudo-philosophy</span>, <span class="flicker">schizobabble</span>, moldy brain soup and stray ramblings that somehow hit the spot.</p>
-    </section>
-    <section>
-      <h2>Diagnosis</h2>
-      <p>Psychiatry doesn’t cure — it <span class="flicker">classifies monsters</span>. Notes on madness: bipolarity, psychosis, meds, private hell and a bit of medicine for the already lost.</p>
-    </section>
-    <section>
-      <h2>Simulation</h2>
-      <p>Space doesn’t attract — it watches. Posts about the universe, time, black holes, <span class="flicker">simulations</span> and illusions you’ll die in without knowing if you were ever alive.</p>
-    </section>
-    <section>
-      <h2>Lobotomy Bandage</h2>
-      <p>Psychology for those already broken who like digging through their ruins. Theories, trauma, <span class="flicker">emotions like a joke</span> — no sobbing, just blood.</p>
-    </section>
-    <section>
-      <h2>Darklog</h2>
-      <p>Like if a clown kept a diary in a morgue. Mini-blog: whining, punchlines, <span class="flicker">dark humor</span>, loneliness, daily decay — not to hug, just to inhale.</p>
-    </section>
-    <section>
-      <h2>Noise</h2>
-      <p>Somewhere between VHS nightmares and whispers on a 4:03 AM frequency. GIFs, visuals, <span class="flicker">random vibes</span>. No context, no goal, just anxiety.</p>
-    </section>
-    <section>
-      <h2>Archive</h2>
-      <p>Dump of thoughts, mistakes and exhaustion. Old drafts, forgotten fragments — like a post-depression brain: <span class="flicker">everything’s there, nothing makes sense</span>.</p>
-    </section>
-  
-<section class="demon-directory">
-  <div class="demon-tab">
-    <h3>🩸 THEORIES</h3>
-    <p>Inside the Skull, Diagnosis, Simulation</p>
-  </div>
-  <div class="demon-tab">
-    <h3>🪓 EMOTIONAL DAMAGE</h3>
-    <p>Lobotomy Bandage, Darklog</p>
-  </div>
-  <div class="demon-tab">
-    <h3>📼 NOISE / ECHOES</h3>
-    <p>Noise, Archive, Chat</p>
-  </div>
-</section>
-
+  <section class="character-gallery">
+    <div class="character-card">
+      <img src="images/char_jester.png" alt="Jester">
+      <p class="char-label">THE FOOL</p>
+    </div>
+    <div class="character-card">
+      <img src="images/char_brokenboy.png" alt="Sad Boy">
+      <p class="char-label">BROKEN VESSEL</p>
+    </div>
+    <div class="character-card">
+      <img src="images/char_smiletear.png" alt="Crying Girl">
+      <p class="char-label">LAUGHING PAIN</p>
+    </div>
+    <div class="character-card">
+      <img src="images/char_brain.png" alt="Brain">
+      <p class="char-label">SIMULATED CONSCIOUSNESS</p>
+    </div>
+  </section>
 </main>
 
-  <script>
-    const canvas = document.getElementById("matrix");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const letters = "アァイィウヴエェオカガキギクグケゲコゴサザシジスズセゼソゾタダチッヂツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポ".split("");
-    const fontSize = 14;
-    const columns = Math.floor(canvas.width / fontSize);
-    const drops = Array(columns).fill(1);
-
-    function draw() {
-      ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      ctx.fillStyle = "#aaa";
-      ctx.font = `${fontSize}px monospace`;
-
-      for (let i = 0; i < drops.length; i++) {
-        const text = letters[Math.floor(Math.random() * letters.length)];
-        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          drops[i] = 0;
-        }
-
-        drops[i]++;
-      }
-    }
-
-    setInterval(draw, 40);
-
-    window.addEventListener("resize", () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-  </script>
-
-</div>
 </body>
 </html>
