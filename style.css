@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: 'VT323', monospace;
+  font-family: 'Press Start 2P', monospace;
   color: white;
   background-image: url('images/edited_with_shadow_and_noise_v2.png');
   background-size: cover;
@@ -134,35 +134,35 @@ body::before {
 }
 
 
-.slider-container {
-  position: relative;
-  display: flex;
-  align-items: center;
+
+/* Matrix word canvas should not block layout */
+#wordRainCanvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  opacity: 0.2;
 }
 
-.cards-grid.scrollable {
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  scrollbar-width: thin;
-  scrollbar-color: #444 #111;
+/* Fixing card layout */
+.card-display .card {
+  width: 200px;
+  min-height: 260px;
+  font-size: 12px;
 }
 
-.slider-btn {
-  font-size: 18px;
-  font-family: 'VT323', monospace;
-  background-color: #111;
-  color: white;
-  border: 2px solid white;
-  padding: 8px;
-  cursor: pointer;
-  z-index: 10;
-  height: 240px;
+.dialogue-text p {
+  font-size: 12px;
+  line-height: 1.6;
 }
 
-.slider-btn.left {
-  margin-right: 10px;
+.dialogue-text h2 {
+  font-size: 14px;
 }
 
-.slider-btn.right {
-  margin-left: 10px;
+.side-panel button {
+  font-size: 11px;
 }
