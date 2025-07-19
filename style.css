@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'VT323', monospace;
   color: white;
   background-image: url('images/edited_with_shadow_and_noise_v2.png');
   background-size: cover;
@@ -149,7 +149,7 @@ body::before {
 
 .slider-btn {
   font-size: 18px;
-  font-family: 'Press Start 2P', monospace;
+  font-family: 'VT323', monospace;
   background-color: #111;
   color: white;
   border: 2px solid white;
@@ -165,40 +165,4 @@ body::before {
 
 .slider-btn.right {
   margin-left: 10px;
-}
-
-
-.slider-onecard {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 20px;
-}
-
-.card-display {
-  width: 200px;
-  height: auto;
-  overflow: hidden;
-}
-
-.card-display .card {
-  width: 180px;
-  background-color: #111;
-  border: 2px solid white;
-  padding: 10px;
-  text-align: center;
-}
-
-.nav-arrow {
-  background-color: #111;
-  color: white;
-  border: 2px solid white;
-  font-size: 16px;
-  padding: 10px;
-  cursor: pointer;
-  font-family: 'Press Start 2P', monospace;
-}
-
-.nav-arrow:hover {
-  background-color: #444;
 }
