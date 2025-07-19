@@ -134,10 +134,35 @@ body::before {
 }
 
 
+.slider-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
 .cards-grid.scrollable {
   flex-wrap: nowrap;
   overflow-x: auto;
-  justify-content: flex-start;
+  scrollbar-width: thin;
   scrollbar-color: #444 #111;
-  padding-bottom: 10px;
+}
+
+.slider-btn {
+  font-size: 18px;
+  font-family: 'Press Start 2P', monospace;
+  background-color: #111;
+  color: white;
+  border: 2px solid white;
+  padding: 8px;
+  cursor: pointer;
+  z-index: 10;
+  height: 240px;
+}
+
+.slider-btn.left {
+  margin-right: 10px;
+}
+
+.slider-btn.right {
+  margin-left: 10px;
 }
