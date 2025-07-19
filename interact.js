@@ -1,56 +1,63 @@
-console.log("interact.js connected");
+console.log("interact.js active");
 
-// === CURSOR TRAIL EFFECT ===
-document.addEventListener('mousemove', (e) => {
-  const dot = document.createElement('div');
-  dot.className = 'cursor-trail';
-  dot.style.left = `${e.clientX}px`;
-  dot.style.top = `${e.clientY}px`;
-  document.body.appendChild(dot);
-  setTimeout(() => dot.remove(), 800);
-});
+// === CARD LOGIC ===
+const cards = [
+  {
+    name: "THE FOOL",
+    image: "images/char_jester.png",
+    desc: "You’ve opened it again... <strong>Why?</strong><br>This is your confession. Your inner garbage. Shameful, but without it — hollow."
+  },
+  {
+    name: "BROKEN VESSEL",
+    image: "images/char_brokenboy.png",
+    desc: "Fragments of thought you always return to, like old infections. Trying to understand the world — breaking yourself instead."
+  },
+  {
+    name: "LAUGHING PAIN",
+    image: "images/char_smiletear.png",
+    desc: "Why are you laughing? Oh right — hobbies. Broken joys you grip onto just to avoid falling apart."
+  },
+  {
+    name: "SIMULATED CONSCIOUSNESS",
+    image: "images/char_brain.png",
+    desc: "What seems like theory may just be a bug. Nonsense hiding structure. Or structure hiding nonsense."
+  },
+  {
+    name: "THE CONFINED",
+    image: "images/char_confined.png",
+    desc: "They think you're trapped. But you write — that means you exist. This is where blood on keys becomes chapters."
+  },
+  {
+    name: "UNKNOWN ENTITY",
+    image: "images/char_stitchedgirl.png",
+    desc: "This isn't information. It's a virus. Lies that sound more convincing than truth. You clicked — now it's in you."
+  }
+];
 
-// === CHAT INTERFACE ===
-document.addEventListener('DOMContentLoaded', () => {
-  const chatBox = document.createElement('div');
-  chatBox.className = 'chat-kadabura';
+let currentIndex = 0;
 
-  const portrait = document.createElement('img');
-  portrait.src = 'images/char_jester.png';
-  portrait.alt = 'chat-portrait';
+function updateCard() {
+  const data = cards[currentIndex];
+  document.getElementById('card-display').innerHTML = `
+    <div class="card">
+      <img src="${data.image}" alt="${data.name}">
+      <p>${data.name}</p>
+      <p>${data.desc}</p>
+    </div>`;
+  document.getElementById('char-name').textContent = data.name;
+  document.getElementById('portrait').src = data.image;
+  document.getElementById('char-desc').innerHTML = data.desc;
+}
 
-  const textWindow = document.createElement('div');
-  textWindow.className = 'chat-text';
+function nextCard() {
+  currentIndex = (currentIndex + 1) % cards.length;
+  updateCard();
+}
 
-  const message = document.createElement('p');
-  message.textContent = '"Do you really want to know?"';
+function prevCard() {
+  currentIndex = (currentIndex - 1 + cards.length) % cards.length;
+  updateCard();
+}
 
-  const respond = document.createElement('button');
-  respond.textContent = '🗯 Speak';
-  respond.className = 'speak-btn';
+document.addEventListener('DOMContentLoaded', updateCard);
 
-  const phrases = [
-    "the noise is getting louder...",
-    "you looked. now it knows.",
-    "this isn’t silence. it’s waiting.",
-    "я видел, как ты смотришь в пол.",
-    "everything echoes in the void",
-    "you’re still breathing. unfortunately.",
-    "не пугайся. ты уже мёртв.",
-    "I heard you.",
-    "am I thinking this or are you?",
-    "hope is a glitch."
-  ];
-
-  respond.addEventListener('click', () => {
-    const reply = phrases[Math.floor(Math.random() * phrases.length)];
-    message.textContent = `🤖 ${reply}`;
-  });
-
-  textWindow.appendChild(message);
-  textWindow.appendChild(respond);
-  chatBox.appendChild(portrait);
-  chatBox.appendChild(textWindow);
-
-  document.body.appendChild(chatBox);
-});
