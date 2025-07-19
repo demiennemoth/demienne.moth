@@ -132,3 +132,12 @@ body::before {
   font-size: 10px;
   margin: 0;
 }
+
+
+.cards-grid.scrollable {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  justify-content: flex-start;
+  scrollbar-color: #444 #111;
+  padding-bottom: 10px;
+}
