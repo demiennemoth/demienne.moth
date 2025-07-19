@@ -23,62 +23,27 @@
     </aside>
 
     <main class="main-panel">
-      <section class="dialogue-box">
+      <section class="dialogue-box" id="dialogue-box">
         <div class="portrait">
-          <img src="images/char_jester.png" alt="portrait">
+          <img id="portrait" src="images/char_jester.png" alt="portrait">
         </div>
         <div class="dialogue-text">
-          <h2>THE FOOL</h2>
-          <p>You’ve opened it again... <strong>Why?</strong><br>
+          <h2 id="char-name">THE FOOL</h2>
+          <p id="char-desc">You’ve opened it again... <strong>Why?</strong><br>
           This is your confession. Your inner garbage. Shameful, but without it — hollow.</p>
         </div>
       </section>
 
-      <div class="slider-container">
-        <button class="slider-btn left" onclick="scrollCards(-1)">‹</button>
-        <section class="cards-grid scrollable" id="cardScroll">
-          <div class="card">
-            <img src="images/char_jester.png" alt="Fool">
-            <p>THE FOOL</p>
-            <p>This is your confession. Your inner garbage. Shameful, but without it — hollow.</p>
-          </div>
-          <div class="card">
-            <img src="images/char_brokenboy.png" alt="Broken Vessel">
-            <p>BROKEN VESSEL</p>
-            <p>Fragments of thought you always return to, like old infections. Trying to understand the world — breaking yourself instead.</p>
-          </div>
-          <div class="card">
-            <img src="images/char_smiletear.png" alt="Laughing Pain">
-            <p>LAUGHING PAIN</p>
-            <p>Why are you laughing? Oh right — hobbies. Broken joys you grip onto just to avoid falling apart.</p>
-          </div>
-          <div class="card">
-            <img src="images/char_brain.png" alt="Simulated Consciousness">
-            <p>SIMULATED CONSCIOUSNESS</p>
-            <p>What seems like theory may just be a bug. Nonsense hiding structure. Or structure hiding nonsense.</p>
-          </div>
-          <div class="card">
-            <img src="images/char_confined.png" alt="The Confined">
-            <p>THE CONFINED</p>
-            <p>They think you're trapped. But you write — that means you exist. This is where blood on keys becomes chapters.</p>
-          </div>
-          <div class="card">
-            <img src="images/char_stitchedgirl.png" alt="Unknown Entity">
-            <p>UNKNOWN ENTITY</p>
-            <p>This isn't information. It's a virus. Lies that sound more convincing than truth. You clicked — now it's in you.</p>
-          </div>
-        </section>
-        <button class="slider-btn right" onclick="scrollCards(1)">›</button>
+      <div class="slider-onecard">
+        <button class="nav-arrow left" onclick="prevCard()">❮</button>
+        <div class="card-display" id="card-display">
+          <!-- JS inserts card here -->
+        </div>
+        <button class="nav-arrow right" onclick="nextCard()">❯</button>
       </div>
     </main>
   </div>
 
-  <script>
-    function scrollCards(direction) {
-      const container = document.getElementById('cardScroll');
-      const scrollAmount = 220;
-      container.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
-    }
-  </script>
+  <script src="interact.js"></script>
 </body>
 </html>
