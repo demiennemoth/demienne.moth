@@ -43,7 +43,26 @@
         </div>
         <button class="nav-arrow right" onclick="nextCard()">❯</button>
       </div>
-    </main>
+    
+<div id="nickname-container" class="modal" style="display:none;">
+  <h2>Choose your nickname</h2>
+  <input type="text" id="nickname-input" placeholder="Enter nickname..." />
+  <button id="save-nickname">Enter</button>
+</div>
+
+<div id="forum-container" style="display:none;">
+  <h1>Anonymous Forum</h1>
+  <div id="thread-list"></div>
+
+  <div id="new-thread">
+    <h3>Create New Thread</h3>
+    <input type="text" id="thread-title" placeholder="Thread title" />
+    <textarea id="thread-body" placeholder="Thread body"></textarea>
+    <button id="post-thread">Post</button>
+  </div>
+</div>
+
+</main>
   </div>
 
   <script type="module" src="interact.js"></script>
