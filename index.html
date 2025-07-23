@@ -43,26 +43,28 @@
         </div>
         <button class="nav-arrow right" onclick="nextCard()">❯</button>
       </div>
-    
-<div id="nickname-container" class="modal" style="display:none;">
-  <h2>Choose your nickname</h2>
-  <input type="text" id="nickname-input" placeholder="Enter nickname..." />
-  <button id="save-nickname">Enter</button>
-</div>
 
-<div id="forum-container" style="display:none;">
-  <h1>Anonymous Forum</h1>
-  <div id="thread-list"></div>
+      <!-- Nickname Modal -->
+      <div id="nickname-container" class="modal" style="display: flex; flex-direction: column; align-items: center; margin-top: 30px;">
+        <h2 style="color: white;">Choose your nickname</h2>
+        <input type="text" id="nickname-input" placeholder="Enter nickname..." style="padding: 10px; font-size: 16px; width: 250px;" />
+        <button id="save-nickname" style="margin-top: 10px; padding: 8px 20px;">Enter</button>
+      </div>
 
-  <div id="new-thread">
-    <h3>Create New Thread</h3>
-    <input type="text" id="thread-title" placeholder="Thread title" />
-    <textarea id="thread-body" placeholder="Thread body"></textarea>
-    <button id="post-thread">Post</button>
-  </div>
-</div>
+      <!-- Forum -->
+      <div id="forum-container" style="display: none; margin-top: 40px; color: white;">
+        <h1 style="text-align: center;">Anonymous Forum</h1>
+        <div id="thread-list" style="margin: 20px 0;"></div>
 
-</main>
+        <div id="new-thread" style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px;">
+          <h3>Create New Thread</h3>
+          <input type="text" id="thread-title" placeholder="Thread title" style="width: 100%; padding: 8px; margin-bottom: 10px;" />
+          <textarea id="thread-body" placeholder="Thread body" style="width: 100%; padding: 8px;" rows="5"></textarea>
+          <button id="post-thread" style="margin-top: 10px;">Post</button>
+        </div>
+      </div>
+
+    </main>
   </div>
 
   <script type="module" src="forum.js"></script>
