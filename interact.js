@@ -98,4 +98,3 @@ postThreadBtn.addEventListener("click", async () => {
   threadBodyInput.value = "";
   loadThreads();
 });
-
