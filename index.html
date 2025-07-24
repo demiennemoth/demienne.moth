@@ -1,73 +1,76 @@
+<!-- index.html (OS-style dark vintage site) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>MOTH DAMIENNE</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOTH OS</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <canvas id="wordRainCanvas"></canvas>
-
-  <div class="site-title-box">
-    <h1 class="site-title">MOTH DAMIEN</h1>
+  <div id="desktop">
+    <div class="icon" onclick="openWindow('forum')">
+      <img src="images/icon_forum.png" alt="Forum" />
+      <span>FORUM.EXE</span>
+    </div>
+    <div class="icon" onclick="openWindow('profile')">
+      <img src="images/icon_profile.png" alt="Profile" />
+      <span>PROFILE.DAT</span>
+    </div>
+    <div class="icon" onclick="openWindow('news')">
+      <img src="images/icon_readnews.png" alt="News" />
+      <span>READ.LNK</span>
+    </div>
+    <div class="icon" onclick="openWindow('help')">
+      <img src="images/icon_help.png" alt="Help" />
+      <span>HELP.TXT</span>
+    </div>
   </div>
 
-  <div class="interface-grid">
-    <aside class="side-panel">
-      <div class="panel-header">MENU</div>
-      <button>THE FOOL</button>
-      <button>BROKEN VESSEL</button>
-      <button>SIMULATED CONSCIOUSNESS</button>
-      <button>LAUGHING PAIN</button>
-      <button>THE CONFINED</button>
-      <button>UNKNOWN ENTITY</button>
-    </aside>
-
-    <main class="main-panel">
-      <section class="dialogue-box" id="dialogue-box">
-        <div class="portrait">
-          <img id="portrait" src="images/char_jester.png" alt="portrait">
-        </div>
-        <div class="dialogue-text">
-          <h2 id="char-name">THE FOOL</h2>
-          <p id="char-desc">You’ve opened it again... <strong>Why?</strong><br>
-          This is your confession. Your inner garbage. Shameful, but without it — hollow.</p>
-        </div>
-      </section>
-
-      <div class="slider-onecard">
-        <button class="nav-arrow left" onclick="prevCard()">❮</button>
-        <div class="card-display" id="card-display">
-          <!-- JS inserts card here -->
-        </div>
-        <button class="nav-arrow right" onclick="nextCard()">❯</button>
-      </div>
-
-      <!-- Nickname Modal -->
-      <div id="nickname-container" class="modal" style="display: flex; flex-direction: column; align-items: center; margin-top: 30px;">
-        <h2 style="color: white;">Choose your nickname</h2>
-        <input type="text" id="nickname-input" placeholder="Enter nickname..." style="padding: 10px; font-size: 16px; width: 250px;" />
-        <button id="save-nickname" style="margin-top: 10px; padding: 8px 20px;">Enter</button>
-      </div>
-
-      <!-- Forum -->
-      <div id="forum-container" style="display: none; margin-top: 40px; color: white;">
-        <h1 style="text-align: center;">Anonymous Forum</h1>
-        <div id="thread-list" style="margin: 20px 0;"></div>
-
-        <div id="new-thread" style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 8px;">
-          <h3>Create New Thread</h3>
-          <input type="text" id="thread-title" placeholder="Thread title" style="width: 100%; padding: 8px; margin-bottom: 10px;" />
-          <textarea id="thread-body" placeholder="Thread body" style="width: 100%; padding: 8px;" rows="5"></textarea>
-          <button id="post-thread" style="margin-top: 10px;">Post</button>
-        </div>
-      </div>
-
-    </main>
+  <!-- Taskbar -->
+  <div id="taskbar">
+    <div id="start-button" onclick="toggleStartMenu()">
+      <img src="images/icon_start.png" alt="Start" /> SYSTEM
+    </div>
+    <div id="clock">00:00 AM</div>
   </div>
 
-  <script type="module" src="forum.js"></script>
-  <script src="wordrain.js"></script>
+  <!-- Start menu -->
+  <div id="start-menu" class="hidden">
+    <ul>
+      <li onclick="openWindow('register')">
+        <img src="images/icon_asession.png" alt="Register" /> Register
+      </li>
+      <li onclick="openWindow('login')">
+        <img src="images/icon_asession.png" alt="Login" /> Login
+      </li>
+      <li onclick="openWindow('search')">
+        <img src="images/icon_asession.png" alt="Search" /> Search Site
+      </li>
+    </ul>
+  </div>
+
+  <!-- Windows -->
+  <div id="window-forum" class="window hidden">
+    <div class="title-bar">FORUM.EXE</div>
+    <iframe src="forum.html"></iframe>
+  </div>
+
+  <div id="window-profile" class="window hidden">
+    <div class="title-bar">PROFILE.DAT</div>
+    <p>Your profile info here.</p>
+  </div>
+
+  <div id="window-news" class="window hidden">
+    <div class="title-bar">READ.LNK</div>
+    <p>Latest news or site updates.</p>
+  </div>
+
+  <div id="window-help" class="window hidden">
+    <div class="title-bar">HELP.TXT</div>
+    <p>Instructions for using the site.</p>
+  </div>
+
+  <script src="interact.js"></script>
 </body>
 </html>
