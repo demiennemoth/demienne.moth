@@ -1,7 +1,7 @@
 body {
   margin: 0;
   background: #000;
-  cursor: url('icons/cursor.png'), auto;
+  cursor: url('images/cursor.png'), auto;
   color: #fff;
   font-family: monospace;
 }
