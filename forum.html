@@ -68,6 +68,10 @@
     <div id="threads"></div>
   </div>
 
-  <script type="module" src="forum.js"></script>
+  <script type="module">
+    import { mountForumUI } from './forum.js';
+    const container = document.getElementById("threads");
+    mountForumUI(container);
+  </script>
 </body>
 </html>
