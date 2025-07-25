@@ -1,4 +1,3 @@
-// Firebase init
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
   getFirestore, collection, addDoc, getDocs, serverTimestamp, doc, setDoc
@@ -22,97 +21,81 @@ const auth = getAuth(app);
 
 let currentUser = null;
 
-window.mountForumUI = function (container) {
-  container.innerHTML = `
-    <div id="nickname-container" class="forum-block" style="display:none;">
-      <input type="text" id="nickname-input" placeholder="Enter nickname">
-      <button id="save-nickname">Save</button>
-    </div>
+const nicknameContainer = document.getElementById("nickname-container");
+const nicknameInput = document.getElementById("nickname-input");
+const saveNicknameBtn = document.getElementById("save-nickname");
+const forumContainer = document.getElementById("forum-container");
+const threadTitleInput = document.getElementById("thread-title");
+const threadBodyInput = document.getElementById("thread-body");
+const postThreadBtn = document.getElementById("post-thread");
+const threadList = document.getElementById("thread-list");
 
-    <div id="forum-container" class="forum-block" style="display:none;">
-      <input type="text" id="thread-title" placeholder="Thread title">
-      <textarea id="thread-body" placeholder="Thread body"></textarea>
-      <button id="post-thread">Post</button>
-      <div id="thread-list"></div>
-    </div>
-  `;
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    currentUser = user;
+    const userSnap = await getDocs(collection(db, "users"));
+    const exists = userSnap.docs.some(doc => doc.id === currentUser.uid);
 
-  const nicknameContainer = document.getElementById("nickname-container");
-  const nicknameInput = document.getElementById("nickname-input");
-  const saveNicknameBtn = document.getElementById("save-nickname");
-  const forumContainer = document.getElementById("forum-container");
-  const threadTitleInput = document.getElementById("thread-title");
-  const threadBodyInput = document.getElementById("thread-body");
-  const postThreadBtn = document.getElementById("post-thread");
-  const threadList = document.getElementById("thread-list");
-
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      currentUser = user;
-      const userSnap = await getDocs(collection(db, "users"));
-      const exists = userSnap.docs.some(doc => doc.id === currentUser.uid);
-
-      if (!exists) {
-        nicknameContainer.style.display = "block";
-        forumContainer.style.display = "none";
-      } else {
-        nicknameContainer.style.display = "none";
-        forumContainer.style.display = "block";
-        loadThreads();
-      }
+    if (!exists) {
+      nicknameContainer.style.display = "block";
+      forumContainer.style.display = "none";
     } else {
-      signInAnonymously(auth);
+      nicknameContainer.style.display = "none";
+      forumContainer.style.display = "block";
+      loadThreads();
     }
-  });
-
-  saveNicknameBtn.addEventListener("click", async () => {
-    const nickname = nicknameInput.value.trim();
-    if (!nickname) return alert("Enter nickname");
-
-    await setDoc(doc(db, "users", currentUser.uid), {
-      nickname,
-      createdAt: serverTimestamp()
-    });
-
-    nicknameContainer.style.display = "none";
-    forumContainer.style.display = "block";
-    loadThreads();
-  });
-
-  async function loadThreads() {
-    threadList.innerHTML = "";
-    const querySnapshot = await getDocs(collection(db, "threads"));
-    querySnapshot.forEach((docSnap) => {
-      const thread = docSnap.data();
-      const threadId = docSnap.id;
-      const div = document.createElement("div");
-      div.className = "thread";
-      div.innerHTML = `
-        <a href="thread.html?id=${threadId}" class="thread-link">
-          <span class="thread-id">No.${threadId.slice(0, 6)}</span>
-          <h3>${thread.title}</h3>
-          <p>${thread.body}</p>
-          <small>${new Date(thread.createdAt?.seconds * 1000).toLocaleString()}</small>
-        </a>
-      `;
-      threadList.appendChild(div);
-    });
+  } else {
+    signInAnonymously(auth);
   }
+});
 
-  postThreadBtn.addEventListener("click", async () => {
-    const title = threadTitleInput.value.trim();
-    const body = threadBodyInput.value.trim();
-    if (!title || !body) return alert("Fill in both fields");
+saveNicknameBtn.addEventListener("click", async () => {
+  const nickname = nicknameInput.value.trim();
+  if (!nickname) return alert("Enter nickname");
 
-    await addDoc(collection(db, "threads"), {
-      title,
-      body,
-      createdAt: serverTimestamp(),
-      userId: currentUser.uid
-    });
-
-    threadTitleInput.value = "";
-    threadBodyInput.value = "";
-    loadThreads();
+  await setDoc(doc(db, "users", currentUser.uid), {
+    nickname,
+    createdAt: serverTimestamp()
   });
-};
+
+  nicknameContainer.style.display = "none";
+  forumContainer.style.display = "block";
+  loadThreads();
+});
+
+async function loadThreads() {
+  threadList.innerHTML = "";
+  const querySnapshot = await getDocs(collection(db, "threads"));
+  querySnapshot.forEach((docSnap) => {
+    const thread = docSnap.data();
+    const threadId = docSnap.id;
+    const div = document.createElement("div");
+    div.className = "thread";
+    div.innerHTML = `
+      <a href="thread.html?id=${threadId}" class="thread-link">
+        <span class="thread-id">No.${threadId.slice(0, 6)}</span>
+        <h3>${thread.title}</h3>
+        <p>${thread.body}</p>
+        <small>${new Date(thread.createdAt?.seconds * 1000).toLocaleString()}</small>
+      </a>
+    `;
+    threadList.appendChild(div);
+  });
+}
+
+postThreadBtn.addEventListener("click", async () => {
+  const title = threadTitleInput.value.trim();
+  const body = threadBodyInput.value.trim();
+  if (!title || !body) return alert("Fill in both fields");
+
+  await addDoc(collection(db, "threads"), {
+    title,
+    body,
+    createdAt: serverTimestamp(),
+    userId: currentUser.uid
+  });
+
+  threadTitleInput.value = "";
+  threadBodyInput.value = "";
+  loadThreads();
+});
