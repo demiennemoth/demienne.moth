@@ -7,14 +7,25 @@ function openWindow(name) {
   const container = document.getElementById("window-container");
   const win = document.createElement("div");
   win.className = "window";
+
+  const contentId = `window-content-${name}`;
   win.innerHTML = `
     <div class="window-header">
       <span>${name.toUpperCase()}</span>
-      <div>
-        <button onclick="this.closest('.window').remove()">×</button>
-      </div>
+      <div><button onclick="this.closest('.window').remove()">×</button></div>
     </div>
-    <div class="window-content">Content for ${name} window.</div>
+    <div class="window-content" id="${contentId}">Loading...</div>
   `;
   container.appendChild(win);
+
+  if (name === "forum") {
+    setTimeout(() => {
+      const target = document.getElementById(contentId);
+      if (typeof mountForumUI === "function") {
+        mountForumUI(target);
+      } else {
+        target.innerHTML = "<p>Error loading forum module.</p>";
+      }
+    }, 0);
+  }
 }
