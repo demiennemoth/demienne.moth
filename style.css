@@ -1,7 +1,11 @@
+* {
+  cursor: url('images/cursor.png'), auto !important;
+}
+
 body {
   margin: 0;
   background: #000;
-  cursor: url('images/cursor.png'), auto;
+  
   color: #fff;
   font-family: monospace;
 }
