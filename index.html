@@ -1,76 +1,42 @@
-<!-- index.html (OS-style dark vintage site) -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MOTH OS</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Moth Demienne OS</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="main.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD0cCiWsbsYidFXgzmPmPlQ1CbDZ0aWfqY",
+      authDomain: "mothdemienne.firebaseapp.com",
+      projectId: "mothdemienne",
+      storageBucket: "mothdemienne.firebasestorage.app",
+      messagingSenderId: "199511653439",
+      appId: "1:199511653439:web:e659bc721c660d9340cc8a"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
 </head>
 <body>
-  <div id="desktop">
-    <div class="icon" onclick="openWindow('forum')">
-      <img src="images/icon_forum.png" alt="Forum" />
-      <span>FORUM.EXE</span>
-    </div>
-    <div class="icon" onclick="openWindow('profile')">
-      <img src="images/icon_profile.png" alt="Profile" />
-      <span>PROFILE.DAT</span>
-    </div>
-    <div class="icon" onclick="openWindow('news')">
-      <img src="images/icon_readnews.png" alt="News" />
-      <span>READ.LNK</span>
-    </div>
-    <div class="icon" onclick="openWindow('help')">
-      <img src="images/icon_help.png" alt="Help" />
-      <span>HELP.TXT</span>
+  <div class="desktop">
+    <div class="icon" onclick="openWindow('read')"><img src="icons/read.png"><span>Read</span></div>
+    <div class="icon" onclick="openWindow('forum')"><img src="icons/forum.png"><span>Forum</span></div>
+    <div class="icon" onclick="openWindow('news')"><img src="icons/news.png"><span>News</span></div>
+    <div class="icon" onclick="openWindow('profile')"><img src="icons/profile.png"><span>Profile</span></div>
+    <div class="icon" onclick="openWindow('power')"><img src="icons/power.png"><span>Power</span></div>
+  </div>
+
+  <div class="taskbar">
+    <button id="start-btn" onclick="toggleStartMenu()"><img src="icons/start.png" alt="start"></button>
+    <div id="start-menu" class="hidden">
+      <div onclick="openWindow('access')">Accession</div>
+      <div onclick="openWindow('help')">Help</div>
     </div>
   </div>
 
-  <!-- Taskbar -->
-  <div id="taskbar">
-    <div id="start-button" onclick="toggleStartMenu()">
-      <img src="images/icon_start.png" alt="Start" /> SYSTEM
-    </div>
-    <div id="clock">00:00 AM</div>
-  </div>
-
-  <!-- Start menu -->
-  <div id="start-menu" class="hidden">
-    <ul>
-      <li onclick="openWindow('register')">
-        <img src="images/icon_asession.png" alt="Register" /> Register
-      </li>
-      <li onclick="openWindow('login')">
-        <img src="images/icon_asession.png" alt="Login" /> Login
-      </li>
-      <li onclick="openWindow('search')">
-        <img src="images/icon_asession.png" alt="Search" /> Search Site
-      </li>
-    </ul>
-  </div>
-
-  <!-- Windows -->
-  <div id="window-forum" class="window hidden">
-    <div class="title-bar">FORUM.EXE</div>
-    <iframe src="forum.html"></iframe>
-  </div>
-
-  <div id="window-profile" class="window hidden">
-    <div class="title-bar">PROFILE.DAT</div>
-    <p>Your profile info here.</p>
-  </div>
-
-  <div id="window-news" class="window hidden">
-    <div class="title-bar">READ.LNK</div>
-    <p>Latest news or site updates.</p>
-  </div>
-
-  <div id="window-help" class="window hidden">
-    <div class="title-bar">HELP.TXT</div>
-    <p>Instructions for using the site.</p>
-  </div>
-
-  <script src="interact.js"></script>
+  <div id="window-container"></div>
 </body>
 </html>
