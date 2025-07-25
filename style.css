@@ -40,6 +40,14 @@ body {
 }
 
 #start-btn img {
+  background-color: transparent !important;
+  border: none !important;
+  width: 32px;
+  height: 32px;
+  display: block;
+  padding: 0;
+  margin: 0;
+}
   background-color: transparent;
   border: none;
   width: 32px;
