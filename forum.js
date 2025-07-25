@@ -1,3 +1,4 @@
+// Firebase init
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
   getFirestore, collection, addDoc, getDocs, serverTimestamp, doc, setDoc
@@ -6,6 +7,7 @@ import {
   getAuth, signInAnonymously, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyD0cCiWsbsYidFXgzmPmPlQ1CbDZ0aWfqY",
   authDomain: "mothdemienne.firebaseapp.com",
@@ -19,26 +21,28 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
 
+// UI Elements
 const nicknameContainer = document.getElementById("nickname-container");
 const nicknameInput = document.getElementById("nickname-input");
 const saveNicknameBtn = document.getElementById("save-nickname");
 const forumContainer = document.getElementById("forum-container");
+const threadTitleInput = document.getElementById("thread-title");
+const threadBodyInput = document.getElementById("thread-body");
+const postThreadBtn = document.getElementById("post-thread");
+const threadList = document.getElementById("thread-list");
 
 let currentUser = null;
 
+// Auth
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
-    const userDoc = doc(db, "users", user.uid);
     const userSnap = await getDocs(collection(db, "users"));
+    const exists = userSnap.docs.some(doc => doc.id === currentUser.uid);
 
-    let nicknameExists = false;
-    userSnap.forEach((docu) => {
-      if (docu.id === user.uid) nicknameExists = true;
-    });
-
-    if (!nicknameExists) {
+    if (!exists) {
       nicknameContainer.style.display = "block";
+      forumContainer.style.display = "none";
     } else {
       nicknameContainer.style.display = "none";
       forumContainer.style.display = "block";
@@ -49,44 +53,45 @@ onAuthStateChanged(auth, async (user) => {
   }
 });
 
-saveNicknameBtn.onclick = async () => {
+saveNicknameBtn.addEventListener("click", async () => {
   const nickname = nicknameInput.value.trim();
-  if (!nickname) return;
+  if (!nickname) return alert("Enter nickname");
+
   await setDoc(doc(db, "users", currentUser.uid), {
-    name: nickname,
-    createdAt: serverTimestamp(),
-    uid: currentUser.uid,
+    nickname,
+    createdAt: serverTimestamp()
   });
+
   nicknameContainer.style.display = "none";
   forumContainer.style.display = "block";
   loadThreads();
-};
+});
 
 async function loadThreads() {
-  const threadList = document.getElementById("thread-list");
   threadList.innerHTML = "";
   const querySnapshot = await getDocs(collection(db, "threads"));
   querySnapshot.forEach((doc) => {
-    const data = doc.data();
+    const thread = doc.data();
     const div = document.createElement("div");
-    div.classList.add("thread");
-    div.innerHTML = `<h2>${data.title}</h2><p>${data.body}</p>`;
+    div.className = "thread";
+    div.innerHTML = `<h3>${thread.title}</h3><p>${thread.body}</p><small>${new Date(thread.createdAt?.seconds * 1000).toLocaleString()}</small>`;
     threadList.appendChild(div);
   });
 }
 
-document.getElementById("post-thread").onclick = async () => {
-  const title = document.getElementById("thread-title").value;
-  const body = document.getElementById("thread-body").value;
-  if (!title || !body) return;
+postThreadBtn.addEventListener("click", async () => {
+  const title = threadTitleInput.value.trim();
+  const body = threadBodyInput.value.trim();
+  if (!title || !body) return alert("Fill in both fields");
+
   await addDoc(collection(db, "threads"), {
     title,
     body,
     createdAt: serverTimestamp(),
-    authorId: currentUser.uid,
-    category: "general"
+    userId: currentUser.uid
   });
-  document.getElementById("thread-title").value = "";
-  document.getElementById("thread-body").value = "";
+
+  threadTitleInput.value = "";
+  threadBodyInput.value = "";
   loadThreads();
-};
+});
