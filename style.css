@@ -1,168 +1,91 @@
 body {
   margin: 0;
-  font-family: 'Press Start 2P', monospace;
-  color: white;
-  background-image: url('images/edited_with_shadow_and_noise_v2.png');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  position: relative;
-  z-index: 0;
+  background: #000;
+  cursor: url('cursor.png'), auto;
+  color: #fff;
+  font-family: monospace;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6);
-  z-index: -1;
-}
-
-.site-title-box {
-  text-align: center;
-  margin: 20px 0;
-}
-
-.site-title {
-  font-size: 24px;
-  border: 3px solid white;
-  padding: 10px;
-  display: inline-block;
-  letter-spacing: 2px;
-}
-
-.interface-grid {
+.desktop {
   display: flex;
-  max-width: 1200px;
-  margin: 0 auto;
-  gap: 20px;
+  flex-wrap: wrap;
   padding: 20px;
+  gap: 30px;
 }
 
-.side-panel {
-  background-color: #222;
-  border: 2px solid white;
-  padding: 20px;
-  width: 200px;
+.icon {
+  width: 64px;
   text-align: center;
-}
-
-.side-panel .panel-header {
-  background-color: #444;
-  color: white;
-  margin-bottom: 15px;
-  padding: 10px;
-  font-size: 12px;
-  border: 2px solid white;
-}
-
-.side-panel button {
-  display: block;
-  width: 100%;
-  margin: 6px 0;
-  padding: 8px;
-  background-color: #111;
-  color: white;
-  border: 2px solid white;
-  font-size: 10px;
+  color: #ccc;
   cursor: pointer;
 }
 
-.side-panel button:hover {
-  background-color: #444;
+.icon img {
+  width: 64px;
+  height: 64px;
 }
 
-.main-panel {
-  flex-grow: 1;
-}
-
-.dialogue-box {
-  display: flex;
-  border: 2px solid white;
-  padding: 20px;
-  background-color: #111;
-  margin-bottom: 30px;
-}
-
-.portrait img {
-  width: 160px;
-  height: auto;
-  border: 2px solid white;
-  margin-right: 20px;
-}
-
-.dialogue-text h2 {
-  margin-top: 0;
-  font-size: 12px;
-  color: #fff;
-}
-
-.dialogue-text p {
-  font-size: 10px;
-  line-height: 1.6;
-}
-
-.cards-grid {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.card {
-  width: 180px;
-  background-color: #111;
-  border: 2px solid white;
-  padding: 10px;
-  text-align: center;
-}
-
-.card img {
-  width: 100%;
-  height: auto;
-  border: 2px solid white;
-  margin-bottom: 10px;
-}
-
-.card p {
-  font-size: 10px;
-  margin: 0;
-}
-
-
-
-/* Matrix word canvas should not block layout */
-#wordRainCanvas {
+.taskbar {
   position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  opacity: 0.2;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  background: #111;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
 }
 
-/* Fixing card layout */
-.card-display .card {
-  width: 200px;
-  min-height: 260px;
-  font-size: 12px;
+#start-btn img {
+  height: 24px;
 }
 
-.dialogue-text p {
-  font-size: 12px;
-  line-height: 1.6;
+#start-menu {
+  position: absolute;
+  bottom: 50px;
+  left: 10px;
+  background: #111;
+  border: 1px solid #400;
+  color: #fff;
+  width: 150px;
 }
 
-.dialogue-text h2 {
-  font-size: 14px;
+#start-menu.hidden {
+  display: none;
 }
 
-.side-panel button {
-  font-size: 11px;
+#start-menu div {
+  padding: 10px;
+  cursor: pointer;
+}
+
+#start-menu div:hover {
+  background: #400;
+}
+
+.window {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  width: 400px;
+  height: 300px;
+  background: #111;
+  border: 2px solid red;
+  box-shadow: 0 0 20px red;
+  display: flex;
+  flex-direction: column;
+}
+
+.window-header {
+  background: #200;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  cursor: move;
+}
+
+.window-content {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
 }
