@@ -94,8 +94,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   background: transparent;
   border: none;
   padding: 0;
@@ -104,8 +104,8 @@ body {
 }
 
 #start-btn img {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   display: block;
   object-fit: contain;
   background: transparent;
@@ -113,4 +113,14 @@ body {
   outline: none;
   box-shadow: none;
   filter: none;
+}
+
+
+
+.taskbar-time {
+  margin-left: auto;
+  padding: 0 15px;
+  color: #ccc;
+  font-size: 14px;
+  user-select: none;
 }
