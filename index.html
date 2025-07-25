@@ -5,32 +5,23 @@
   <title>Moth Demienne OS</title>
   <link rel="stylesheet" href="style.css">
   <script defer src="main.js"></script>
+  <script defer src="forum_final.js" type="module"></script>
+  <script defer src="wordrain.js"></script>
   <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyD0cCiWsbsYidFXgzmPmPlQ1CbDZ0aWfqY",
-      authDomain: "mothdemienne.firebaseapp.com",
-      projectId: "mothdemienne",
-      storageBucket: "mothdemienne.firebasestorage.app",
-      messagingSenderId: "199511653439",
-      appId: "1:199511653439:web:e659bc721c660d9340cc8a"
-    };
-    firebase.initializeApp(firebaseConfig);
-  </script>
 </head>
 <body>
   <div class="desktop">
-    <div class="icon" onclick="openWindow('read')"><img src="icons/read.png"><span>Read</span></div>
-    <div class="icon" onclick="openWindow('forum')"><img src="icons/forum.png"><span>Forum</span></div>
-    <div class="icon" onclick="openWindow('news')"><img src="icons/news.png"><span>News</span></div>
-    <div class="icon" onclick="openWindow('profile')"><img src="icons/profile.png"><span>Profile</span></div>
-    <div class="icon" onclick="openWindow('power')"><img src="icons/power.png"><span>Power</span></div>
+    <div class="icon" onclick="openWindow('read')"><img src="icons/icon_readnews.png"><span>Read</span></div>
+    <div class="icon" onclick="openWindow('forum')"><img src="icons/icon_forum.png"><span>Forum</span></div>
+    <div class="icon" onclick="openWindow('news')"><img src="icons/icon_news.png"><span>News</span></div>
+    <div class="icon" onclick="openWindow('profile')"><img src="icons/icon_profile.png"><span>Profile</span></div>
+    <div class="icon" onclick="openWindow('power')"><img src="icons/icon_start.png"><span>Power</span></div>
   </div>
 
   <div class="taskbar">
-    <button id="start-btn" onclick="toggleStartMenu()"><img src="icons/start.png" alt="start"></button>
+    <button id="start-btn" onclick="toggleStartMenu()"><img src="icons/icon_start.png" alt="start"></button>
     <div id="start-menu" class="hidden">
       <div onclick="openWindow('access')">Accession</div>
       <div onclick="openWindow('help')">Help</div>
@@ -38,5 +29,18 @@
   </div>
 
   <div id="window-container"></div>
+
+  <!-- Контейнеры для форума -->
+  <div id="nickname-container" style="display:none;">
+    <input type="text" id="nickname-input" placeholder="Enter nickname">
+    <button id="save-nickname">Save</button>
+  </div>
+
+  <div id="forum-container" style="display:none;">
+    <input type="text" id="thread-title" placeholder="Thread title">
+    <textarea id="thread-body" placeholder="Thread body"></textarea>
+    <button id="post-thread">Post</button>
+    <div id="thread-list"></div>
+  </div>
 </body>
 </html>
