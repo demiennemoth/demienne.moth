@@ -42,8 +42,8 @@ body {
 #start-btn img {
   background-color: transparent;
   border: none;
-  width: 32px;
-  height: 32px;
+  width: 64px;
+  height: 64px;
 }
 
 #start-menu {
@@ -95,3 +95,4 @@ body {
   padding: 10px;
   overflow-y: auto;
 }
+
