@@ -39,13 +39,6 @@ body {
   padding-left: 10px;
 }
 
-#start-btn img {
-  background-color: transparent;
-  border: none;
-  width: 64px;
-  height: 64px;
-}
-
 #start-menu {
   position: absolute;
   bottom: 50px;
@@ -94,5 +87,31 @@ body {
   flex: 1;
   padding: 10px;
   overflow-y: auto;
+}
+
+#start-btn {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+}
+
+#start-btn img {
+  width: 64px;
+  height: 64px;
+  display: block;
+  object-fit: contain;
+  background: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  filter: none;
 }
 
