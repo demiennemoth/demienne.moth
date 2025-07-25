@@ -94,8 +94,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   background: transparent;
   border: none;
   padding: 0;
@@ -104,8 +104,8 @@ body {
 }
 
 #start-btn img {
-  width: 64px;
-  height: 64px;
+  width: 48px;
+  height: 48px;
   display: block;
   object-fit: contain;
   background: transparent;
@@ -114,4 +114,3 @@ body {
   box-shadow: none;
   filter: none;
 }
-
