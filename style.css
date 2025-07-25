@@ -1,95 +1,92 @@
-* {
-  cursor: url('images/cursor.png'), auto !important;
-}
-
 body {
   margin: 0;
   background: #000;
+  cursor: url('images/cursor.png'), auto;
   color: #fff;
   font-family: monospace;
 }
 
-a {
-  color: white;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-#forum-container {
-  max-width: 900px;
-  margin: 0 auto;
+.desktop {
+  display: flex;
+  flex-wrap: wrap;
   padding: 20px;
+  gap: 30px;
 }
 
-form#thread-form {
-  background: #111;
-  border: 1px solid #400;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 0 10px #400;
-}
-
-form#thread-form input,
-form#thread-form textarea {
-  width: 100%;
-  margin-bottom: 10px;
-  padding: 10px;
-  background: #000;
-  color: #fff;
-  border: 1px solid #400;
-}
-
-form#thread-form button {
-  background: #400;
-  color: white;
-  border: none;
-  padding: 10px 20px;
+.icon {
+  width: 64px;
+  text-align: center;
+  color: #ccc;
   cursor: pointer;
 }
 
-form#thread-form button:hover {
-  background: #800;
+.icon img {
+  width: 64px;
+  height: 64px;
 }
 
-.thread {
+.taskbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
   background: #111;
-  border: 1px solid #444;
-  margin-bottom: 15px;
-  padding: 15px;
-  box-shadow: 0 0 10px #200;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
 }
 
-.thread h3 {
-  margin: 0 0 10px 0;
-  font-size: 1.2em;
+#start-btn img {
+  height: 24px;
 }
 
-.thread p {
-  margin: 0;
-  max-height: 3.5em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  position: relative;
+#start-menu {
+  position: absolute;
+  bottom: 50px;
+  left: 10px;
+  background: #111;
+  border: 1px solid #400;
+  color: #fff;
+  width: 150px;
 }
 
-.thread.expanded p {
-  max-height: none;
+#start-menu.hidden {
+  display: none;
 }
 
-.thread small {
-  color: #888;
+#start-menu div {
+  padding: 10px;
+  cursor: pointer;
 }
 
-.thread-id {
-  color: #888;
-  font-size: 0.8em;
-  display: block;
-  margin-bottom: 5px;
+#start-menu div:hover {
+  background: #400;
 }
 
-.thread-link {
-  display: block;
+.window {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  width: 400px;
+  height: 300px;
+  background: #111;
+  border: 2px solid red;
+  box-shadow: 0 0 20px red;
+  display: flex;
+  flex-direction: column;
 }
+
+.window-header {
+  background: #200;
+  padding: 5px;
+  display: flex;
+  justify-content: space-between;
+  cursor: move;
+}
+
+.window-content {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+}
+
