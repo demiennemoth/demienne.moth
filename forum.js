@@ -24,12 +24,12 @@ let currentUser = null;
 
 window.mountForumUI = function (container) {
   container.innerHTML = `
-    <div id="nickname-container" style="display:none;">
+    <div id="nickname-container" class="forum-block" style="display:none;">
       <input type="text" id="nickname-input" placeholder="Enter nickname">
       <button id="save-nickname">Save</button>
     </div>
 
-    <div id="forum-container" style="display:none;">
+    <div id="forum-container" class="forum-block" style="display:none;">
       <input type="text" id="thread-title" placeholder="Thread title">
       <textarea id="thread-body" placeholder="Thread body"></textarea>
       <button id="post-thread">Post</button>
@@ -82,11 +82,19 @@ window.mountForumUI = function (container) {
   async function loadThreads() {
     threadList.innerHTML = "";
     const querySnapshot = await getDocs(collection(db, "threads"));
-    querySnapshot.forEach((doc) => {
-      const thread = doc.data();
+    querySnapshot.forEach((docSnap) => {
+      const thread = docSnap.data();
+      const threadId = docSnap.id;
       const div = document.createElement("div");
       div.className = "thread";
-      div.innerHTML = `<h3>${thread.title}</h3><p>${thread.body}</p><small>${new Date(thread.createdAt?.seconds * 1000).toLocaleString()}</small>`;
+      div.innerHTML = `
+        <a href="thread.html?id=${threadId}" class="thread-link">
+          <span class="thread-id">No.${threadId.slice(0, 6)}</span>
+          <h3>${thread.title}</h3>
+          <p>${thread.body}</p>
+          <small>${new Date(thread.createdAt?.seconds * 1000).toLocaleString()}</small>
+        </a>
+      `;
       threadList.appendChild(div);
     });
   }
