@@ -1,32 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Moth Demienne OS</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="stylesheet" href="style.css">
-  <script defer src="main.js"></script>
-  <script defer src="wordrain.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Форум</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="desktop">
-    <div class="icon" onclick="openWindow('read')"><img src="images/icon_readnews.png"><span>Read</span></div>
-    <div class="icon"><a href="forum.html"><img src="images/icon_forum.png"><span>Forum</span></a></div>
-    <div class="icon" onclick="openWindow('news')"><img src="images/icon_news.png"><span>News</span></div>
-    <div class="icon" onclick="openWindow('profile')"><img src="images/icon_profile.png"><span>Profile</span></div>
+  <div id="nickname-container">
+    <input type="text" id="nickname-input" placeholder="Enter your nickname" />
+    <button id="save-nickname">Save</button>
   </div>
 
-  <div class="taskbar">
-    <button id="start-btn" onclick="toggleStartMenu()"><img src="images/icon_start.png" alt="start"></button>
-    <div id="start-menu" class="hidden">
-      <div onclick="openWindow('access')">Accession</div>
-      <div onclick="openWindow('help')">Help</div>
-    </div>
-    <div class="taskbar-time">6:66</div>
+  <div id="forum-container" style="display:none;">
+    <form id="thread-form">
+      <input type="text" id="thread-title" placeholder="Thread Title" required />
+      <textarea id="thread-body" placeholder="Thread Body" required></textarea>
+      <button type="submit" id="post-thread">Post</button>
+    </form>
+
+    <div id="thread-list"></div>
   </div>
 
-  <div id="window-container"></div>
+  <script type="module" src="forum.js"></script>
 </body>
 </html>
