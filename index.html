@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Moth Demienne OS</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="stylesheet" href="style.css">
+  <script defer src="main.js"></script>
+  <script defer src="forum.js" type="module"></script>
+  <script defer src="wordrain.js"></script>
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
+</head>
+<body>
+  <div class="desktop">
+    <div class="icon" onclick="openWindow('read')"><img src="images/icon_readnews.png"><span>Read</span></div>
+    <div class="icon" onclick="openWindow('forum')"><img src="images/icon_forum.png"><span>Forum</span></div>
+    <div class="icon" onclick="openWindow('news')"><img src="images/icon_news.png"><span>News</span></div>
+    <div class="icon" onclick="openWindow('profile')"><img src="images/icon_profile.png"><span>Profile</span></div>
+  </div>
+
+  <div class="taskbar">
+    <button id="start-btn" onclick="toggleStartMenu()"><img src="images/icon_start.png" alt="start"></button>
+    <div id="start-menu" class="hidden">
+      <div onclick="openWindow('access')">Accession</div>
+      <div onclick="openWindow('help')">Help</div>
+    </div>
+      <div class="taskbar-time">6:66</div>
+  </div>
+
+  <div id="window-container"></div>
+</body>
+</html>
