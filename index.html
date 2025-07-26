@@ -202,32 +202,7 @@
   </style>
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&amp;display=swap" rel="stylesheet"/>
  
-<style>
-  .word {
-    position: absolute;
-    color: rgba(240, 240, 240, 0.2);
-    font-family: 'UnifrakturCook', cursive;
-    font-size: calc(16px + 0.5vw);
-    animation: fall linear infinite;
-    pointer-events: none;
-    white-space: nowrap;
-    text-shadow: 0 0 3px #888;
-    z-index: 0;
-  }
 
-  @keyframes fall {
-    0% {
-      top: -60px;
-      transform: translateX(0) rotate(0deg);
-      opacity: 0.12;
-    }
-    100% {
-      top: 100vh;
-      transform: translateX(30px) rotate(1deg);
-      opacity: 0.22;
-    }
-  }
-</style>
 
 </head>
  <body>
@@ -285,22 +260,7 @@
   <script src="forum.js">
   </script>
  
-<script>
-  const words = [
-    "whisper", "follow", "echo", "grave", "gone", "error",
-    "fade", "lost", "void", "memory"
-  ];
-  function spawnWord() {
-    const word = document.createElement('div');
-    word.className = 'word';
-    word.textContent = words[Math.floor(Math.random() * words.length)];
-    word.style.left = Math.random() * 100 + 'vw';
-    word.style.animationDuration = (6 + Math.random() * 6) + 's';
-    document.body.appendChild(word);
-    setTimeout(() => word.remove(), 16000);
-  }
-  setInterval(spawnWord, 350);
-</script>
+
 
 </body>
 </html>
