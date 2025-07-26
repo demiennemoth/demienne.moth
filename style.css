@@ -1,0 +1,74 @@
+body {
+  background-color: #141613;
+  font-family: 'UnifrakturCook', cursive;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+.header-title {
+  font-size: 3.8em;
+  color: #e4e4e4;
+  text-align: center;
+  margin: 40px auto;
+  animation: breathing 5s ease-in-out infinite;
+  border: 2px solid #555;
+  padding: 20px;
+  display: inline-block;
+  background-color: rgba(10, 10, 10, 0.4);
+  box-shadow: 0 0 10px #000;
+}
+
+@keyframes breathing {
+  0%, 100% {
+    opacity: 0.8;
+    text-shadow: 0 0 4px #666;
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 12px #eee;
+  }
+}
+
+.desktop {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 80px;
+  padding: 120px 40px;
+}
+
+.icon {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 20px;
+  display: inline-block;
+  text-align: center;
+  transition: 0.3s ease;
+}
+
+.icon img {
+  width: 160px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.icon div {
+  margin-top: 8px;
+  color: #ddbbbb;
+  font-size: 1.6em;
+  text-shadow: 0 0 6px #000;
+}
+
+.taskbar {
+  background: linear-gradient(to top, #1b1e1b, #0f100f);
+  border-top: 2px solid #333;
+  box-shadow: 0 -2px 10px #000000;
+  backdrop-filter: blur(2px);
+  padding: 6px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
