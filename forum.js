@@ -66,21 +66,40 @@ saveNicknameBtn.addEventListener("click", async () => {
 async function loadThreads() {
   threadList.innerHTML = "";
   const querySnapshot = await getDocs(collection(db, "threads"));
+
+  const threadsByCategory = {};
+
   querySnapshot.forEach((docSnap) => {
     const thread = docSnap.data();
     const threadId = docSnap.id;
-    const div = document.createElement("div");
-    div.className = "thread";
-    div.innerHTML = `
-      <a href="thread.html?id=${threadId}" class="thread-link">
-        <span class="thread-id">No.${threadId.slice(0, 6)}</span>
-        <h3>${thread.title}</h3>
-        <p>${thread.body}</p>
-        <small>${new Date(thread.createdAt?.seconds * 1000).toLocaleString()}</small>
-      </a>
-    `;
-    threadList.appendChild(div);
+    const category = thread.category || "Без категории";
+
+    if (!threadsByCategory[category]) {
+      threadsByCategory[category] = [];
+    }
+
+    threadsByCategory[category].push({ id: threadId, ...thread });
   });
+
+  for (const category in threadsByCategory) {
+    const catBlock = document.createElement("div");
+    catBlock.className = "category-block";
+    catBlock.innerHTML = `<h2 style="color: orange">${category.toUpperCase()}</h2>`;
+    threadsByCategory[category].forEach(thread => {
+      const div = document.createElement("div");
+      div.className = "thread-box";
+      div.innerHTML = `
+        <div class="thread-title">
+          <a href="thread.html?id=${thread.id}">${thread.title}</a>
+        </div>
+        <div class="thread-id">No.${thread.id.slice(0, 6)}</div>
+        <small>${new Date(thread.createdAt?.seconds * 1000).toLocaleString()}</small>
+      `;
+      catBlock.appendChild(div);
+    });
+
+    threadList.appendChild(catBlock);
+  }
 }
 
 postThreadBtn.addEventListener("click", async () => {
@@ -91,6 +110,7 @@ postThreadBtn.addEventListener("click", async () => {
   await addDoc(collection(db, "threads"), {
     title,
     body,
+    category: "ФИЛОСОФИЯ", // Временно жёстко, потом сделаем выбор категории
     createdAt: serverTimestamp(),
     userId: currentUser.uid
   });
