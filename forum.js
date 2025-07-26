@@ -27,6 +27,7 @@ const saveNicknameBtn = document.getElementById("save-nickname");
 const forumContainer = document.getElementById("forum-container");
 const threadTitleInput = document.getElementById("thread-title");
 const threadBodyInput = document.getElementById("thread-body");
+const categoryInput = document.getElementById("thread-category");
 const postThreadBtn = document.getElementById("post-thread");
 const threadList = document.getElementById("thread-list");
 
@@ -105,17 +106,19 @@ async function loadThreads() {
 postThreadBtn.addEventListener("click", async () => {
   const title = threadTitleInput.value.trim();
   const body = threadBodyInput.value.trim();
-  if (!title || !body) return alert("Fill in both fields");
+  const category = categoryInput.value;
+  if (!title || !body || !category) return alert("Все поля обязательны");
 
   await addDoc(collection(db, "threads"), {
     title,
     body,
-    category: "ФИЛОСОФИЯ", // Временно жёстко, потом сделаем выбор категории
+    category,
     createdAt: serverTimestamp(),
     userId: currentUser.uid
   });
 
   threadTitleInput.value = "";
   threadBodyInput.value = "";
+  categoryInput.value = "";
   loadThreads();
 });
