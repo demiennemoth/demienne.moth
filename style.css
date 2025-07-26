@@ -6,7 +6,7 @@ body {
   margin: 0;
   background: #000;
   color: #fff;
-  font-family: monospace;
+  font-family: 'Pixy', monospace;
 }
 
 .desktop {
@@ -21,6 +21,7 @@ body {
   text-align: center;
   color: #ccc;
   cursor: pointer;
+  font-size: 12px;
 }
 
 .icon img {
@@ -114,8 +115,6 @@ body {
   box-shadow: none;
   filter: none;
 }
-
-
 
 .taskbar-time {
   margin-left: auto;
