@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+ <head>
+  <meta charset="utf-8"/>
+  <title>MOLDEM.EXE</title>
+  <link href="favicon.ico" rel="icon" type="image/x-icon"/>
+  <link href="style.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&display=swap" rel="stylesheet"/>
+  <script src="whispers.js" defer></script>
+ </head>
+ <body>
+  <div style="display: flex; justify-content: center;">
+   <div class="header-title">MOTH DEMIENNE</div>
+  </div>
+  <div class="desktop">
+   <div class="icon" onclick="window.location.href='forum.html'">
+    <img alt="Forum" src="images/icon_forum.png"/>
+    <div>Forum</div>
+   </div>
+   <div class="icon" onclick="openWindow('news')">
+    <img alt="News" src="images/icon_news.png"/>
+    <div>News</div>
+   </div>
+   <div class="icon" onclick="openWindow('readnews')">
+    <img alt="Read" src="images/icon_readnews.png"/>
+    <div>Read</div>
+   </div>
+   <div class="icon" onclick="openWindow('profile')">
+    <img alt="Profile" src="images/icon_profile.png"/>
+    <div>Profile</div>
+   </div>
+  </div>
+  <div class="taskbar">
+   <button id="start-btn" onclick="toggleStartMenu()">
+    <img alt="start" src="images/icon_start.png"/>
+   </button>
+   <div class="hidden" id="start-menu">
+    <div onclick="openWindow('accession')">Accession</div>
+    <div onclick="openWindow('help')">Help</div>
+   </div>
+   <div class="taskbar-time">6:66</div>
+  </div>
+  <div id="window-container"></div>
+ </body>
+</html>
