@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head>
-  <meta charset="UTF-8" />
-  <title>MOLDEM.EXE</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico" />
-  <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.cdnfonts.com/css/pixy" rel="stylesheet" />
+ <head>
+  <meta charset="utf-8"/>
+  <title>
+   MOLDEM.EXE
+  </title>
+  <link href="favicon.ico" rel="icon" type="image/x-icon"/>
+  <link href="style.css" rel="stylesheet"/>
+  <link href="https://fonts.cdnfonts.com/css/pixy" rel="stylesheet"/>
   <style>
-    .icon {
+   .icon {
       background-color: transparent;
       border: none;
       padding: 0;
@@ -37,44 +39,59 @@
       background-size: cover;
       background-attachment: fixed;
     }
+  
+body { background: #1a0f0f !important; background-image: none !important; }
   </style>
-</head>
-<body>
-  <div class="desktop">
-    <div class="icon" onclick="window.location.href='forum.html'">
-      <img src="images/icon_forum.png" alt="Forum" />
-      <div>ФОРУМ • архив</div>
+  <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&amp;display=swap" rel="stylesheet"/>
+ </head>
+ <body>
+  <div class="desktop" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 60px; padding: 100px 40px;">
+   <div class="icon" onclick="window.location.href='forum.html'">
+    <img alt="Forum" src="images/icon_forum.png"/>
+    <div style="font-family: 'UnifrakturCook', cursive; font-size: 1.3em; color: #cfa; text-shadow: 0 0 4px #000;">
+     Forum
     </div>
-    <div class="icon" onclick="openWindow('news')">
-      <img src="images/icon_news.png" alt="News" />
-      <div>ХРОНИКИ • new</div>
+   </div>
+   <div class="icon" onclick="openWindow('news')">
+    <img alt="News" src="images/icon_news.png"/>
+    <div style="font-family: 'UnifrakturCook', cursive; font-size: 1.3em; color: #cfa; text-shadow: 0 0 4px #000;">
+     News
     </div>
-    <div class="icon" onclick="openWindow('readnews')">
-      <img src="images/icon_readnews.png" alt="Read" />
-      <div>СЛЕДЫ • txt</div>
+   </div>
+   <div class="icon" onclick="openWindow('readnews')">
+    <img alt="Read" src="images/icon_readnews.png"/>
+    <div style="font-family: 'UnifrakturCook', cursive; font-size: 1.3em; color: #cfa; text-shadow: 0 0 4px #000;">
+     Read
     </div>
-    <div class="icon" onclick="openWindow('profile')">
-      <img src="images/icon_profile.png" alt="Profile" />
-      <div>ID: 0466</div>
+   </div>
+   <div class="icon" onclick="openWindow('profile')">
+    <img alt="Profile" src="images/icon_profile.png"/>
+    <div style="font-family: 'UnifrakturCook', cursive; font-size: 1.3em; color: #cfa; text-shadow: 0 0 4px #000;">
+     Profile
     </div>
+   </div>
   </div>
-
   <div class="taskbar">
-    <button id="start-btn" onclick="toggleStartMenu()">
-      <img src="images/icon_start.png" alt="start" />
-    </button>
-    <div id="start-menu" class="hidden">
-      <div onclick="openWindow('accession')">Accession</div>
-      <div onclick="openWindow('help')">Help</div>
+   <button id="start-btn" onclick="toggleStartMenu()">
+    <img alt="start" src="images/icon_start.png"/>
+   </button>
+   <div class="hidden" id="start-menu">
+    <div onclick="openWindow('accession')">
+     Accession
     </div>
-    <div class="taskbar-time">6:66</div>
+    <div onclick="openWindow('help')">
+     Help
+    </div>
+   </div>
+   <div class="taskbar-time">
+    6:66
+   </div>
   </div>
-
-  <div id="window-container"></div>
-
-  <script src="main.js"></script>
-  <script src="forum.js"></script>
-  <script src="wordrain.js"></script>
-</body>
+  <div id="window-container">
+  </div>
+  <script src="main.js">
+  </script>
+  <script src="forum.js">
+  </script>
+ </body>
 </html>
-
