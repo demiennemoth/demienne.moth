@@ -1,3 +1,4 @@
+// forum.js с полной валидацией, логами, try/catch и улучшенным отображением категорий
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
 import {
   getFirestore, collection, addDoc, getDocs, serverTimestamp, doc, setDoc
@@ -34,6 +35,7 @@ const threadList = document.getElementById("thread-list");
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     currentUser = user;
+    console.log("Пользователь авторизован:", user.uid);
     const userSnap = await getDocs(collection(db, "users"));
     const exists = userSnap.docs.some(doc => doc.id === currentUser.uid);
 
@@ -46,27 +48,44 @@ onAuthStateChanged(auth, async (user) => {
       loadThreads();
     }
   } else {
-    signInAnonymously(auth);
+    console.warn("Пользователь не авторизован, пробуем анонимную авторизацию...");
+    signInAnonymously(auth).catch(err => console.error("Ошибка анонимной авторизации:", err));
   }
 });
 
 saveNicknameBtn.addEventListener("click", async () => {
   const nickname = nicknameInput.value.trim();
-  if (!nickname) return alert("Введите ник");
+  if (!nickname) {
+    alert("Введите ник");
+    console.warn("Ник пустой");
+    return;
+  }
 
-  await setDoc(doc(db, "users", currentUser.uid), {
-    nickname,
-    createdAt: serverTimestamp()
-  });
-
-  nicknameContainer.style.display = "none";
-  forumContainer.style.display = "block";
-  loadThreads();
+  try {
+    await setDoc(doc(db, "users", currentUser.uid), {
+      nickname,
+      createdAt: serverTimestamp()
+    });
+    console.log("Ник сохранён:", nickname);
+    nicknameContainer.style.display = "none";
+    forumContainer.style.display = "block";
+    loadThreads();
+  } catch (err) {
+    console.error("Ошибка при сохранении ника:", err);
+    alert("Не удалось сохранить ник. Проверь соединение.");
+  }
 });
 
 async function loadThreads() {
   threadList.innerHTML = "";
-  const querySnapshot = await getDocs(collection(db, "threads"));
+  let querySnapshot;
+  try {
+    querySnapshot = await getDocs(collection(db, "threads"));
+  } catch (err) {
+    console.error("Ошибка при загрузке тредов:", err);
+    alert("Не удалось загрузить треды");
+    return;
+  }
 
   const threadsByCategory = {};
 
@@ -86,6 +105,7 @@ async function loadThreads() {
     const catBlock = document.createElement("div");
     catBlock.className = "category-block";
     catBlock.innerHTML = `<h2 style="color: orange">${category.toUpperCase()}</h2>`;
+
     threadsByCategory[category].forEach(thread => {
       const div = document.createElement("div");
       div.className = "thread-box";
@@ -94,7 +114,7 @@ async function loadThreads() {
           <a href="thread.html?id=${thread.id}">${thread.title}</a>
         </div>
         <div class="thread-id">No.${thread.id.slice(0, 6)}</div>
-        <small>${new Date(thread.createdAt?.seconds * 1000).toLocaleString()}</small>
+        <small>${thread.createdAt?.seconds ? new Date(thread.createdAt.seconds * 1000).toLocaleString() : ""}</small>
       `;
       catBlock.appendChild(div);
     });
@@ -114,7 +134,7 @@ postThreadBtn.addEventListener("click", async () => {
     return;
   }
 
-  console.log("Попытка создать тред:", { title, body, category, userId: currentUser?.uid });
+  console.log("Создание треда...", { title, body, category });
 
   try {
     const docRef = await addDoc(collection(db, "threads"), {
@@ -122,18 +142,17 @@ postThreadBtn.addEventListener("click", async () => {
       body,
       category,
       createdAt: serverTimestamp(),
-      userId: currentUser.uid
+      userId: currentUser?.uid || ""
     });
-
-    console.log("Тред создан успешно:", docRef.id);
+    console.log("Тред успешно создан:", docRef.id);
 
     threadTitleInput.value = "";
     threadBodyInput.value = "";
     categoryInput.value = "";
 
-    setTimeout(() => loadThreads(), 500); // даём Firebase отдохнуть
+    setTimeout(() => loadThreads(), 600);
   } catch (err) {
-    console.error("Ошибка при создании треда:", err);
-    alert("Произошла ошибка при создании треда. Проверь консоль.");
+    console.error("Ошибка при добавлении треда:", err);
+    alert("Ошибка при создании треда. Проверь консоль.");
   }
 });
