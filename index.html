@@ -40,33 +40,69 @@
       background-attachment: fixed;
     }
   
-body { background: #1a0f0f !important; background-image: none !important; }
+    body {
+      background: #0c0606 !important;
+      background-image: none !important;
+    }
+
+    .taskbar {
+      background: rgba(10, 5, 5, 0.8);
+      border-top: 2px solid #330000;
+      box-shadow: 0 -2px 10px #000000aa;
+    }
+
+    .icon div {
+      font-family: 'UnifrakturCook', cursive;
+      font-size: 1.6em;
+      color: #ddbbbb;
+      text-shadow: 0 0 6px #000;
+    }
+
+    .desktop {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 80px;
+      padding: 120px 40px;
+    }
+
+    .header-title {
+      font-family: 'UnifrakturCook', cursive;
+      font-size: 3em;
+      color: #bb6666;
+      text-align: center;
+      margin-top: 40px;
+      text-shadow: 0 0 8px #000000, 0 0 2px #550000;
+    }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&amp;display=swap" rel="stylesheet"/>
  </head>
  <body>
-  <div class="desktop" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 60px; padding: 100px 40px;">
+  <div class="header-title">
+   MOTH DEMIENNE
+  </div>
+  <div class="desktop">
    <div class="icon" onclick="window.location.href='forum.html'">
     <img alt="Forum" src="images/icon_forum.png"/>
-    <div style="font-family: 'UnifrakturCook', cursive; font-size: 1.3em; color: #cfa; text-shadow: 0 0 4px #000;">
+    <div>
      Forum
     </div>
    </div>
    <div class="icon" onclick="openWindow('news')">
     <img alt="News" src="images/icon_news.png"/>
-    <div style="font-family: 'UnifrakturCook', cursive; font-size: 1.3em; color: #cfa; text-shadow: 0 0 4px #000;">
+    <div>
      News
     </div>
    </div>
    <div class="icon" onclick="openWindow('readnews')">
     <img alt="Read" src="images/icon_readnews.png"/>
-    <div style="font-family: 'UnifrakturCook', cursive; font-size: 1.3em; color: #cfa; text-shadow: 0 0 4px #000;">
+    <div>
      Read
     </div>
    </div>
    <div class="icon" onclick="openWindow('profile')">
     <img alt="Profile" src="images/icon_profile.png"/>
-    <div style="font-family: 'UnifrakturCook', cursive; font-size: 1.3em; color: #cfa; text-shadow: 0 0 4px #000;">
+    <div>
      Profile
     </div>
    </div>
