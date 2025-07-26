@@ -32,7 +32,7 @@
       cursor: pointer;
     }
 
-    #thread-form input, #thread-form textarea {
+    #thread-form input, #thread-form textarea, #thread-category {
       background: #111;
       color: #ccc;
       border: 1px solid #444;
@@ -79,11 +79,6 @@
       margin-bottom: 5px;
     }
 
-    .thread-body {
-      color: #aaa;
-      margin-top: 5px;
-    }
-
     small {
       font-size: 0.8em;
       color: #777;
@@ -101,6 +96,17 @@
     <form id="thread-form">
       <input type="text" id="thread-title" placeholder="заголовок темы" required />
       <textarea id="thread-body" placeholder="пиши сюда свой тред..." required></textarea>
+      <select id="thread-category" required>
+        <option value="">Выбери категорию</option>
+        <option value="ФИЛОСОФИЯ">ФИЛОСОФИЯ</option>
+        <option value="МОЙ АД">МОЙ АД</option>
+        <option value="ПСИХОПОЛЕ">ПСИХОПОЛЕ</option>
+        <option value="СЕКРЕТНО">СЕКРЕТНО</option>
+        <option value="ВНЕ РЕАЛЬНОСТИ">ВНЕ РЕАЛЬНОСТИ</option>
+        <option value="ВЕЩИ И ТЕЛА">ВЕЩИ И ТЕЛА</option>
+        <option value="ХАРД">ХАРД</option>
+        <option value="ИГРЫ">ИГРЫ</option>
+      </select>
       <button type="submit" id="post-thread">Создать тред</button>
     </form>
 
