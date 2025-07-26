@@ -8,23 +8,20 @@
   <link href="https://fonts.cdnfonts.com/css/pixy" rel="stylesheet" />
   <style>
     .icon {
-      padding: 0;
+      background-color: transparent;
       border: none;
-      background: none;
-      box-shadow: none;
-      border-radius: 0;
+      padding: 0;
+      margin: 20px;
+      display: inline-block;
+      text-align: center;
+      transition: 0.3s ease;
     }
 
-    .icon:hover {
-      border-color: #770000;
-      box-shadow: 0 0 20px #550000, inset 0 0 15px #000;
-    }
-
-    
-
-    @keyframes flicker {
-      from { filter: brightness(0.8); }
-      to { filter: brightness(1.2); }
+    .icon img {
+      width: 160px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
     }
 
     .icon div {
@@ -32,6 +29,7 @@
       color: #aa6666;
       font-weight: bold;
       text-shadow: 0 0 4px #220000;
+      font-size: 1.1em;
     }
 
     body {
@@ -44,19 +42,19 @@
 <body>
   <div class="desktop">
     <div class="icon" onclick="window.location.href='forum.html'">
-      <img src="images/icon_forum.png" alt="Forum" style="width: 160px; height: auto;" />
+      <img src="images/icon_forum.png" alt="Forum" />
       <div>ФОРУМ • архив</div>
     </div>
     <div class="icon" onclick="openWindow('news')">
-      <img src="images/icon_news.png" alt="News" style="width: 160px; height: auto;" />
+      <img src="images/icon_news.png" alt="News" />
       <div>ХРОНИКИ • new</div>
     </div>
     <div class="icon" onclick="openWindow('readnews')">
-      <img src="images/icon_readnews.png" alt="Read" style="width: 160px; height: auto;" />
+      <img src="images/icon_readnews.png" alt="Read" />
       <div>СЛЕДЫ • txt</div>
     </div>
     <div class="icon" onclick="openWindow('profile')">
-      <img src="images/icon_profile.png" alt="Profile" style="width: 160px; height: auto;" />
+      <img src="images/icon_profile.png" alt="Profile" />
       <div>ID: 0466</div>
     </div>
   </div>
@@ -79,3 +77,4 @@
   <script src="wordrain.js"></script>
 </body>
 </html>
+
