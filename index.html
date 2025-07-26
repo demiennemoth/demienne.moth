@@ -161,6 +161,44 @@
       backdrop-filter: blur(2px);
       padding: 6px 12px;
     }
+  
+    @keyframes breathing {
+      0%, 100% {
+        opacity: 0.8;
+        text-shadow: 0 0 4px #666;
+      }
+      50% {
+        opacity: 1;
+        text-shadow: 0 0 12px #eee;
+      }
+    }
+
+    .header-title {
+      font-family: 'UnifrakturCook', cursive;
+      font-size: 3.8em;
+      color: #e4e4e4;
+      text-align: center;
+      margin-top: 40px;
+      text-shadow: 0 0 10px #000000, 0 0 4px #aaa;
+      animation: breathing 5s ease-in-out infinite;
+      border: 2px solid #555;
+      padding: 20px;
+      display: inline-block;
+      background-color: rgba(10, 10, 10, 0.4);
+      box-shadow: 0 0 10px #000;
+    }
+
+    body {
+      background-color: #141613 !important;
+    }
+
+    .taskbar {
+      background: linear-gradient(to top, #1b1e1b, #0f100f);
+      border-top: 2px solid #333;
+      box-shadow: 0 -2px 10px #000000;
+      backdrop-filter: blur(2px);
+      padding: 6px 12px;
+    }
   </style>
   <link href="https://fonts.googleapis.com/css2?family=UnifrakturCook:wght@700&amp;display=swap" rel="stylesheet"/>
  </head>
