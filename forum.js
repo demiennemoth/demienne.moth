@@ -52,7 +52,7 @@ onAuthStateChanged(auth, async (user) => {
 
 saveNicknameBtn.addEventListener("click", async () => {
   const nickname = nicknameInput.value.trim();
-  if (!nickname) return alert("Enter nickname");
+  if (!nickname) return alert("Введите ник");
 
   await setDoc(doc(db, "users", currentUser.uid), {
     nickname,
@@ -107,18 +107,33 @@ postThreadBtn.addEventListener("click", async () => {
   const title = threadTitleInput.value.trim();
   const body = threadBodyInput.value.trim();
   const category = categoryInput.value;
-  if (!title || !body || !category) return alert("Все поля обязательны");
 
-  await addDoc(collection(db, "threads"), {
-    title,
-    body,
-    category,
-    createdAt: serverTimestamp(),
-    userId: currentUser.uid
-  });
+  if (!title || !body || !category) {
+    alert("Все поля обязательны");
+    console.warn("Не заполнены поля:", { title, body, category });
+    return;
+  }
 
-  threadTitleInput.value = "";
-  threadBodyInput.value = "";
-  categoryInput.value = "";
-  loadThreads();
+  console.log("Попытка создать тред:", { title, body, category, userId: currentUser?.uid });
+
+  try {
+    const docRef = await addDoc(collection(db, "threads"), {
+      title,
+      body,
+      category,
+      createdAt: serverTimestamp(),
+      userId: currentUser.uid
+    });
+
+    console.log("Тред создан успешно:", docRef.id);
+
+    threadTitleInput.value = "";
+    threadBodyInput.value = "";
+    categoryInput.value = "";
+
+    setTimeout(() => loadThreads(), 500); // даём Firebase отдохнуть
+  } catch (err) {
+    console.error("Ошибка при создании треда:", err);
+    alert("Произошла ошибка при создании треда. Проверь консоль.");
+  }
 });
