@@ -1,143 +1,104 @@
-
-// forum.js — управление форумом, без повторной инициализации Firebase
+// forum.js — управление форумом (только работа с тредами)
 import { db, auth } from "./firebase.js";
 import { 
-  collection, addDoc, getDocs, serverTimestamp, doc, setDoc 
+  collection, addDoc, getDocs, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
-let currentUser = null;
+window.addEventListener("DOMContentLoaded", () => {
+  const forumContainer = document.getElementById("forum-container");
+  const threadTitleInput = document.getElementById("thread-title");
+  const threadBodyInput = document.getElementById("thread-body");
+  const categoryInput = document.getElementById("thread-category");
+  const postThreadBtn = document.getElementById("post-thread");
+  const threadList = document.getElementById("thread-list");
 
-const nicknameContainer = document.getElementById("nickname-container");
-const nicknameInput = document.getElementById("nickname-input");
-const saveNicknameBtn = document.getElementById("save-nickname");
-const forumContainer = document.getElementById("forum-container");
-const threadTitleInput = document.getElementById("thread-title");
-const threadBodyInput = document.getElementById("thread-body");
-const categoryInput = document.getElementById("thread-category");
-const postThreadBtn = document.getElementById("post-thread");
-const threadList = document.getElementById("thread-list");
+  let currentUser = null;
 
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    currentUser = user;
-    console.log("Пользователь авторизован:", user.uid);
-    const userSnap = await getDocs(collection(db, "users"));
-    const exists = userSnap.docs.some(doc => doc.id === currentUser.uid);
-
-    if (!exists) {
-      nicknameContainer.style.display = "block";
-      forumContainer.style.display = "none";
-    } else {
-      nicknameContainer.style.display = "none";
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      currentUser = user;
+      console.log("Пользователь авторизован:", user.uid);
       forumContainer.style.display = "block";
       loadThreads();
+    } else {
+      console.warn("Не авторизован — войди через окно Profile.");
+      forumContainer.style.display = "none";
     }
-  } else {
-    console.warn("Пользователь не авторизован. Войдите через окно Profile.");
-  }
-});
-
-saveNicknameBtn.addEventListener("click", async () => {
-  const nickname = nicknameInput.value.trim();
-  if (!nickname) {
-    alert("Введите ник");
-    console.warn("Ник пустой");
-    return;
-  }
-
-  try {
-    await setDoc(doc(db, "users", currentUser.uid), {
-      nickname,
-      createdAt: serverTimestamp()
-    });
-    console.log("Ник сохранён:", nickname);
-    nicknameContainer.style.display = "none";
-    forumContainer.style.display = "block";
-    loadThreads();
-  } catch (err) {
-    console.error("Ошибка при сохранении ника:", err);
-    alert("Не удалось сохранить ник. Проверь соединение.");
-  }
-});
-
-async function loadThreads() {
-  threadList.innerHTML = "";
-  let querySnapshot;
-  try {
-    querySnapshot = await getDocs(collection(db, "threads"));
-  } catch (err) {
-    console.error("Ошибка при загрузке тредов:", err);
-    alert("Не удалось загрузить треды");
-    return;
-  }
-
-  const threadsByCategory = {};
-
-  querySnapshot.forEach((docSnap) => {
-    const thread = docSnap.data();
-    const threadId = docSnap.id;
-    const category = thread.category || "Без категории";
-
-    if (!threadsByCategory[category]) {
-      threadsByCategory[category] = [];
-    }
-
-    threadsByCategory[category].push({ id: threadId, ...thread });
   });
 
-  for (const category in threadsByCategory) {
-    const catBlock = document.createElement("div");
-    catBlock.className = "category-block";
-    catBlock.innerHTML = `<h2 style="color: orange">${category.toUpperCase()}</h2>`;
+  async function loadThreads() {
+    threadList.innerHTML = "";
+    try {
+      const querySnapshot = await getDocs(collection(db, "threads"));
+      const threadsByCategory = {};
 
-    threadsByCategory[category].forEach(thread => {
-      const div = document.createElement("div");
-      div.className = "thread-box";
-      div.innerHTML = `
-        <div class="thread-title">
-          <a href="thread.html?id=${thread.id}">${thread.title}</a>
-        </div>
-        <div class="thread-id">No.${thread.id.slice(0, 6)}</div>
-        <small>${thread.createdAt?.seconds ? new Date(thread.createdAt.seconds * 1000).toLocaleString() : ""}</small>
-      `;
-      catBlock.appendChild(div);
-    });
+      querySnapshot.forEach((docSnap) => {
+        const thread = docSnap.data();
+        const threadId = docSnap.id;
+        const category = thread.category || "Без категории";
 
-    threadList.appendChild(catBlock);
+        if (!threadsByCategory[category]) {
+          threadsByCategory[category] = [];
+        }
+        threadsByCategory[category].push({ id: threadId, ...thread });
+      });
+
+      for (const category in threadsByCategory) {
+        const catBlock = document.createElement("div");
+        catBlock.className = "category-block";
+        catBlock.innerHTML = `<h2 style="color: orange">${category.toUpperCase()}</h2>`;
+
+        threadsByCategory[category].forEach(thread => {
+          const div = document.createElement("div");
+          div.className = "thread-box";
+          div.innerHTML = `
+            <div class="thread-title">
+              <a href="thread.html?id=${thread.id}">${thread.title}</a>
+            </div>
+            <div class="thread-id">No.${thread.id.slice(0, 6)}</div>
+            <small>${thread.createdAt?.seconds ? new Date(thread.createdAt.seconds * 1000).toLocaleString() : ""}</small>
+          `;
+          catBlock.appendChild(div);
+        });
+
+        threadList.appendChild(catBlock);
+      }
+    } catch (err) {
+      console.error("Ошибка при загрузке тредов:", err);
+      alert("Не удалось загрузить треды");
+    }
   }
-}
 
-postThreadBtn.addEventListener("click", async () => {
-  const title = threadTitleInput.value.trim();
-  const body = threadBodyInput.value.trim();
-  const category = categoryInput.value;
+  postThreadBtn.addEventListener("click", async (e) => {
+    e.preventDefault();
+    const title = threadTitleInput.value.trim();
+    const body = threadBodyInput.value.trim();
+    const category = categoryInput.value;
 
-  if (!title || !body || !category) {
-    alert("Все поля обязательны");
-    console.warn("Не заполнены поля:", { title, body, category });
-    return;
-  }
+    if (!title || !body || !category) {
+      alert("Все поля обязательны");
+      return;
+    }
 
-  console.log("Создание треда...", { title, body, category });
+    try {
+      const docRef = await addDoc(collection(db, "threads"), {
+        title,
+        body,
+        category,
+        createdAt: serverTimestamp(),
+        userId: currentUser?.uid || ""
+      });
+      console.log("Тред успешно создан:", docRef.id);
 
-  try {
-    const docRef = await addDoc(collection(db, "threads"), {
-      title,
-      body,
-      category,
-      createdAt: serverTimestamp(),
-      userId: currentUser?.uid || ""
-    });
-    console.log("Тред успешно создан:", docRef.id);
+      threadTitleInput.value = "";
+      threadBodyInput.value = "";
+      categoryInput.value = "";
 
-    threadTitleInput.value = "";
-    threadBodyInput.value = "";
-    categoryInput.value = "";
-
-    setTimeout(() => loadThreads(), 600);
-  } catch (err) {
-    console.error("Ошибка при добавлении треда:", err);
-    alert("Ошибка при создании треда. Проверь консоль.");
-  }
+      setTimeout(() => loadThreads(), 600);
+    } catch (err) {
+      console.error("Ошибка при добавлении треда:", err);
+      alert("Не удалось создать тред");
+    }
+  });
 });
