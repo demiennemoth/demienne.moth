@@ -49,7 +49,7 @@ onAuthStateChanged(auth, async (user) => {
     }
   } else {
     console.warn("Пользователь не авторизован, пробуем анонимную авторизацию...");
-    signInAnonymously(auth).catch(err => console.error("Ошибка анонимной авторизации:", err));
+    // Анонимка отключена, юзер должен войти через окно Profile
   }
 });
 
