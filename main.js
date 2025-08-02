@@ -1,6 +1,5 @@
 
 // main.js — версия как модуль
-import { mountProfileUI } from "./profile.js";
 import { mountForumUI } from "./forum.js";
 
 function toggleStartMenu() {
@@ -9,6 +8,11 @@ function toggleStartMenu() {
 }
 
 export function openWindow(name) {
+  if (name === "profile") {
+    window.location.href = "profile.html";
+    return;
+  }
+
   const container = document.getElementById("window-container");
   const win = document.createElement("div");
   win.className = "window";
@@ -23,15 +27,11 @@ export function openWindow(name) {
   `;
   container.appendChild(win);
 
-  if (name === "profile") {
-    const target = document.getElementById(contentId);
-    mountProfileUI(target);
-  } else if (name === "forum") {
+  if (name === "forum") {
     const target = document.getElementById(contentId);
     mountForumUI(target);
   }
 }
-
 
 // Делаем функции доступными глобально для onclick в HTML
 window.toggleStartMenu = toggleStartMenu;
