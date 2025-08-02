@@ -1,17 +1,31 @@
-// forum.js — управление форумом (только работа с тредами)
+
+// forum.js — UI форума как модуль
 import { db, auth } from "./firebase.js";
 import { 
   collection, addDoc, getDocs, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
-window.addEventListener("DOMContentLoaded", () => {
-  const forumContainer = document.getElementById("forum-container");
-  const threadTitleInput = document.getElementById("thread-title");
-  const threadBodyInput = document.getElementById("thread-body");
-  const categoryInput = document.getElementById("thread-category");
-  const postThreadBtn = document.getElementById("post-thread");
-  const threadList = document.getElementById("thread-list");
+export function mountForumUI(container) {
+  container.innerHTML = `
+    <div id="forum-container">
+      <h2>Форум</h2>
+      <form id="thread-form">
+        <input type="text" id="thread-title" placeholder="Заголовок"><br>
+        <textarea id="thread-body" placeholder="Текст"></textarea><br>
+        <input type="text" id="thread-category" placeholder="Категория"><br>
+        <button id="post-thread">Создать тред</button>
+      </form>
+      <div id="thread-list"></div>
+    </div>
+  `;
+
+  const forumContainer = container.querySelector("#forum-container");
+  const threadTitleInput = container.querySelector("#thread-title");
+  const threadBodyInput = container.querySelector("#thread-body");
+  const categoryInput = container.querySelector("#thread-category");
+  const postThreadBtn = container.querySelector("#post-thread");
+  const threadList = container.querySelector("#thread-list");
 
   let currentUser = null;
 
@@ -101,4 +115,4 @@ window.addEventListener("DOMContentLoaded", () => {
       alert("Не удалось создать тред");
     }
   });
-});
+}
