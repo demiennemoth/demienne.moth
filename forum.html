@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <title>FORUM.EXE</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background-color: #0f0f0f;
+      color: #ccc;
+      font-family: 'Courier New', monospace;
+      padding: 20px;
+    }
+
+    #nickname-container {
+      margin-bottom: 30px;
+    }
+
+    #nickname-input {
+      background: #111;
+      color: #ccc;
+      border: 1px solid #444;
+      padding: 5px;
+      font-family: monospace;
+    }
+
+    #save-nickname {
+      background: #222;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+
+    #thread-form input, #thread-form textarea, #thread-category {
+      background: #111;
+      color: #ccc;
+      border: 1px solid #444;
+      padding: 5px;
+      font-family: monospace;
+      margin-bottom: 10px;
+      display: block;
+      width: 100%;
+    }
+
+    #post-thread {
+      background: #222;
+      color: #fff;
+      border: 1px solid #555;
+      padding: 5px 15px;
+      cursor: pointer;
+    }
+
+    .thread-box {
+      border: 1px solid #444;
+      padding: 10px;
+      margin: 15px 0;
+      background-color: rgba(25, 25, 25, 0.9);
+      box-shadow: 0 0 10px #111;
+    }
+
+    .thread-box a {
+      text-decoration: none;
+      color: #8af;
+    }
+
+    .thread-box a:hover {
+      text-decoration: underline;
+    }
+
+    .thread-id {
+      color: #999;
+      font-size: 0.9em;
+    }
+
+    .thread-title {
+      font-size: 1.2em;
+      color: #ccc;
+      margin-bottom: 5px;
+    }
+
+    small {
+      font-size: 0.8em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <div id="forum-root"></div>
+
+  <script type="module">
+    import { mountForumUI } from "./forum.js";
+    const container = document.getElementById("forum-root");
+    mountForumUI(container);
+  </script>
+</body>
+</html>
