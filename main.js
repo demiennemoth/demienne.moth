@@ -1,9 +1,14 @@
+
+// main.js — версия как модуль
+import { mountProfileUI } from "./profile.js";
+import { mountForumUI } from "./forum.js";
+
 function toggleStartMenu() {
   const menu = document.getElementById("start-menu");
   menu.classList.toggle("hidden");
 }
 
-function openWindow(name) {
+export function openWindow(name) {
   const container = document.getElementById("window-container");
   const win = document.createElement("div");
   win.className = "window";
@@ -19,22 +24,10 @@ function openWindow(name) {
   container.appendChild(win);
 
   if (name === "profile") {
-    setTimeout(() => {
-      const target = document.getElementById(contentId);
-      if (typeof mountProfileUI === "function") {
-        mountProfileUI(target);
-      } else {
-        target.innerHTML = "<p>Profile module not loaded.</p>";
-      }
-    }, 0);
+    const target = document.getElementById(contentId);
+    mountProfileUI(target);
   } else if (name === "forum") {
-    setTimeout(() => {
-      const target = document.getElementById(contentId);
-      if (typeof mountForumUI === "function") {
-        mountForumUI(target);
-      } else {
-        target.innerHTML = "<p>Error loading forum module.</p>";
-      }
-    }, 0);
+    const target = document.getElementById(contentId);
+    mountForumUI(target);
   }
 }
