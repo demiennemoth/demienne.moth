@@ -31,3 +31,8 @@ export function openWindow(name) {
     mountForumUI(target);
   }
 }
+
+
+// Делаем функции доступными глобально для onclick в HTML
+window.toggleStartMenu = toggleStartMenu;
+window.openWindow = openWindow;
