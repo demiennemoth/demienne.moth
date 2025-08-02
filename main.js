@@ -18,7 +18,16 @@ function openWindow(name) {
   `;
   container.appendChild(win);
 
-  if (name === "forum") {
+  if (name === "profile") {
+    setTimeout(() => {
+      const target = document.getElementById(contentId);
+      if (typeof mountProfileUI === "function") {
+        mountProfileUI(target);
+      } else {
+        target.innerHTML = "<p>Profile module not loaded.</p>";
+      }
+    }, 0);
+  } else if (name === "forum") {
     setTimeout(() => {
       const target = document.getElementById(contentId);
       if (typeof mountForumUI === "function") {
