@@ -1,24 +1,10 @@
-// forum.js с полной валидацией, логами, try/catch и улучшенным отображением категорий
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import {
-  getFirestore, collection, addDoc, getDocs, serverTimestamp, doc, setDoc
+
+// forum.js — управление форумом, без повторной инициализации Firebase
+import { db, auth } from "./firebase.js";
+import { 
+  collection, addDoc, getDocs, serverTimestamp, doc, setDoc 
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-import {
-  getAuth, signInAnonymously, onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyD0cCiWsbsYidFXgzmPmPlQ1CbDZ0aWfqY",
-  authDomain: "mothdemienne.firebaseapp.com",
-  projectId: "mothdemienne",
-  storageBucket: "mothdemienne.appspot.com",
-  messagingSenderId: "199511653439",
-  appId: "1:199511653439:web:e659bc721c660d9340cc8a"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
 let currentUser = null;
 
@@ -48,8 +34,7 @@ onAuthStateChanged(auth, async (user) => {
       loadThreads();
     }
   } else {
-    console.warn("Пользователь не авторизован, пробуем анонимную авторизацию...");
-    // Анонимка отключена, юзер должен войти через окно Profile
+    console.warn("Пользователь не авторизован. Войдите через окно Profile.");
   }
 });
 
