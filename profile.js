@@ -1,3 +1,4 @@
+
 // profile.js — регистрация и вход (ник + пароль через Firebase)
 import { auth, db } from "./firebase.js";
 import { 
