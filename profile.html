@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Профиль</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div id="profile-container" class="window">
+    <div class="window-header">
+      <span>PROFILE</span>
+      <div><a href="index.html"><button>×</button></a></div>
+    </div>
+    <div class="window-content">
+      <h2 id="profile-nickname"></h2>
+      <button id="logout-btn">Выйти</button>
+
+      <div id="profile-tabs">
+        <button id="tab-threads">Мои треды</button>
+        <button id="tab-bookmarks">Закладки</button>
+        <button id="tab-diary">Дневник</button>
+      </div>
+
+      <div id="profile-content"></div>
+    </div>
+  </div>
+
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="profile.js"></script>
+</body>
+</html>
