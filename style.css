@@ -41,6 +41,8 @@ body {
 }
 
 #start-menu {
+  width: 220px;
+  box-shadow: 0 0 15px #fff, 0 0 30px #aaa;
   position: absolute;
   bottom: 50px;
   left: 10px;
