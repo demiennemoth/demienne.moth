@@ -1,14 +1,10 @@
 // profile.js — регистрация и вход (ник + пароль через Firebase)
-
+import { auth, db } from "./firebase.js";
 import { 
-  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged 
+  createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged 
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { 
-  getFirestore, doc, setDoc, getDoc, serverTimestamp 
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-
-const auth = getAuth();
-const db = getFirestore();
+import { doc, setDoc, getDoc, serverTimestamp } 
+  from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 export function mountProfileUI(container) {
   container.innerHTML = `
@@ -33,7 +29,6 @@ export function mountProfileUI(container) {
   regBtn.addEventListener("click", async () => {
     const nickname = container.querySelector("#nickname").value.trim();
     const password = container.querySelector("#password").value;
-
     if (!nickname || !password) return alert("Заполни оба поля!");
 
     const email = `${nickname}@anon.local`; // фейковый email
@@ -75,7 +70,6 @@ export function mountProfileUI(container) {
     if (user) {
       container.querySelector("#auth-container").style.display = "none";
       container.querySelector("#profile-container").style.display = "block";
-
       const snap = await getDoc(doc(db, "users", user.uid));
       if (snap.exists()) {
         container.querySelector("#profile-nickname").textContent = snap.data().nickname;
