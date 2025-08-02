@@ -127,3 +127,31 @@ body {
   font-size: 14px;
   user-select: none;
 }
+
+
+/* Profile window styles */
+.profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.profile-form input {
+  background: #111;
+  border: 1px solid #444;
+  color: #dcdcdc;
+  padding: 5px;
+  font-family: 'VT323', monospace;
+}
+
+.profile-form button {
+  background: #222;
+  border: 1px solid #555;
+  color: #fff;
+  padding: 6px;
+  cursor: pointer;
+}
+
+.profile-form button:hover {
+  background: #333;
+}
