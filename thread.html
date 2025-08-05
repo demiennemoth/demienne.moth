@@ -4,78 +4,64 @@
   <meta charset="UTF-8">
   <title>THREAD.EXE</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    body {
-      background-color: #0f0f0f;
-      color: #c5c5c5;
-      font-family: 'Courier New', monospace;
-      padding: 20px;
-    }
-
-    .post {
-      border: 1px solid #444;
-      background-color: rgba(20, 20, 20, 0.8);
-      padding: 10px;
-      margin-bottom: 15px;
-      box-shadow: 0 0 10px #222;
-    }
-
-    .meta {
-      font-size: 0.9em;
-      color: #888;
-      margin-bottom: 5px;
-    }
-
-    .quote {
-      color: #78c36a;
-    }
-
-    .ref {
-      color: #6a9ec3;
-      cursor: pointer;
-    }
-
-    .ref:hover {
-      text-decoration: underline;
-    }
-
-    #reply-form {
-      margin-top: 40px;
-    }
-
-    #reply-form textarea {
-      width: 100%;
-      height: 100px;
-      background: #111;
-      color: #ccc;
-      border: 1px solid #444;
-      font-family: monospace;
-      padding: 10px;
-    }
-
-    #reply-form button {
-      margin-top: 10px;
-      background: #222;
-      color: #fff;
-      border: 1px solid #555;
-      padding: 5px 15px;
-      cursor: pointer;
-    }
-
-    #reply-form button:hover {
-      background: #444;
-    }
-  </style>
   <script type="module" src="thread.js"></script>
+  <script>
+    function togglePost(id) {
+      const post = document.querySelector(`#post${id} .post-body`);
+      if (post.style.display === "none") {
+        post.style.display = "block";
+      } else {
+        post.style.display = "none";
+      }
+    }
+    function quotePost(id) {
+      const textarea = document.querySelector("textarea");
+      textarea.value += ">>" + id + "\n";
+      textarea.focus();
+    }
+  </script>
 </head>
 <body>
-  <div class="thread-wrapper">
-    <div id="thread-content"></div>
+  <div class="thread" id="thread1">
+    <h2 style="color:#ff0040;">/b/ - Тред</h2>
 
-    <div id="reply-form">
-      <textarea id="reply-text" placeholder=">нажми сюда чтобы влить безысходности..."></textarea>
+    <!-- Форма -->
+    <div class="form-box" id="reply-form">
+      <textarea id="reply-input" placeholder=">напиши свой ответ..."></textarea>
       <button id="reply-btn">Ответить</button>
     </div>
+
+    <!-- Посты -->
+    <div class="post" id="post1">
+      <div class="post-header">
+        <span class="post-number" onclick="quotePost(1)">#1</span> Анон, 06/08/25
+        <span class="collapse-btn" onclick="togglePost(1)">[–]</span>
+      </div>
+      <div class="post-body">
+        <p>Кто ещё чувствует, что экран смотрит на тебя?</p>
+      </div>
+    </div>
+
+    <div class="post" id="post2">
+      <div class="post-header">
+        <span class="post-number" onclick="quotePost(2)">#2</span> Анон, 06/08/25
+        <span class="collapse-btn" onclick="togglePost(2)">[–]</span>
+      </div>
+      <div class="post-body">
+        <p><span class="quote">&gt;&gt;1</span><br>Ты не один. Мы все здесь.</p>
+      </div>
+    </div>
+
+    <div class="post" id="post3">
+      <div class="post-header">
+        <span class="post-number" onclick="quotePost(3)">#3</span> Анон, 06/08/25
+        <span class="collapse-btn" onclick="togglePost(3)">[–]</span>
+      </div>
+      <div class="post-body">
+        <p><span class="quote">&gt;&gt;2</span><br>А кто среди нас настоящий?</p>
+      </div>
+    </div>
+
   </div>
 </body>
 </html>
