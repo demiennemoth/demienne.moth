@@ -1,5 +1,6 @@
-// main.js — версия как модуль (с добавленными новостями)
+// main.js — версия с поддержкой авторизации
 import { mountForumUI } from "./forum.js";
+import { auth } from "./firebase.js";
 
 function toggleStartMenu() {
   const menu = document.getElementById("start-menu");
@@ -35,6 +36,32 @@ export function openWindow(name) {
   if (name === "news") {
     import("./news.js").then(module => {
       module.mountNewsUI(target);
+    });
+  }
+
+  if (name === "accession") {
+    target.innerHTML = `
+      <form id="login-form">
+        <label>Логин:<br><input type="text" id="login"></label><br><br>
+        <label>Пароль:<br><input type="password" id="password"></label><br><br>
+        <button type="submit">Войти</button>
+      </form>
+      <div id="login-message"></div>
+    `;
+
+    import("https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js").then(({ signInWithEmailAndPassword }) => {
+      const form = document.getElementById("login-form");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("login").value;
+        const pass = document.getElementById("password").value;
+        try {
+          await signInWithEmailAndPassword(auth, email, pass);
+          document.getElementById("login-message").textContent = "✅ Успешный вход";
+        } catch (err) {
+          document.getElementById("login-message").textContent = "❌ Ошибка: " + err.message;
+        }
+      });
     });
   }
 }
