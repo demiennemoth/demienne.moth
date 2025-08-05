@@ -1,20 +1,24 @@
-// profile.js — новый UI профиля
-import { auth, db } from "./firebase.js";
-import { signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { doc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+// profile.js — версия для анонимного форума без Firebase
 
 window.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementById("profile-root");
   if (!container) return;
 
+  const anonId = localStorage.getItem("anon-id");
+
+  if (!anonId) {
+    container.innerHTML = "<p>Ты не авторизован</p>";
+    return;
+  }
+
   container.innerHTML = `
     <div class="profile-page">
       <div class="profile-left">
         <div class="avatar"></div>
-        <button id="logout-btn">Выйти</button>
+        <button id="reset-id">Сменить ID</button>
       </div>
       <div class="profile-right">
-        <h2 id="profile-nickname">Загрузка...</h2>
+        <h2>Твой ID: ${anonId}</h2>
         <div class="tabs">
           <a href="#" data-tab="threads">Мои треды</a>
           <a href="#" data-tab="bookmarks">Закладки</a>
@@ -25,10 +29,14 @@ window.addEventListener("DOMContentLoaded", () => {
     </div>
   `;
 
-  const logoutBtn = container.querySelector("#logout-btn");
+  const resetBtn = container.querySelector("#reset-id");
   const tabContent = container.querySelector("#tab-content");
 
-  logoutBtn.addEventListener("click", () => signOut(auth));
+  resetBtn.addEventListener("click", () => {
+    const newId = "anon" + Math.floor(Math.random() * 10000);
+    localStorage.setItem("anon-id", newId);
+    location.reload();
+  });
 
   container.querySelectorAll(".tabs a").forEach(tab => {
     tab.addEventListener("click", (e) => {
@@ -38,16 +46,5 @@ window.addEventListener("DOMContentLoaded", () => {
       if (type === "bookmarks") tabContent.textContent = "Здесь будут твои закладки...";
       if (type === "diary") tabContent.textContent = "Здесь будет твой дневник...";
     });
-  });
-
-  onAuthStateChanged(auth, async (user) => {
-    if (user) {
-      const snap = await getDoc(doc(db, "users", user.uid));
-      if (snap.exists()) {
-        container.querySelector("#profile-nickname").textContent = snap.data().nickname;
-      }
-    } else {
-      container.innerHTML = "<p>Ты не авторизован</p>";
-    }
   });
 });
