@@ -1,14 +1,18 @@
+/* === Общие стили === */
 * {
   cursor: url('images/cursor.png'), auto !important;
 }
 
 body {
   margin: 0;
-  background: #141613; /* фон как в заготовке */
+  background: #141613;
   color: #dcdcdc;
   font-family: 'VT323', monospace;
+  font-size: 14px;
+  line-height: 1.5;
 }
 
+/* === Рабочий стол === */
 .desktop {
   display: flex;
   flex-wrap: wrap;
@@ -29,6 +33,7 @@ body {
   height: 64px;
 }
 
+/* === Панель задач === */
 .taskbar {
   position: fixed;
   bottom: 0;
@@ -73,7 +78,6 @@ body {
   user-select: none;
 }
 
-/* --- восстановленный блок кнопки Пуск --- */
 #start-btn {
   all: unset;
   display: flex;
@@ -91,16 +95,9 @@ body {
 #start-btn img {
   width: 56px;
   height: 56px;
-  display: block;
-  object-fit: contain;
-  background: transparent;
-  border: none;
-  outline: none;
-  box-shadow: none;
-  filter: none;
 }
 
-/* --- стили окон (форум, треды и т.п.) --- */
+/* === Окна (форум/треды/новости) === */
 .window {
   position: absolute;
   top: 100px;
@@ -128,75 +125,135 @@ body {
   overflow-y: auto;
 }
 
-/* --- Новый профиль --- */
-.profile-page {
-  max-width: 900px;
-  margin: 40px auto;
-  background: #1c1e1b;
-  border: 1px solid #2a2d2a;
-  box-shadow: 0 0 15px rgba(0,0,0,0.9);
+/* === Форум плитками === */
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  width: 90%;
+  margin: 20px auto;
+}
+
+.thread-link {
+  display: block;
+  padding: 12px;
+  background: #111;
+  border: 1px solid #333;
+  transition: 0.2s;
+  color: #e0e0e0;
+  text-decoration: none;
+}
+
+.thread-link img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+  margin-bottom: 8px;
+  border: 1px solid #333;
+}
+
+.thread-link:hover {
+  background: #1e1e1e;
+  border-color: #ff0040;
+  color: #ff0040;
+  transform: scale(1.02);
+}
+
+.meta {
+  font-size: 12px;
+  color: #777;
+  margin-top: 4px;
+}
+
+/* === Тред и посты === */
+.thread {
+  margin: 20px auto;
+  width: 90%;
+  background: #111;
+  padding: 15px;
+  border: 1px solid #333;
+}
+
+.post {
+  margin: 15px 0;
+  padding: 12px;
+  border: 1px dashed #444;
+  background: #1a1a1a;
+  transition: background 0.2s, border 0.2s;
+}
+
+.post:hover {
+  background: #151515;
+  border: 1px solid #ff0040;
+}
+
+.post-header {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 6px;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.profile-left {
-  width: 200px;
-  padding: 20px;
-  border-right: 1px solid #2a2d2a;
-  text-align: center;
-}
-
-.profile-left .avatar {
-  width: 150px;
-  height: 150px;
-  background: #2b2e2b;
-  margin: 0 auto 10px;
-  border: 1px solid #3a3d3a;
-}
-
-.profile-left button {
-  background: #102c54;
-  color: #fff;
-  border: none;
-  padding: 5px 10px;
+.post-number {
+  color: #ff0040;
+  margin-right: 10px;
   cursor: pointer;
 }
 
-.profile-left button:hover {
-  background: #163a6b;
+.collapse-btn {
+  cursor: pointer;
+  color: #ff0040;
+  margin-left: auto;
+  font-size: 12px;
 }
 
-.profile-right {
-  flex-grow: 1;
-  padding: 20px;
+.post img {
+  max-width: 200px;
+  display: block;
+  margin: 6px 0;
+  border: 1px solid #444;
 }
 
-.profile-right h2 {
-  margin-top: 0;
-  border-bottom: 1px solid #2a2d2a;
-  padding-bottom: 5px;
+.quote {
+  color: #ff0040;
+}
+
+/* === Форма ответа === */
+.form-box, #reply-form {
+  background: #222;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 2px solid #444;
+}
+
+textarea, input[type="text"] {
+  background: #000;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  width: 100%;
+}
+
+textarea {
+  height: 90px;
+  line-height: 1.4;
+}
+
+input[type="submit"], button {
+  margin-top: 6px;
+  background: #111;
+  color: #e0e0e0;
+  border: 1px solid #666;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+input[type="submit"]:hover, button:hover {
+  background: #ff0040;
   color: #fff;
-}
-
-.tabs {
-  margin: 15px 0;
-}
-
-.tabs a {
-  color: #9daaba;
-  margin-right: 15px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.tabs a:hover {
-  text-decoration: underline;
-  color: #c0ccd9;
-}
-
-.tab-content {
-  background: #141613;
-  border: 1px solid #2a2d2a;
-  padding: 10px;
-  min-height: 250px;
-  color: #d0d0d0;
+  border-color: #ff0040;
 }
