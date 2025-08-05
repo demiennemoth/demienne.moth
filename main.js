@@ -1,4 +1,4 @@
-// main.js — версия с поддержкой авторизации
+// main.js — версия с поддержкой авторизации и регистрации
 import { mountForumUI } from "./forum.js";
 import { auth } from "./firebase.js";
 
@@ -46,12 +46,18 @@ export function openWindow(name) {
         <label>Пароль:<br><input type="password" id="password"></label><br><br>
         <button type="submit">Войти</button>
       </form>
+      <hr>
+      <form id="register-form">
+        <label>Email:<br><input type="text" id="reg-email"></label><br><br>
+        <label>Пароль:<br><input type="password" id="reg-password"></label><br><br>
+        <button type="submit">Зарегистрироваться</button>
+      </form>
       <div id="login-message"></div>
     `;
 
-    import("https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js").then(({ signInWithEmailAndPassword }) => {
-      const form = document.getElementById("login-form");
-      form.addEventListener("submit", async (e) => {
+    import("https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js").then(({ signInWithEmailAndPassword, createUserWithEmailAndPassword }) => {
+      const loginForm = document.getElementById("login-form");
+      loginForm.addEventListener("submit", async (e) => {
         e.preventDefault();
         const email = document.getElementById("login").value;
         const pass = document.getElementById("password").value;
@@ -59,7 +65,20 @@ export function openWindow(name) {
           await signInWithEmailAndPassword(auth, email, pass);
           document.getElementById("login-message").textContent = "✅ Успешный вход";
         } catch (err) {
-          document.getElementById("login-message").textContent = "❌ Ошибка: " + err.message;
+          document.getElementById("login-message").textContent = "❌ Ошибка входа: " + err.message;
+        }
+      });
+
+      const regForm = document.getElementById("register-form");
+      regForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const email = document.getElementById("reg-email").value;
+        const pass = document.getElementById("reg-password").value;
+        try {
+          await createUserWithEmailAndPassword(auth, email, pass);
+          document.getElementById("login-message").textContent = "✅ Регистрация успешна";
+        } catch (err) {
+          document.getElementById("login-message").textContent = "❌ Ошибка регистрации: " + err.message;
         }
       });
     });
