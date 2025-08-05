@@ -5,7 +5,11 @@
 
 body {
   margin: 0;
-  background: #0d0d0d url('https://www.transparenttextures.com/patterns/noise-pattern-with-subtle-cross-lines.png');
+  background-color: #000;
+  background-image: 
+    linear-gradient(0deg, rgba(255,0,64,0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,0,64,0.08) 1px, transparent 1px);
+  background-size: 40px 40px;
   color: #dcdcdc;
   font-family: 'VT323', monospace;
   font-size: 14px;
