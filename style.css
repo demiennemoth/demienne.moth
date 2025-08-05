@@ -5,7 +5,7 @@
 
 body {
   margin: 0;
-  background: #141613;
+  background: #0d0d0d url('https://www.transparenttextures.com/patterns/noise-pattern-with-subtle-cross-lines.png');
   color: #dcdcdc;
   font-family: 'VT323', monospace;
   font-size: 14px;
@@ -125,6 +125,30 @@ body {
   overflow-y: auto;
 }
 
+/* === Меню === */
+.menu {
+  background: #1a1a1a;
+  padding: 10px;
+  border-bottom: 2px solid #333;
+  text-align: center;
+  font-size: 16px;
+  box-shadow: 0 0 10px #000 inset;
+}
+.menu a {
+  margin: 0 10px;
+  color: #e0e0e0;
+  text-decoration: none;
+  position: relative;
+}
+.menu a::before {
+  content: "▣ ";
+  color: #ff0040;
+}
+.menu a:hover {
+  color: #ff0040;
+  text-shadow: 0 0 5px #ff0040, 0 0 10px #ff0040;
+}
+
 /* === Форум плитками === */
 .board {
   display: grid;
@@ -133,7 +157,6 @@ body {
   width: 90%;
   margin: 20px auto;
 }
-
 .thread-link {
   display: block;
   padding: 12px;
@@ -142,8 +165,8 @@ body {
   transition: 0.2s;
   color: #e0e0e0;
   text-decoration: none;
+  box-shadow: 0 0 8px rgba(255,0,64,0.1);
 }
-
 .thread-link img {
   width: 100%;
   height: 120px;
@@ -152,14 +175,13 @@ body {
   margin-bottom: 8px;
   border: 1px solid #333;
 }
-
 .thread-link:hover {
   background: #1e1e1e;
   border-color: #ff0040;
   color: #ff0040;
   transform: scale(1.02);
+  box-shadow: 0 0 12px #ff0040;
 }
-
 .meta {
   font-size: 12px;
   color: #777;
@@ -173,21 +195,21 @@ body {
   background: #111;
   padding: 15px;
   border: 1px solid #333;
+  box-shadow: 0 0 12px rgba(255,0,64,0.2);
 }
-
 .post {
   margin: 15px 0;
   padding: 12px;
   border: 1px dashed #444;
   background: #1a1a1a;
   transition: background 0.2s, border 0.2s;
+  position: relative;
 }
-
 .post:hover {
   background: #151515;
   border: 1px solid #ff0040;
+  box-shadow: 0 0 10px rgba(255,0,64,0.2);
 }
-
 .post-header {
   font-size: 12px;
   color: #999;
@@ -196,29 +218,42 @@ body {
   justify-content: space-between;
   align-items: center;
 }
-
 .post-number {
   color: #ff0040;
   margin-right: 10px;
   cursor: pointer;
 }
-
 .collapse-btn {
   cursor: pointer;
   color: #ff0040;
   margin-left: auto;
   font-size: 12px;
 }
-
 .post img {
   max-width: 200px;
   display: block;
   margin: 6px 0;
   border: 1px solid #444;
 }
-
 .quote {
   color: #ff0040;
+  display: block;
+  border-left: 2px solid #ff0040;
+  padding-left: 6px;
+  margin: 4px 0;
+}
+
+/* === Глич‑анимация для заголовков === */
+@keyframes glitch {
+  0% { text-shadow: 2px 0 red, -2px 0 blue; }
+  20% { text-shadow: -2px 0 red, 2px 0 blue; }
+  40% { text-shadow: 2px 0 red, -2px 0 blue; }
+  60% { text-shadow: -2px 0 red, 2px 0 blue; }
+  80% { text-shadow: 2px 0 red, -2px 0 blue; }
+  100% { text-shadow: none; }
+}
+.thread h2, .menu {
+  animation: glitch 1s infinite;
 }
 
 /* === Форма ответа === */
@@ -227,8 +262,8 @@ body {
   padding: 12px;
   margin-bottom: 20px;
   border: 2px solid #444;
+  box-shadow: 0 0 8px rgba(255,0,64,0.1);
 }
-
 textarea, input[type="text"] {
   background: #000;
   color: #e0e0e0;
@@ -237,12 +272,10 @@ textarea, input[type="text"] {
   font-size: 14px;
   width: 100%;
 }
-
 textarea {
   height: 90px;
   line-height: 1.4;
 }
-
 input[type="submit"], button {
   margin-top: 6px;
   background: #111;
@@ -251,7 +284,6 @@ input[type="submit"], button {
   padding: 6px 10px;
   cursor: pointer;
 }
-
 input[type="submit"]:hover, button:hover {
   background: #ff0040;
   color: #fff;
