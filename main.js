@@ -1,10 +1,24 @@
-// main.js — версия с поддержкой авторизации и регистрации
+// main.js — версия с поддержкой анонимного ID
 import { mountForumUI } from "./forum.js";
-import { auth } from "./firebase.js";
 
 function toggleStartMenu() {
   const menu = document.getElementById("start-menu");
   menu.classList.toggle("hidden");
+}
+
+function getAnonId() {
+  let id = localStorage.getItem("anon-id");
+  if (!id) {
+    id = "anon" + Math.floor(Math.random() * 10000);
+    localStorage.setItem("anon-id", id);
+  }
+  return id;
+}
+
+function generateAnon() {
+  const id = "anon" + Math.floor(Math.random() * 10000);
+  localStorage.setItem("anon-id", id);
+  document.getElementById("anon-id").textContent = id;
 }
 
 export function openWindow(name) {
@@ -40,51 +54,17 @@ export function openWindow(name) {
   }
 
   if (name === "accession") {
+    const currentId = getAnonId();
     target.innerHTML = `
-      <form id="login-form">
-        <label>Логин:<br><input type="text" id="login"></label><br><br>
-        <label>Пароль:<br><input type="password" id="password"></label><br><br>
-        <button type="submit">Войти</button>
-      </form>
-      <hr>
-      <form id="register-form">
-        <label>Email:<br><input type="text" id="reg-email"></label><br><br>
-        <label>Пароль:<br><input type="password" id="reg-password"></label><br><br>
-        <button type="submit">Зарегистрироваться</button>
-      </form>
-      <div id="login-message"></div>
+      <div id="anon-box">
+        <p>Ваш ID: <span id="anon-id">${currentId}</span></p>
+        <button onclick="generateAnon()">Сменить ID</button>
+      </div>
     `;
-
-    import("https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js").then(({ signInWithEmailAndPassword, createUserWithEmailAndPassword }) => {
-      const loginForm = document.getElementById("login-form");
-      loginForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const email = document.getElementById("login").value;
-        const pass = document.getElementById("password").value;
-        try {
-          await signInWithEmailAndPassword(auth, email, pass);
-          document.getElementById("login-message").textContent = "✅ Успешный вход";
-        } catch (err) {
-          document.getElementById("login-message").textContent = "❌ Ошибка входа: " + err.message;
-        }
-      });
-
-      const regForm = document.getElementById("register-form");
-      regForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const email = document.getElementById("reg-email").value;
-        const pass = document.getElementById("reg-password").value;
-        try {
-          await createUserWithEmailAndPassword(auth, email, pass);
-          document.getElementById("login-message").textContent = "✅ Регистрация успешна";
-        } catch (err) {
-          document.getElementById("login-message").textContent = "❌ Ошибка регистрации: " + err.message;
-        }
-      });
-    });
   }
 }
 
 // Делаем функции доступными глобально для onclick в HTML
 window.toggleStartMenu = toggleStartMenu;
 window.openWindow = openWindow;
+window.generateAnon = generateAnon;
