@@ -4,94 +4,32 @@
   <meta charset="UTF-8" />
   <title>FORUM.EXE</title>
   <link rel="stylesheet" href="style.css" />
-  <style>
-    body {
-      background-color: #0f0f0f;
-      color: #ccc;
-      font-family: 'Courier New', monospace;
-      padding: 20px;
-    }
-
-    #nickname-container {
-      margin-bottom: 30px;
-    }
-
-    #nickname-input {
-      background: #111;
-      color: #ccc;
-      border: 1px solid #444;
-      padding: 5px;
-      font-family: monospace;
-    }
-
-    #save-nickname {
-      background: #222;
-      color: #fff;
-      border: 1px solid #555;
-      padding: 5px 10px;
-      cursor: pointer;
-    }
-
-    #thread-form input, #thread-form textarea, #thread-category {
-      background: #111;
-      color: #ccc;
-      border: 1px solid #444;
-      padding: 5px;
-      font-family: monospace;
-      margin-bottom: 10px;
-      display: block;
-      width: 100%;
-    }
-
-    #post-thread {
-      background: #222;
-      color: #fff;
-      border: 1px solid #555;
-      padding: 5px 15px;
-      cursor: pointer;
-    }
-
-    .thread-box {
-      border: 1px solid #444;
-      padding: 10px;
-      margin: 15px 0;
-      background-color: rgba(25, 25, 25, 0.9);
-      box-shadow: 0 0 10px #111;
-    }
-
-    .thread-box a {
-      text-decoration: none;
-      color: #8af;
-    }
-
-    .thread-box a:hover {
-      text-decoration: underline;
-    }
-
-    .thread-id {
-      color: #999;
-      font-size: 0.9em;
-    }
-
-    .thread-title {
-      font-size: 1.2em;
-      color: #ccc;
-      margin-bottom: 5px;
-    }
-
-    small {
-      font-size: 0.8em;
-      color: #777;
-    }
-  </style>
 </head>
 <body>
-  <div id="forum-root"></div>
+  <h1 style="text-align:center; margin-top:20px; color:#ff0040;">Форум</h1>
 
-  <script type="module">
-    import { mountForumUI } from "./forum.js";
-    const container = document.getElementById("forum-root");
-    mountForumUI(container);
-  </script>
+  <!-- Список тредов плитками -->
+  <div class="board">
+    <a class="thread-link" href="thread.html?id=1">
+      <img src="images/thread_dark.png" alt="preview">
+      Тред про тьму
+      <div class="meta">42 поста • 06/08/25</div>
+    </a>
+    <a class="thread-link" href="thread.html?id=2">
+      <img src="images/thread_memes.png" alt="preview">
+      Тред про мемы
+      <div class="meta">15 постов • 06/08/25</div>
+    </a>
+    <a class="thread-link" href="thread.html?id=3">
+      <img src="images/thread_beer.png" alt="preview">
+      Тред про пиво
+      <div class="meta">8 постов • 06/08/25</div>
+    </a>
+    <a class="thread-link" href="thread.html?id=4">
+      <img src="images/thread_music.png" alt="preview">
+      Тред про музыку
+      <div class="meta">23 поста • 05/08/25</div>
+    </a>
+  </div>
 </body>
 </html>
