@@ -1,4 +1,4 @@
-// main.js — версия с поддержкой анонимного ID
+// main.js — версия с поддержкой анонимного ID и всех окон
 import { mountForumUI } from "./forum.js";
 
 function toggleStartMenu() {
@@ -51,6 +51,10 @@ export function openWindow(name) {
     import("./news.js").then(module => {
       module.mountNewsUI(target);
     });
+  }
+
+  if (name === "readnews") {
+    target.innerHTML = "<p>Здесь будет чтение новостей...</p>";
   }
 
   if (name === "accession") {
