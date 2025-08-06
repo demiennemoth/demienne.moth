@@ -1,4 +1,4 @@
-// thread.js — полная отрисовка треда, формы и ответов внутри JS
+// thread.js — форма вставляется только при наличии anon-id (никаких display: none)
 import { db } from "./firebase.js";
 import { doc, getDoc, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
@@ -21,18 +21,21 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
 
     const thread = threadSnap.data();
-    threadContainer.innerHTML = `
-      <h2>${thread.title}</h2>
-      <p>${thread.body}</p>
-      <small>${thread.createdAt?.seconds ? new Date(thread.createdAt.seconds * 1000).toLocaleString() : ""}</small>
 
-      <div class="form-box" id="reply-form" style="margin-top:20px; display:${anonId ? "block" : "none"};">
+    const formBlock = anonId ? `
+      <div class="form-box" id="reply-form" style="margin-top:20px;">
         <form>
           <textarea id="reply-input" placeholder=">напиши свой ответ..."></textarea>
           <button type="submit" id="reply-btn">Ответить</button>
         </form>
       </div>
+    ` : "";
 
+    threadContainer.innerHTML = `
+      <h2>${thread.title}</h2>
+      <p>${thread.body}</p>
+      <small>${thread.createdAt?.seconds ? new Date(thread.createdAt.seconds * 1000).toLocaleString() : ""}</small>
+      ${formBlock}
       <div id="reply-list" style="margin-top:20px;"></div>
     `;
   } catch (err) {
@@ -70,7 +73,7 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   replyForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
-    const body = replyInput.value.trim();
+    const body = replyInput?.value.trim();
     if (!body || !anonId) return;
 
     try {
