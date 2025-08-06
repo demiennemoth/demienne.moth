@@ -1,9 +1,6 @@
-// thread.js — работа с отдельным тредом
-import { db, auth } from "./firebase.js";
-import { 
-  doc, getDoc, collection, addDoc, getDocs, serverTimestamp 
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+// thread.js — поддержка анонимных ответов с anon-id
+import { db } from "./firebase.js";
+import { doc, getDoc, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 window.addEventListener("DOMContentLoaded", async () => {
   const threadContainer = document.getElementById("thread-container");
@@ -11,24 +8,19 @@ window.addEventListener("DOMContentLoaded", async () => {
   const replyForm = document.getElementById("reply-form");
   const replyInput = document.getElementById("reply-input");
 
-  let currentUser = null;
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      currentUser = user;
-      replyForm.style.display = "block";
-    } else {
-      currentUser = null;
-      replyForm.style.display = "none";
-    }
-  });
-
   const params = new URLSearchParams(window.location.search);
   const threadId = params.get("id");
+  const anonId = localStorage.getItem("anon-id");
 
   if (!threadId) {
     threadContainer.innerHTML = "<p>Тред не найден</p>";
     return;
+  }
+
+  if (anonId) {
+    replyForm.style.display = "block";
+  } else {
+    replyForm.style.display = "none";
   }
 
   // Загружаем тред
@@ -62,7 +54,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         div.className = "reply-box";
         div.innerHTML = `
           <p>${reply.body}</p>
-          <small>${reply.createdAt?.seconds ? new Date(reply.createdAt.seconds * 1000).toLocaleString() : ""}</small>
+          <small>${reply.author || "анон"} — ${reply.createdAt?.seconds ? new Date(reply.createdAt.seconds * 1000).toLocaleString() : ""}</small>
         `;
         replyList.appendChild(div);
       });
@@ -74,17 +66,16 @@ window.addEventListener("DOMContentLoaded", async () => {
 
   loadReplies();
 
-  // Отправка ответа
   replyForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const body = replyInput.value.trim();
-    if (!body) return;
+    if (!body || !anonId) return;
 
     try {
       await addDoc(collection(db, "threads", threadId, "replies"), {
         body,
-        createdAt: serverTimestamp(),
-        userId: currentUser?.uid || ""
+        author: anonId,
+        createdAt: serverTimestamp()
       });
       replyInput.value = "";
       loadReplies();
