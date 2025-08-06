@@ -8,16 +8,16 @@
   <script>
     function togglePost(id) {
       const post = document.querySelector(`#post${id} .post-body`);
-      if (post.style.display === "none") {
-        post.style.display = "block";
-      } else {
-        post.style.display = "none";
+      if (post && post.style) {
+        post.style.display = post.style.display === "none" ? "block" : "none";
       }
     }
     function quotePost(id) {
-      const textarea = document.querySelector("textarea");
-      textarea.value += ">>" + id + "\n";
-      textarea.focus();
+      const textarea = document.querySelector("#reply-input");
+      if (textarea) {
+        textarea.value += ">>" + id + "\n";
+        textarea.focus();
+      }
     }
   </script>
 </head>
