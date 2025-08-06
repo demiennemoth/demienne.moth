@@ -1,9 +1,6 @@
-// forum.js — UI форума как модуль (фикс: всегда показывать форум)
-import { db, auth } from "./firebase.js";
-import { 
-  collection, addDoc, getDocs, serverTimestamp
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+// forum.js — теперь с поддержкой anon-id
+import { db } from "./firebase.js";
+import { collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 export function mountForumUI(container) {
   container.innerHTML = `
@@ -19,25 +16,11 @@ export function mountForumUI(container) {
     </div>
   `;
 
-  const forumContainer = container.querySelector("#forum-container");
   const threadTitleInput = container.querySelector("#thread-title");
   const threadBodyInput = container.querySelector("#thread-body");
   const categoryInput = container.querySelector("#thread-category");
   const postThreadBtn = container.querySelector("#post-thread");
   const threadList = container.querySelector("#thread-list");
-
-  let currentUser = null;
-
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      currentUser = user;
-      console.log("Пользователь авторизован:", user.uid);
-    } else {
-      console.warn("Не авторизован — форум доступен только для чтения.");
-    }
-    forumContainer.style.display = "block"; // всегда показываем форум
-    loadThreads();
-  });
 
   async function loadThreads() {
     threadList.innerHTML = "";
@@ -86,15 +69,16 @@ export function mountForumUI(container) {
     e.preventDefault();
     const title = threadTitleInput.value.trim();
     const body = threadBodyInput.value.trim();
-    const category = categoryInput.value;
+    const category = categoryInput.value.trim();
+    const anonId = localStorage.getItem("anon-id");
 
     if (!title || !body || !category) {
       alert("Все поля обязательны");
       return;
     }
 
-    if (!currentUser) {
-      alert("Чтобы создавать треды, нужно войти через профиль.");
+    if (!anonId) {
+      alert("Сначала получи анонимный ID в окне Accession");
       return;
     }
 
@@ -103,19 +87,19 @@ export function mountForumUI(container) {
         title,
         body,
         category,
-        createdAt: serverTimestamp(),
-        userId: currentUser.uid
+        author: anonId,
+        createdAt: serverTimestamp()
       });
-      console.log("Тред успешно создан:", docRef.id);
 
       threadTitleInput.value = "";
       threadBodyInput.value = "";
       categoryInput.value = "";
-
       setTimeout(() => loadThreads(), 600);
     } catch (err) {
       console.error("Ошибка при добавлении треда:", err);
       alert("Не удалось создать тред");
     }
   });
+
+  loadThreads();
 }
