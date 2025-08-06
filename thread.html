@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>THREAD.EXE</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="thread.js"></script>
+  <script>
+    function togglePost(id) {
+      const post = document.querySelector(`#post${id} .post-body`);
+      if (post && post.style) {
+        post.style.display = post.style.display === "none" ? "block" : "none";
+      }
+    }
+    function quotePost(id) {
+      const textarea = document.querySelector("#reply-input");
+      if (textarea) {
+        textarea.value += ">>" + id + "\n";
+        textarea.focus();
+      }
+    }
+  </script>
+</head>
+<body>
+
+  <!-- Меню -->
+  <div class="menu">
+    <a href="forum.html">/b/</a>
+    <a href="news.html">/news/</a>
+    <a href="read.html">/read/</a>
+    <a href="profile.html">/profile/</a>
+  </div>
+
+  <!-- Сам тред -->
+  <div class="thread" id="thread-container">
+    <h2 id="thread-title" style="color:#ff0040;">/b/ - Тред</h2>
+    <p id="thread-info" style="color:#aaa; font-size: 0.9em;"></p>
+
+    <!-- Форма -->
+    <div class="form-box" id="reply-form">
+      <textarea id="reply-input" placeholder=">напиши свой ответ..."></textarea>
+      <button id="reply-btn">Ответить</button>
+    </div>
+
+    <!-- Сюда подгружаются посты -->
+    <div id="reply-list"></div>
+
+  </div>
+</body>
+</html>
