@@ -33,7 +33,8 @@
 
   <!-- Сам тред -->
   <div class="thread" id="thread1">
-    <h2 style="color:#ff0040;">/b/ - Тред</h2>
+    <h2 id="thread-title" style="color:#ff0040;">/b/ - Тред</h2>
+    <p id="thread-info" style="color:#aaa; font-size: 0.9em;"></p>
 
     <!-- Форма -->
     <div class="form-box" id="reply-form">
@@ -41,36 +42,8 @@
       <button id="reply-btn">Ответить</button>
     </div>
 
-    <!-- Посты -->
-    <div class="post" id="post1">
-      <div class="post-header">
-        <span class="post-number" onclick="quotePost(1)">#1</span> Анон, 06/08/25
-        <span class="collapse-btn" onclick="togglePost(1)">[–]</span>
-      </div>
-      <div class="post-body">
-        <p>Кто ещё чувствует, что экран смотрит на тебя?</p>
-      </div>
-    </div>
-
-    <div class="post" id="post2">
-      <div class="post-header">
-        <span class="post-number" onclick="quotePost(2)">#2</span> Анон, 06/08/25
-        <span class="collapse-btn" onclick="togglePost(2)">[–]</span>
-      </div>
-      <div class="post-body">
-        <p><span class="quote">&gt;&gt;1</span><br>Ты не один. Мы все здесь.</p>
-      </div>
-    </div>
-
-    <div class="post" id="post3">
-      <div class="post-header">
-        <span class="post-number" onclick="quotePost(3)">#3</span> Анон, 06/08/25
-        <span class="collapse-btn" onclick="togglePost(3)">[–]</span>
-      </div>
-      <div class="post-body">
-        <p><span class="quote">&gt;&gt;2</span><br>А кто среди нас настоящий?</p>
-      </div>
-    </div>
+    <!-- Сюда подгружаются посты -->
+    <div id="post-list"></div>
 
   </div>
 </body>
