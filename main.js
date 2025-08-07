@@ -35,7 +35,7 @@ export function openWindow(name) {
   win.innerHTML = `
     <div class="window-header">
       <span>${name.toUpperCase()}</span>
-      <div><button onclick="this.closest('.window').remove()">×</button></div>
+      <div class="close-btn" onclick="this.closest('.window').remove()">×</div>
     </div>
     <div class="window-content" id="${contentId}">Loading...</div>
   `;
