@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ru">
 <head>
@@ -6,12 +7,49 @@
   <link href="favicon.ico" rel="icon" type="image/x-icon"/>
   <link href="style.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  
+  <style>
+    .bios-title {
+      position: fixed;
+      top: 80px;
+      right: 60px;
+      font-family: monospace;
+      font-size: 16px;
+      color: #00ff00;
+      background: rgba(0, 0, 0, 0.75);
+      padding: 20px;
+      white-space: pre-wrap;
+      line-height: 1.5;
+      border: 2px solid #008800;
+      box-shadow: 0 0 20px #00ff00;
+    }
+
+    .bios-title .blink {
+      display: inline-block;
+      width: 10px;
+      animation: blink 1s step-start infinite;
+    }
+
+    @keyframes blink {
+      50% { opacity: 0; }
+    }
+  </style>
 </head>
 <body>
-  <div style="display: flex; justify-content: center;">
-    <div class="header-title">MOTH DEMIENNE</div>
+  <div class="bios-title">
+BOOT SEQUENCE: INITIATED
+
+> moldem.exe /root/psyche/mask.sys
+> loading personality layers...
+
+[ERROR] Profile file is corrupted
+[FALLBACK] Entering degraded mode...
+
+USER: [UNKNOWN]
+OS: Damaged Kernel Simulation v3.6
+
+>>> ACCESSING MOTH DEMIENNE<span class="blink">_</span>
   </div>
+
   <div class="desktop">
     <div class="icon" onclick="window.location.href='forum.html'">
       <img src="images/icon_forum.png" alt="Forum"/>
@@ -30,6 +68,7 @@
       <div>Profile</div>
     </div>
   </div>
+
   <div class="taskbar">
     <button id="start-btn" onclick="toggleStartMenu()">
       <img src="images/icon_start.png" alt="start"/>
@@ -42,10 +81,10 @@
     <div class="taskbar-time">6:66</div>
   </div>
   <div id="window-container"></div>
+
   <script type="module" src="firebase.js"></script>
   <script type="module" src="forum.js"></script>
   <script type="module" src="profile.js"></script>
   <script type="module" src="main.js"></script>
-
 </body>
 </html>
