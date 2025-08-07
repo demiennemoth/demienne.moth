@@ -135,16 +135,18 @@ body {
 
 .window-header {
   background: #1a4876;
+  height: 28px;
   padding: 5px 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: white;
+  color: #ffffff;
   font-weight: bold;
   font-size: 13px;
   border-bottom: 2px solid #000;
   box-shadow: inset 0 1px #fff, inset 0 -1px #000;
   cursor: move;
+  font-family: Tahoma, sans-serif;
 }
 
 .window-content {
@@ -316,4 +318,23 @@ input[type="submit"]:hover, button:hover {
   background: #1a4876;
   color: #fff;
   border-color: #ff0040;
+}
+
+
+.window-header .close-btn {
+  width: 22px;
+  height: 22px;
+  background: #c0c0c0;
+  border: 2px solid #000;
+  box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080;
+  color: black;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+  text-align: center;
+  cursor: pointer;
+  margin-left: 8px;
+}
+.window-header .close-btn:hover {
+  background: #808080;
 }
