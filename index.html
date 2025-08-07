@@ -11,16 +11,17 @@
     .bios-title {
       position: fixed;
       top: 80px;
-      right: 60px;
+      right: 40px;
       font-family: monospace;
-      font-size: 16px;
+      font-size: 12px;
       color: #00ff00;
       background: rgba(0, 0, 0, 0.75);
-      padding: 20px;
+      padding: 16px;
       white-space: pre-wrap;
       line-height: 1.5;
       border: 2px solid #008800;
-      box-shadow: 0 0 20px #00ff00;
+      box-shadow: 0 0 12px #00ff00;
+      max-width: 400px;
     }
 
     .bios-title .blink {
@@ -31,6 +32,24 @@
 
     @keyframes blink {
       50% { opacity: 0; }
+    }
+
+    .desktop {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    #start-menu div {
+      color: #000000;
+      font-weight: bold;
+    }
+
+    #start-menu div:hover {
+      background-color: #1a4876;
+      color: #ffffff;
     }
   </style>
 </head>
