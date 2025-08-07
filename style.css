@@ -70,7 +70,7 @@ body {
   position: absolute;
   bottom: 60px;
   left: 10px;
-  background: #111;
+  background: #585858;
   border: 3px solid #ffffff;
   color: #dcdcdc;
   width: 220px;
@@ -125,7 +125,7 @@ body {
   left: 100px;
   width: 400px;
   height: 300px;
-  background: #111;
+  background: #585858;
   border: 2px solid red;
   box-shadow: 0 0 20px red;
   display: flex;
@@ -133,7 +133,7 @@ body {
 }
 
 .window-header {
-  background: #200;
+  background: #1a4876;
   padding: 5px;
   display: flex;
   justify-content: space-between;
@@ -181,7 +181,7 @@ body {
 .thread-link {
   display: block;
   padding: 12px;
-  background: #111;
+  background: #585858;
   border: 1px solid #333;
   transition: 0.2s;
   color: #e0e0e0;
@@ -306,7 +306,7 @@ input[type="submit"], button {
   cursor: pointer;
 }
 input[type="submit"]:hover, button:hover {
-  background: #ff0040;
+  background: #1a4876;
   color: #fff;
   border-color: #ff0040;
 }
