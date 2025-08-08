@@ -69,7 +69,7 @@ window.addEventListener("DOMContentLoaded", async () => {
     }
   }
 
-  loadReplies();
+  loadReplies(); try{ await bumpReplies(threadId);}catch(e){}
 
   replyForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -83,10 +83,19 @@ window.addEventListener("DOMContentLoaded", async () => {
         createdAt: serverTimestamp()
       });
       replyInput.value = "";
-      loadReplies();
+      loadReplies(); try{ await bumpReplies(threadId);}catch(e){}
     } catch (err) {
       console.error("Ошибка при добавлении ответа:", err);
       alert("Не удалось отправить ответ");
     }
   });
 });
+
+
+// After adding a reply, optionally bump repliesCount on parent thread (best-effort)
+import { updateDoc, doc as docRef, increment } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+async function bumpReplies(threadId){
+  try{
+    await updateDoc(docRef(db, "threads", threadId), { repliesCount: increment(1) });
+  }catch(e){ /* ignore */ }
+}
