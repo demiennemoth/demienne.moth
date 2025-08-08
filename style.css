@@ -430,3 +430,62 @@ table.threads95 tr:hover td{background:#c6d4ff;}
 .row95 label{min-width:90px;}
 textarea.input95{width:100%; min-height:120px; resize:vertical;}
 @media (max-width: 860px){ .container95{grid-template-columns:1fr;} }
+
+
+/* === Graphite background with subtle noise for gaps between windows === */
+body.win95-bg {
+  background-color: #16161c !important;
+  background-image: radial-gradient(1000px 700px at 50% 20%, rgba(255,255,255,.035), transparent 70%), 
+                    radial-gradient(900px 600px at 20% 80%, rgba(255,255,255,.02), transparent 70%),
+                    linear-gradient(180deg, #121218, #0f0f16 60%, #13131a);
+  color: #e4e4e4;
+  position: relative;
+  overflow-x: hidden;
+}
+body.win95-bg::before {
+  content: "";
+  position: fixed; inset: 0; pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.015) 0 1px, transparent 1px 2px);
+  opacity: .25;
+}
+body.win95-bg::after {
+  content: "";
+  position: fixed; inset: -8%; pointer-events: none;
+  background: radial-gradient(900px 600px at 50% 50%, transparent 60%, rgba(0,0,0,.6) 100%);
+}
+
+/* Decorative Win95 windows around the forum */
+.decowin {
+  position: absolute;
+  background: var(--95-gray);
+  border: 2px solid var(--95-light);
+  border-right-color: var(--95-black);
+  border-bottom-color: var(--95-black);
+  box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white), 0 14px 28px rgba(0,0,0,.35);
+  width: 260px;
+}
+.decowin .titlebar95 {
+  padding: 2px 6px;
+  height: 22px;
+}
+.decowin .panel95 { padding: 6px; }
+
+/* Make main window larger to fill screen while keeping visible frame */
+.window95.main-forum {
+  max-width: min(1320px, calc(100vw - 40px));
+  margin: 20px auto 70px;
+}
+
+/* Taskbar glow to integrate with background */
+.taskbar.win95 {
+  box-shadow: 0 -8px 24px rgba(0,0,0,.45), inset 0 1px 0 #808080;
+  border-top: 2px solid #ffffff;
+}
+
+/* Utility: place container for absolutely-positioned decorative windows */
+#decor-layer {
+  position: fixed; inset: 0;
+  pointer-events: none;
+}
+#decor-layer .decowin { pointer-events: auto; }
