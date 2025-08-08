@@ -5,20 +5,14 @@
   <title>FORUM.EXE</title>
   <link rel="stylesheet" href="style.css" />
   <script type="module">
-    import { mountForumUI } from './forum.js';
+    import { mountForum95 } from './forum.js';
     window.addEventListener("DOMContentLoaded", () => {
-      const root = document.getElementById("forum-root");
-      mountForumUI(root);
+      document.body.classList.add("win95-bg"); // dark background
+      mountForum95(document.getElementById("forum-root"));
     });
   </script>
 </head>
 <body>
-  <div class="menu">
-    <a href="forum.html">/b/</a>
-    <a href="news.html">/news/</a>
-    <a href="read.html">/read/</a>
-    <a href="profile.html">/profile/</a>
-  </div>
-  <div id="forum-root" style="padding: 20px;"></div>
+  <div id="forum-root"></div>
 </body>
 </html>
