@@ -73,58 +73,22 @@ OS: Damaged Kernel Simulation v3.6
     <div class="icon" onclick="window.location.href='forum.html'">
       <img src="images/icon_forum.png" alt="Forum"/>
       <div>Forum</div>
-    </div>
-    <div class="icon" onclick="openWindow('news')">
-      <img src="images/icon_news.png" alt="News"/>
-      <div>News</div>
-    </div>
-    <div class="icon" onclick="openWindow('readnews')">
-      <img src="images/icon_readnews.png" alt="Read"/>
-      <div>Read</div>
-    </div>
+    </div></div></div>
     <div class="icon" onclick="openWindow('profile')">
       <img src="images/icon_profile.png" alt="Profile"/>
       <div>Profile</div>
     </div>
   </div>
 
-  <div class="taskbar95" role="toolbar" aria-label="Панель задач">
-    <button class="start95" id="start95" onclick="toggleStartMenu()" aria-haspopup="true" aria-controls="start-menu">
-      <span class="start-logo" aria-hidden="true"></span>
-      Пуск
-    </button>
-    <div class="tasklist95" id="task-list">
-      <!-- сюда можно добавлять кнопки открытых окон -->
-      <button class="task-btn95" style="display:none">Forum</button>
+  <div class="taskbar">
+    <button id="start-btn" class="start95" onclick="toggleStartMenu()">Пуск</button>
+    <div id="start-menu" class="hidden">
+      <div onclick="openWindow('accession')">Accession</div>
+      <div onclick="openWindow('profile')">Profile</div>
+      <div onclick="openWindow('help')">Help</div>
     </div>
-    <div class="clock95" id="clock95">6:66</div>
-    <div id="start-menu" class="menu95 hidden" role="menu">
-      <div role="menuitem" onclick="openWindow('accession')">Accession</div>
-      <div role="menuitem" onclick="openWindow('profile')">Profile</div>
-      <div role="menuitem" onclick="openWindow('help')">Help</div>
-    </div>
+    <div class="taskbar-time">6:66</div>
   </div>
-  <script>
-    // Часы на панели
-    (function(){
-      const el = document.getElementById('clock95');
-      if(!el) return;
-      setInterval(()=>{
-        const d = new Date();
-        const hh = String(d.getHours()).padStart(2,'0');
-        const mm = String(d.getMinutes()).padStart(2,'0');
-        el.textContent = hh + ':' + mm;
-      }, 10000);
-    })();
-    // Закрытие меню "Пуск" при клике вне
-    document.addEventListener('click', (e)=>{
-      const btn = document.getElementById('start95');
-      const menu = document.getElementById('start-menu');
-      if(!menu || !btn) return;
-      if(e.target === btn || btn.contains(e.target)) return; // кнопка сама обрабатывает
-      if(!menu.classList.contains('hidden')) menu.classList.add('hidden');
-    });
-  </script>
   <div id="window-container"></div>
 
   <script type="module" src="firebase.js"></script>
