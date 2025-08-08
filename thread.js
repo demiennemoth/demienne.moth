@@ -1,6 +1,6 @@
 // thread.js — форма вставляется только при наличии anon-id (никаких display: none)
 import { db } from "./firebase.js";
-import { doc, getDoc, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { doc, getDoc, collection, addDoc, getDocs, serverTimestamp, setDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 window.addEventListener("DOMContentLoaded", async () => {
   const threadContainer = document.getElementById("thread-container");
@@ -32,9 +32,15 @@ window.addEventListener("DOMContentLoaded", async () => {
     ` : "";
 
     threadContainer.innerHTML = `
-      <h2>${thread.title}</h2>
+      <h2 id="thread-title">${thread.title}</h2>
       <p>${thread.body}</p>
       <small>${thread.createdAt?.seconds ? new Date(thread.createdAt.seconds * 1000).toLocaleString() : ""}</small>
+      <!-- Action bar -->
+      <div class="toolbar95" id="thread-actionbar" style="margin:8px 0;">
+        <button class="btn95" id="btn-fav">В избранное</button>
+        <button class="btn95" id="btn-readlater">Прочитать потом</button>
+        <button class="btn95" id="btn-bookmark">Закладка</button>
+      </div>
       ${formBlock}
       <div id="reply-list" style="margin-top:20px;"></div>
     `;
@@ -96,6 +102,44 @@ window.addEventListener("DOMContentLoaded", async () => {
 import { updateDoc, doc as docRef, increment } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 async function bumpReplies(threadId){
   try{
-    await updateDoc(docRef(db, "threads", threadId), { repliesCount: increment(1) });
+    await updateDoc(docRef(db, "threads", threadId), { repliesCount: increment(1)   // === Win95 action buttons wired to Firestore ===
+  (function initThreadActions(){
+    try{
+      const bar = document.getElementById("thread-actionbar");
+      if(!bar) return;
+      const getTitle = () => {
+        const el = document.getElementById("thread-title");
+        return el ? el.textContent.trim() : (thread?.title || threadId || "(без названия)");
+      };
+      function needAnon(){
+        if(!anonId){ alert("Сначала получи анонимный ID в окне Accession"); return true; }
+        if(!threadId){ alert("Нет ID треда в URL"); return true; }
+        return false;
+      }
+      document.getElementById("btn-fav")?.addEventListener("click", async ()=>{
+        if(needAnon()) return;
+        await setDoc(doc(db, "users", anonId, "favorites", threadId), {
+          threadId, title: getTitle(), addedAt: serverTimestamp()
+        }, { merge:true });
+        alert("Добавлено в избранное");
+      });
+      document.getElementById("btn-readlater")?.addEventListener("click", async ()=>{
+        if(needAnon()) return;
+        await addDoc(collection(db, "users", anonId, "readlater"), {
+          threadId, title: getTitle(), addedAt: serverTimestamp()
+        });
+        alert("Сохранено в «Прочитать потом»");
+      });
+      document.getElementById("btn-bookmark")?.addEventListener("click", async ()=>{
+        if(needAnon()) return;
+        await addDoc(collection(db, "users", anonId, "bookmarks"), {
+          url: location.pathname + location.search, desc: getTitle(), addedAt: serverTimestamp()
+        });
+        alert("Закладка добавлена");
+      });
+    }catch(e){ console.warn("initThreadActions failed", e); }
+  })();
+
+});
   }catch(e){ /* ignore */ }
 }
