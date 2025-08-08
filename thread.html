@@ -21,30 +21,27 @@
     }
   </script>
 </head>
-<body>
-
-  <!-- Меню -->
-  <div class="menu">
-    <a href="forum.html">/b/</a>
-    <a href="news.html">/news/</a>
-    <a href="read.html">/read/</a>
-    <a href="profile.html">/profile/</a>
-  </div>
-
-  <!-- Сам тред -->
-  <div class="thread" id="thread-container">
-    <h2 id="thread-title" style="color:#ff0040;">/b/ - Тред</h2>
-    <p id="thread-info" style="color:#aaa; font-size: 0.9em;"></p>
-
-    <!-- Форма -->
-    <div class="form-box" id="reply-form">
-      <textarea id="reply-input" placeholder=">напиши свой ответ..."></textarea>
-      <button id="reply-btn">Ответить</button>
+<body class="win95-bg">
+  <div class="window95" style="max-width:1024px; margin:24px auto 80px;">
+    <div class="titlebar95">
+      <div class="icon"></div>
+      <div class="title">Thread</div>
+      <div class="controls95">
+        <button class="btn95 tb95" onclick="history.back()">×</button>
+      </div>
     </div>
 
-    <!-- Сюда подгружаются посты -->
-    <div id="reply-list"></div>
-
+    <div class="panel95">
+      <div class="thread" id="thread-container" style="background:#fff; color:#000; border:1px solid #808080; box-shadow:none;">
+        <h2 id="thread-title" style="color:#000;">/b/ - Тред</h2>
+        <p id="thread-info" style="color:#333; font-size: 0.9em;"></p>
+        <div class="form-box" id="reply-form">
+          <textarea id="reply-input" placeholder=">напиши свой ответ..."></textarea>
+          <button id="reply-btn">Ответить</button>
+        </div>
+        <div id="reply-list"></div>
+      </div>
+    </div>
   </div>
 </body>
 </html>
