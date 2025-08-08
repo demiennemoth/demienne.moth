@@ -2,12 +2,13 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background-color: #000; /* solid fallback to kill white bars */
   background-image: url('images/bliss-dark.png');
-  background-size: cover;            /* fill viewport */
-  background-position: center center;
+  background-size: contain;
   background-repeat: no-repeat;
   background-attachment: fixed;
+
+  background-position: center;
+  background-repeat: no-repeat;
   font-family: 'VT323', monospace;
   color: #fff;
 }
@@ -33,9 +34,8 @@ body {
   background-color: #000;
   background-image: url('images/bliss-dark.png');
   background-size: cover;
-  background-position: center center;
+  background-position: center;
   background-repeat: no-repeat;
-  background-attachment: fixed;
   color: #dcdcdc;
   font-family: 'VT323', monospace;
   font-size: 14px;
@@ -60,22 +60,30 @@ body {
   bottom: 0;
   width: 100%;
   height: 40px;
-  background: #b7b5a8;
+  background: #c0c0c0;
   display: flex;
   align-items: center;
-  padding-left: 10px;
+  gap: 6px;
+  padding: 3px 6px;
+  border-top: 2px solid #ffffff;
+  box-shadow: inset 0 1px 0 #808080;
+  z-index: 9999;
 }
 
 #start-menu {
-  position: absolute;
-  bottom: 60px;
+  position: fixed;
   left: 10px;
-  background: #b7b5a8;
-  border: 3px solid #ffffff;
-  color: #dcdcdc;
-  width: 220px;
-  min-height: 200px;
-  padding: 15px;
+  bottom: 48px;
+  background: #c0c0c0;
+  border: 2px solid #ffffff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  color: #000;
+  width: 240px;
+  min-height: 140px;
+  padding: 6px;
+  box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #ffffff;
+  z-index: 10000;
 }
 
 #start-menu.hidden {
@@ -83,12 +91,17 @@ body {
 }
 
 #start-menu div {
-  padding: 10px;
+  padding: 6px 8px;
   cursor: pointer;
+  border: 1px solid transparent;
+  color: #000;
+  font-family: Tahoma, sans-serif;
+  font-size: 13px;
 }
 
 #start-menu div:hover {
-  background: #400;
+  background: #000080;
+  color: #ffffff;
 }
 
 .taskbar-time {
@@ -101,21 +114,22 @@ body {
 
 #start-btn {
   all: unset;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 56px;
-  height: 56px;
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
+  min-width: 72px;
+  height: 32px;
+  background: #c0c0c0;
+  border: 2px solid #ffffff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  padding: 2px 12px;
+  margin: 4px;
   cursor: pointer;
-}
-
-#start-btn img {
-  width: 56px;
-  height: 56px;
+  color: #000;
+  font-family: Tahoma, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 /* === Окна (форум/треды/новости) === */
@@ -275,6 +289,19 @@ body {
   margin: 4px 0;
 }
 
+/* === Глич‑анимация для заголовков === */
+@keyframes glitch {
+  0% { text-shadow: 2px 0 red, -2px 0 blue; }
+  20% { text-shadow: -2px 0 red, 2px 0 blue; }
+  40% { text-shadow: 2px 0 red, -2px 0 blue; }
+  60% { text-shadow: -2px 0 red, 2px 0 blue; }
+  80% { text-shadow: 2px 0 red, -2px 0 blue; }
+  100% { text-shadow: none; }
+}
+.thread h2, .menu {
+  animation: glitch 1s infinite;
+}
+
 /* === Форма ответа === */
 .form-box, #reply-form {
   background: #222;
@@ -328,172 +355,11 @@ input[type="submit"]:hover, button:hover {
   background: #808080;
 }
 
-
-/* ===== Win95 forum skin (appended without breaking current styles) ===== */
-:root{
-  --95-gray:#c0c0c0;
-  --95-dark:#808080;
-  --95-light:#dfdfdf;
-  --95-blue:#000080;
-  --95-white:#ffffff;
-  --95-black:#000000;
-}
-body.win95-bg {
-  background-color: #0b0b0b;
-  background-image: none;
-  color: #e4e4e4;
-}
-
-/* Window */
-.window95{
-  margin: 24px auto 80px auto;
-  max-width: 1180px; /* larger window as requested */
-  background: var(--95-gray);
-  border: 2px solid var(--95-light);
-  border-right-color: var(--95-black);
-  border-bottom-color: var(--95-black);
-  box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);
-  font-family: Tahoma, sans-serif;
-  color: #000;
-}
-.titlebar95{
-  background: linear-gradient(var(--95-blue), #000060);
-  color: #fff;
-  padding: 4px 6px;
-  display:flex; align-items:center; gap:6px;
-  user-select:none;
-}
-.titlebar95 .icon{width:16px;height:16px;background:#00a;box-shadow:inset 1px 1px 0 #5af, inset -1px -1px 0 #003;}
-.titlebar95 .title{font-weight:bold; font-size:13px;}
-.controls95{margin-left:auto; display:flex; gap:2px;}
-.btn95{
-  background: var(--95-gray);
-  border:2px solid var(--95-white);
-  border-right-color: var(--95-dark); border-bottom-color: var(--95-dark);
-  padding:2px 8px; cursor:pointer; font-size:13px; color:#000;
-}
-.btn95:active{
-  border:2px solid var(--95-dark);
-  border-right-color: var(--95-white); border-bottom-color: var(--95-white);
-  padding:3px 7px;
-}
-.tb95{width:18px;height:18px;display:grid;place-items:center;}
-.menubar95{display:flex; gap:8px; padding:3px 6px; border-bottom:1px solid var(--95-white);}
-.menu95{padding:1px 6px; cursor:default;}
-.menu95:hover{background:var(--95-blue); color:#fff;}
-.container95{display:grid; grid-template-columns: 240px 1fr; gap:8px; padding:8px;}
-.panel95{padding:6px;}
-.group95{font-weight:bold; background:var(--95-light); padding:3px 4px; border:1px solid var(--95-white); border-right-color:var(--95-dark); border-bottom-color:var(--95-dark);}
-.list95{list-style:none; padding:0; margin:6px 0 0 0;}
-.list95 li{margin:0; padding:2px 4px; cursor:default;}
-.list95 li:hover{background:#c6d4ff;}
-
-.toolbar95{display:flex; gap:6px; align-items:center; padding:4px; border:1px solid var(--95-white); border-right-color:var(--95-dark); border-bottom-color:var(--95-dark); background:var(--95-light);}
-.input95{
-  background:#fff; border:2px solid var(--95-dark);
-  border-right-color:var(--95-white); border-bottom-color:var(--95-white);
-  padding:3px 4px; font-size:13px; min-width:220px; color:#000;
-}
-
-table.threads95{width:100%; border-collapse:collapse; margin-top:8px; background:#fff; font-size:13px; color:#000;}
-table.threads95 th, table.threads95 td{border:1px solid var(--95-dark); padding:6px 8px;}
-table.threads95 th{background:var(--95-light); text-align:left;}
-table.threads95 tr:hover td{background:#c6d4ff;}
-.subject95 a{color:#000; text-decoration:none;}
-.subject95 a:hover{text-decoration:underline;}
-
-.status95{display:flex; justify-content:space-between; padding:3px 6px; background:var(--95-gray);
-  border-top:2px solid var(--95-white); border-left:2px solid var(--95-white);
-  border-right:2px solid var(--95-dark); border-bottom:2px solid var(--95-dark);
-  font-size:12px; color:#000;
-}
-
-/* Modal */
-.modal95{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.35);}
-.modal95 .window95{width:560px; max-width:95%;}
-.row95{display:flex; gap:8px; margin:8px 0;}
-.row95 label{min-width:90px;}
-textarea.input95{width:100%; min-height:120px; resize:vertical;}
-
-/* Responsive */
-@media (max-width: 860px){
-  .container95{grid-template-columns:1fr;}
-}
-
-
-/* === Win95 Taskbar (semantic, no image needed) === */
-.taskbar95{
-  position: fixed;
-  left: 0; right: 0; bottom: 0;
-  height: 40px;
-  background: var(--95-gray, #c0c0c0);
-  border-top: 2px solid #ffffff;
-  box-shadow: inset 0 1px 0 #808080;
-  display:flex; align-items:center; gap:6px;
-  padding: 3px;
-  z-index: 9999;
-  font-family: Tahoma, sans-serif;
-}
-.start95{
-  display:inline-flex; align-items:center; gap:6px;
-  background: #c0c0c0;
-  border: 2px solid #ffffff;
-  border-right-color: #808080; border-bottom-color:#808080;
-  padding: 2px 10px;
-  cursor:pointer; font-weight:bold; color:#000;
-}
-.start95:active{
+#start-btn:active {
   border: 2px solid #808080;
-  border-right-color: #ffffff; border-bottom-color:#ffffff;
-  padding: 3px 9px;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  padding: 3px 11px;
 }
-.start95 .start-logo{
-  width: 16px; height:16px; background:#008000;
-  box-shadow: inset 1px 1px 0 #7fff7f, inset -1px -1px 0 #003000;
-}
-.tasklist95{
-  display:flex; gap:6px; align-items:center;
-  margin-left: 6px; flex: 1 1 auto; overflow:hidden;
-}
-.task-btn95{
-  max-width: 220px;
-  text-overflow: ellipsis; white-space: nowrap; overflow:hidden;
-  background: #c0c0c0;
-  border: 2px solid #ffffff;
-  border-right-color:#808080; border-bottom-color:#808080;
-  padding: 2px 8px; color:#000; cursor:pointer;
-}
-.task-btn95:active{
-  border: 2px solid #808080;
-  border-right-color:#ffffff; border-bottom-color:#ffffff;
-  padding: 3px 7px;
-}
-.clock95{
-  margin-left:auto;
-  padding: 2px 8px;
-  border: 2px solid #ffffff;
-  border-right-color:#808080; border-bottom-color:#808080;
-  color:#000; min-width:64px; text-align:center;
-  user-select:none;
-  background:#c0c0c0;
-}
-/* Start menu dropdown */
-.menu95{
-  position: fixed;
-  left: 6px; bottom: 46px;
-  background: #c0c0c0;
-  border: 2px solid #ffffff;
-  border-right-color:#808080; border-bottom-color:#808080;
-  width: 220px;
-  min-height: 140px;
-  padding: 6px;
-  box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #ffffff;
-}
-.menu95.hidden{ display:none; }
-.menu95 > div{
-  padding: 6px; color:#000; cursor:pointer;
-  border: 1px solid transparent;
-}
-.menu95 > div:hover{
-  background:#000080; color:#fff;
-}
+
+#start-menu.hidden { display: none; }
