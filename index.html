@@ -19,6 +19,82 @@
   </style>
 </head>
 <body>
+  
+  <!-- Decorative windows layer -->
+  <div id="decor-layer" aria-hidden="true">
+    <div class="decowin" style="left: 24px; top: 38px;">
+      <div class="titlebar95"><div class="title">WARNING.TXT</div></div>
+      <div class="panel95"><div style="font-size:12px;">Объект удерживается процессом <b>WATCHER.EXE</b>.</div></div>
+    </div>
+    <div class="decowin" style="right: 26px; top: 84px; width: 300px;">
+      <div class="titlebar95"><div class="title">ECHO.LOG</div></div>
+      <div class="panel95" id="echoLog" style="height:120px; overflow:auto; font-family:'Courier New',monospace; font-size:12px;">
+        [00:00:00] watcher: курсор дрожит.<br>
+        [00:00:03] watcher: окно смотрит в ответ.
+      </div>
+    </div>
+    <div class="decowin" style="left: 40px; bottom: 96px;">
+      <div class="titlebar95"><div class="title">MEM://INVENTORY</div></div>
+      <div class="panel95" style="font-size:12px;">
+        ключ без двери<br>дверь без дома<br>время без хода
+      </div>
+    </div>
+  </div>
+
   <div id="forum-root"></div>
+
+  <!-- Win95 Taskbar -->
+  <div class="taskbar win95">
+    <button id="start-btn">Пуск</button>
+    <div class="task" style="background:#c0c0c0; border:2px solid #fff; border-right-color:#808080; border-bottom-color:#808080; padding:2px 8px; font-family:Tahoma,sans-serif; font-size:13px; color:#000;">
+      Forum — Demienne.Moth
+    </div>
+    <div class="taskbar-time" id="taskbar-time">00:00</div>
+  </div>
+
+  <div id="start-menu" class="hidden">
+    <div onclick="location.href='index.html'">Домой</div>
+    <div onclick="location.href='profile.html'">Твой профиль</div>
+    <div onclick="location.href='thread.html'">Новая тема</div>
+  </div>
+
+
+  <script>
+    // Taskbar clock
+    function pad(n){return String(n).padStart(2,'0')}
+    function tick(){
+      const d = new Date();
+      document.getElementById('taskbar-time').textContent = pad(d.getHours()) + ':' + pad(d.getMinutes());
+    }
+    setInterval(tick, 1000); tick();
+
+    // Start menu toggle
+    const startBtn = document.getElementById('start-btn');
+    const startMenu = document.getElementById('start-menu');
+    startBtn?.addEventListener('click', ()=> startMenu.classList.toggle('hidden'));
+    document.addEventListener('click', (e)=>{
+      if(!startMenu.contains(e.target) && e.target !== startBtn){
+        startMenu.classList.add('hidden');
+      }
+    });
+
+    // Echo log ticker
+    const echo = document.getElementById('echoLog');
+    if(echo){
+      const lines = [
+        "watcher: кто-то стер своё имя.",
+        "watcher: курсор набирает 'да', пока ты думаешь 'нет'.",
+        "watcher: предметы двигаются, когда на них не смотрят.",
+        "watcher: не входить в тишину без проводника.",
+      ];
+      let i=0;
+      setInterval(()=>{
+        const t = new Date(); const ts = '['+pad(t.getHours())+':'+pad(t.getMinutes())+':'+pad(t.getSeconds())+'] ';
+        echo.innerHTML += '<br>' + ts + lines[i++ % lines.length];
+        echo.scrollTop = echo.scrollHeight;
+      }, 3000);
+    }
+  </script>
+
 </body>
 </html>
