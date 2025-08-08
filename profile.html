@@ -3,12 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Профиль</title>
+  <title>PROFILE.EXE</title>
   <link rel="stylesheet" href="style.css">
+  <script type="module">
+    import './firebase.js';
+    import { mountProfile95 } from './profile.js';
+    window.addEventListener('DOMContentLoaded', () => {
+      document.body.classList.add('win95-bg'); // тёмный фон
+      mountProfile95(document.getElementById('profile-root'));
+    });
+  </script>
 </head>
 <body>
   <div id="profile-root"></div>
-
-  <script src="profile.js"></script>
 </body>
 </html>
