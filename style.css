@@ -2,13 +2,12 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
+  background-color: #000; /* solid fallback to kill white bars */
   background-image: url('images/bliss-dark.png');
-  background-size: contain;
+  background-size: cover;            /* fill viewport */
+  background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-
-  background-position: center;
-  background-repeat: no-repeat;
   font-family: 'VT323', monospace;
   color: #fff;
 }
@@ -34,8 +33,9 @@ body {
   background-color: #000;
   background-image: url('images/bliss-dark.png');
   background-size: cover;
-  background-position: center;
+  background-position: center center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
   color: #dcdcdc;
   font-family: 'VT323', monospace;
   font-size: 14px;
@@ -273,19 +273,6 @@ body {
   border-left: 2px solid #ff0040;
   padding-left: 6px;
   margin: 4px 0;
-}
-
-/* === Глич‑анимация для заголовков === */
-@keyframes glitch {
-  0% { text-shadow: 2px 0 red, -2px 0 blue; }
-  20% { text-shadow: -2px 0 red, 2px 0 blue; }
-  40% { text-shadow: 2px 0 red, -2px 0 blue; }
-  60% { text-shadow: -2px 0 red, 2px 0 blue; }
-  80% { text-shadow: 2px 0 red, -2px 0 blue; }
-  100% { text-shadow: none; }
-}
-.thread h2, .menu {
-  animation: glitch 1s infinite;
 }
 
 /* === Форма ответа === */
