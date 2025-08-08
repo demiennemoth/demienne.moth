@@ -9,7 +9,7 @@ export function mountForumUI(container){
 
 export function mountForum95(container){
   container.innerHTML = `
-  <div class="window95" style="max-width: min(1280px, calc(100vw - 32px)); margin: 16px auto 40px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
+  <div class="window95 main-forum" style="max-width: min(1320px, calc(100vw - 40px)); margin: 20px auto 70px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
     <div class="titlebar95">
       <div class="icon" aria-hidden="true"></div>
       <div class="title">Demienne.Moth — Forum</div>
@@ -34,16 +34,6 @@ export function mountForum95(container){
           <a href="profile.html" class="btn95" style="display:block; text-align:center;">Твой профиль</a>
         </div>
         <div class="group95" style="margin-top:10px;">Категории</div>
-        <ul class="list95" id="cat-list"></ul>
-
-        <div class="group95" style="margin-top:10px;">Статус</div>
-        <ul class="list95" id="stat-list">
-          <li id="stat-online">Пользователей онлайн: —</li>
-          <li id="stat-guests">Гостей: —</li>
-          <li>Самый активный: moth.exe</li>
-        </ul>
-
-        <div class="group95">Категории</div>
         <ul class="list95" id="cat-list"></ul>
 
         <div class="group95" style="margin-top:10px;">Статус</div>
@@ -92,7 +82,7 @@ export function mountForum95(container){
 
   <!-- Modal -->
   <div class="modal95" id="modal95">
-    <div class="window95" style="max-width: min(1280px, calc(100vw - 32px)); margin: 16px auto 40px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
+    <div class="window95 main-forum" style="max-width: min(1320px, calc(100vw - 40px)); margin: 20px auto 70px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
       <div class="titlebar95">
         <div class="icon"></div>
         <div class="title">Новая тема</div>
