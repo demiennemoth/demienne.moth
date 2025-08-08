@@ -12,7 +12,7 @@ export function mountForum95(container){
   <div class="window95 main-forum" style="max-width: min(1320px, calc(100vw - 40px)); margin: 20px auto 70px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
     <div class="titlebar95">
       <div class="icon" aria-hidden="true"></div>
-      <div class="title">Demienne.Moth — Forum</div>
+      <div class="title">МОЛЬ — Форум</div>
       <div class="controls95">
         <button class="btn95 tb95" title="Minimize">_</button>
         <button class="btn95 tb95" title="Maximize">▢</button>
