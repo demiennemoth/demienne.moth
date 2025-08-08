@@ -22,7 +22,7 @@ export async function mountProfile95(container){
   <div class="window95" style="max-width:1180px;margin:16px auto 56px auto;">
     <div class="titlebar95">
       <div class="icon" aria-hidden="true"></div>
-      <div class="title">Demienne.Moth — Profile</div>
+      <div class="title">МОЛЬ — Профиль</div>
       <div class="controls95">
         <button class="btn95 tb95" title="Close" onclick="history.back()">×</button>
       </div>
