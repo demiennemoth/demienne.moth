@@ -1,25 +1,17 @@
 // main.js — версия с поддержкой анонимного ID и всех окон
 import { mountForumUI } from "./forum.js";
+import { getAnonId, setAnonId } from "./utils.js";
 
 function toggleStartMenu() {
   const menu = document.getElementById("start-menu");
   menu.classList.toggle("hidden");
 }
 
-function getAnonId() {
-  let id = localStorage.getItem("anon-id");
-  if (!id) {
-    id = "anon" + Math.floor(Math.random() * 10000);
-    localStorage.setItem("anon-id", id);
-  }
+function getAnonIdLegacy(){ return getAnonId() || ""; }
   return id;
 }
 
-function generateAnon() {
-  const id = "anon" + Math.floor(Math.random() * 10000);
-  localStorage.setItem("anon-id", id);
-  document.getElementById("anon-id").textContent = id;
-}
+function generateAnon(){ const id = "anon" + Math.floor(Math.random()*10000); setAnonId(id); const el=document.getElementById("anon-id"); if(el) el.textContent=id; }
 
 export function openWindow(name) {
   if (name === "profile") {
