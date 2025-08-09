@@ -461,3 +461,36 @@ select.input95 {
   background: #fff !important;
   color: #000 !important;
 }
+
+/* === Win95 reply form container & button overrides === */
+.window95 .form-box,
+.window95 #reply-form {
+  background: var(--95-light) !important;
+  color: #000 !important;
+  padding: 6px !important;
+  border: 1px solid var(--95-white) !important;
+  border-right-color: var(--95-dark) !important;
+  border-bottom-color: var(--95-dark) !important;
+  box-shadow: none !important;
+}
+
+/* Кнопка "Ответить" под Win95 */
+.window95 #reply-form button,
+.window95 .form-box button {
+  background: var(--95-gray) !important;
+  color: #000 !important;
+  border: 2px solid var(--95-white) !important;
+  border-right-color: var(--95-dark) !important;
+  border-bottom-color: var(--95-dark) !important;
+  padding: 2px 8px !important;
+  font-size: 13px !important;
+  font-family: Tahoma, sans-serif !important;
+  cursor: pointer;
+}
+.window95 #reply-form button:active,
+.window95 .form-box button:active {
+  border: 2px solid var(--95-dark) !important;
+  border-right-color: var(--95-white) !important;
+  border-bottom-color: var(--95-white) !important;
+  padding: 3px 7px !important;
+}
