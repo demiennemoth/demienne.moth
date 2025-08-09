@@ -9,10 +9,10 @@ export function mountForumUI(container){
 
 export function mountForum95(container){
   container.innerHTML = `
-  <div class="window95" style="max-width: min(1280px, calc(100vw - 32px)); margin: 16px auto 40px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
+  <div class="window95" style="max-width: min(1400px, calc(100vw - 24px)); margin: 16px auto 40px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
     <div class="titlebar95">
       <div class="icon" aria-hidden="true"></div>
-      <div class="title">Demienne.Moth — Forum</div>
+      <div class="title">МОЛЬ — Форум</div>
       <div class="controls95">
         <button class="btn95 tb95" title="Minimize">_</button>
         <button class="btn95 tb95" title="Maximize">▢</button>
@@ -92,7 +92,7 @@ export function mountForum95(container){
 
   <!-- Modal -->
   <div class="modal95" id="modal95">
-    <div class="window95" style="max-width: min(1280px, calc(100vw - 32px)); margin: 16px auto 40px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
+    <div class="window95" style="max-width: min(1400px, calc(100vw - 24px)); margin: 16px auto 40px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
       <div class="titlebar95">
         <div class="icon"></div>
         <div class="title">Новая тема</div>
