@@ -442,3 +442,22 @@ textarea.input95 {
   font-size: 13px;
   font-family: inherit;
 }
+
+/* === Win95 form overrides (stronger specificity) === */
+input.input95[type="text"],
+textarea.input95,
+select.input95 {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid var(--95-dark) !important;
+  border-right-color: var(--95-white) !important;
+  border-bottom-color: var(--95-white) !important;
+  box-shadow: none !important;
+}
+
+/* Target the exact fields as a fallback */
+#reply-form textarea#reply-input,
+.toolbar95 input#searchBox[type="text"] {
+  background: #fff !important;
+  color: #000 !important;
+}
