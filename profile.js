@@ -1,5 +1,6 @@
 // profile.js — Win95 профиль с реальными данными из Firestore
 import { db } from "./firebase.js";
+import { escapeHtml, escapeAttr } from "./utils.js";
 import {
   collection, collectionGroup, doc, setDoc, getDoc, getDocs, query, where, orderBy, limit, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
@@ -338,6 +339,4 @@ export async function mountProfile95(container){
   }
 }
 
-// utils
-function escapeHtml(s){ return String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-function escapeAttr(s){ return String(s).replace(/"/g, '&quot;'); }
+// utils moved to utils.js
