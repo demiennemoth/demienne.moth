@@ -430,3 +430,15 @@ table.threads95 tr:hover td{background:#c6d4ff;}
 .row95 label{min-width:90px;}
 textarea.input95{width:100%; min-height:120px; resize:vertical;}
 @media (max-width: 860px){ .container95{grid-template-columns:1fr;} }
+
+/* === Win95 textarea fix: white background & 3D border === */
+textarea.input95 {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid var(--95-dark);
+  border-right-color: var(--95-white);
+  border-bottom-color: var(--95-white);
+  padding: 4px;
+  font-size: 13px;
+  font-family: inherit;
+}
