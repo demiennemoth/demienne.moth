@@ -8,15 +8,11 @@
     import './firebase.js';
     import { mountForum95 } from './forum.js';
     window.addEventListener("DOMContentLoaded", () => {
-      document.body.classList.add("win95-bg"); // тёмный фон
+      document.body.classList.add("win95-bg");
       mountForum95(document.getElementById("forum-root"));
     });
   </script>
-  <style>
-    /* Убираем любые отступы, чтобы окно форума было главным элементом */
-    html, body { height: 100%; }
-    body { margin: 0; }
-  </style>
+  <style>html, body { height: 100%; } body { margin: 0; }</style>
 </head>
 <body>
   <div id="forum-root"></div>
