@@ -1,9 +1,8 @@
-// forum.js — Win95 UI renderer (non-breaking: keeps existing export mountForumUI)
-import { db } from "./firebase.js";
-import { collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+// forum.js — Win95 UI + fixed creation + admin indicators
+import { db, isAdmin } from "./firebase.js";
+import { collection, addDoc, getDocs, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 export function mountForumUI(container){
-  // legacy mount (kept for compatibility)
   mountForum95(container);
 }
 
@@ -33,6 +32,7 @@ export function mountForum95(container){
         <div style="padding:6px;">
           <a href="profile.html" class="btn95" style="display:block; text-align:center;">Твой профиль</a>
         </div>
+
         <div class="group95" style="margin-top:10px;">Категории</div>
         <ul class="list95" id="cat-list"></ul>
 
@@ -43,14 +43,10 @@ export function mountForum95(container){
           <li>Самый активный: moth.exe</li>
         </ul>
 
-        <div class="group95">Категории</div>
-        <ul class="list95" id="cat-list"></ul>
-
-        <div class="group95" style="margin-top:10px;">Статус</div>
-        <ul class="list95" id="stat-list">
-          <li id="stat-online">Пользователей онлайн: —</li>
-          <li id="stat-guests">Гостей: —</li>
-          <li>Самый активный: moth.exe</li>
+        <div class="group95" style="margin-top:10px;">Режим</div>
+        <ul class="list95">
+          <li>Админ: <b id="admin-flag"></b></li>
+          <li><a href="admin.html">Открыть админку</a></li>
         </ul>
       </aside>
 
@@ -77,6 +73,7 @@ export function mountForum95(container){
               <th>Ответы</th>
               <th>Просмотры</th>
               <th>Последнее</th>
+              <th></th>
             </tr>
           </thead>
           <tbody id="threads-body"></tbody>
@@ -101,22 +98,24 @@ export function mountForum95(container){
         </div>
       </div>
       <div class="panel95">
-        <div class="row95">
-          <label>Заголовок</label>
-          <input class="input95" id="thread-title" style="flex:1" type="text" placeholder="Напишите кратко…" />
-        </div>
-        <div class="row95">
-          <label>Категория</label>
-          <input class="input95" id="thread-category" style="flex:1" type="text" placeholder="Например: Общий" />
-        </div>
-        <div class="row95" style="align-items:flex-start">
-          <label>Текст</label>
-          <textarea class="input95" id="thread-body" placeholder="Тут ваш тёмно-атмосферный пост…"></textarea>
-        </div>
-        <div style="display:flex; gap:8px; justify-content:flex-end">
-          <button class="btn95" id="cancelNew">Отмена</button>
-          <button class="btn95" id="createNew">Опубликовать</button>
-        </div>
+        <form id="new-thread-form">
+          <div class="row95">
+            <label>Заголовок</label>
+            <input class="input95" id="thread-title" style="flex:1" type="text" placeholder="Напишите кратко…" required />
+          </div>
+          <div class="row95">
+            <label>Категория</label>
+            <input class="input95" id="thread-category" style="flex:1" type="text" placeholder="Например: Общий" required />
+          </div>
+          <div class="row95" style="align-items:flex-start">
+            <label>Текст</label>
+            <textarea class="input95" id="thread-body" placeholder="Тут ваш тёмно-атмосферный пост…" required></textarea>
+          </div>
+          <div style="display:flex; gap:8px; justify-content:flex-end">
+            <button type="button" class="btn95" id="cancelNew">Отмена</button>
+            <button type="submit" class="btn95" id="createNew">Опубликовать</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
@@ -124,39 +123,48 @@ export function mountForum95(container){
 
   const threadsBody = container.querySelector("#threads-body");
   const catList = container.querySelector("#cat-list");
+  const adminFlag = container.querySelector("#admin-flag");
 
-  // Load threads and build table
+  adminFlag.textContent = isAdmin() ? "включён" : "нет";
+
   async function loadThreads(){
     threadsBody.innerHTML = "";
     catList.innerHTML = "";
-    const snapshot = await getDocs(collection(db, "threads"));
+    const q = query(collection(db, "threads"), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(q);
     const categories = new Map();
     let totalPosts = 0;
+    let totalThreads = 0;
 
     snapshot.forEach(docSnap => {
       const t = docSnap.data();
       const id = docSnap.id;
+      totalThreads++;
       const cat = (t.category || "Без категории").trim();
       categories.set(cat, (categories.get(cat) || 0) + 1);
+
+      const adminButtons = isAdmin()
+        ? `<a class="btn95" href="admin.html?edit=${id}">Редактировать</a>`
+        : "";
+
       const tr = document.createElement("tr");
       tr.innerHTML = `
-        <td class="subject95"><a href="thread.html?id=${id}">${t.title || "(без названия)"}</a></td>
+        <td class="subject95"><a href="thread.html?id=${id}">${t.title ? escapeHtml(t.title) : "(без названия)"}</a></td>
         <td>${t.author || "анон"}</td>
-        <td>${cat}</td>
+        <td>${escapeHtml(cat)}</td>
         <td>${t.repliesCount || 0}</td>
         <td>${t.views || 0}</td>
         <td>${t.createdAt?.seconds ? new Date(t.createdAt.seconds*1000).toLocaleString() : ""}</td>
+        <td>${adminButtons}</td>
       `;
       threadsBody.appendChild(tr);
       totalPosts += (t.repliesCount || 0);
     });
 
-    // categories sidebar
     for(const [cat, count] of categories.entries()){
       const li = document.createElement("li");
       li.textContent = `${cat} (${count})`;
       li.addEventListener("click", () => {
-        // simple filter
         [...threadsBody.querySelectorAll("tr")].forEach(tr => {
           const td = tr.children[2];
           tr.style.display = (td && td.textContent.startsWith(cat)) ? "" : "none";
@@ -166,28 +174,51 @@ export function mountForum95(container){
     }
 
     const stat = container.querySelector("#stats-count");
-    if(stat) stat.textContent = `Тем: ${categories.size ? [...categories.values()].reduce((a,b)=>a+b,0) : 0} • Сообщений: ${totalPosts}`;
+    if(stat) stat.textContent = `Тем: ${totalThreads} • Сообщений: ${totalPosts}`;
   }
 
-  loadThreads().catch(console.error);
+  loadThreads().catch(err => {
+    console.error(err);
+    alert("Ошибка загрузки тем. Проверь правила Firestore.");
+  });
 
-  // Modal controls
   const modal = container.parentElement.querySelector("#modal95");
   container.querySelector("#newThreadBtn").addEventListener("click", ()=> modal.style.display='flex');
   container.querySelector("#cancelNew").addEventListener("click", ()=> modal.style.display='none');
-  container.querySelector("#createNew").addEventListener("click", async ()=>{
-    const title = document.getElementById("thread-title").value.trim();
-    const body = document.getElementById("thread-body").value.trim();
-    const category = document.getElementById("thread-category").value.trim();
-    const anonId = localStorage.getItem("anon-id");
-    if(!title || !body || !category){ alert("Все поля обязательны"); return; }
-    if(!anonId){ alert("Сначала получи анонимный ID в окне Accession"); return; }
 
-    await addDoc(collection(db, "threads"), {
-      title, body, category, author: anonId,
-      createdAt: serverTimestamp(), repliesCount: 0, views: 0
-    });
-    modal.style.display='none';
-    await loadThreads();
+  const form = container.querySelector("#new-thread-form");
+  form.addEventListener("submit", async (e)=>{
+    e.preventDefault();
+    const btn = container.querySelector("#createNew");
+    btn.disabled = true;
+    try{
+      const title = document.getElementById("thread-title").value.trim();
+      const body = document.getElementById("thread-body").value.trim();
+      const category = document.getElementById("thread-category").value.trim();
+      const anonId = localStorage.getItem("anon-id");
+      if(!title || !body || !category){ alert("Все поля обязательны"); btn.disabled=false; return; }
+      if(!anonId){ alert("Сначала получи анонимный ID в окне Accession"); btn.disabled=false; return; }
+
+      const ref = await addDoc(collection(db, "threads"), {
+        title, body, category, author: anonId,
+        createdAt: serverTimestamp(), repliesCount: 0, views: 0
+      });
+      modal.style.display='none';
+      form.reset();
+      // redirect to the new thread:
+      location.href = "thread.html?id=" + ref.id;
+    }catch(err){
+      console.error("Не удалось создать тему", err);
+      alert("Не удалось создать тему. Смотри консоль и правила Firestore.");
+    }finally{
+      btn.disabled = false;
+    }
   });
+}
+
+// tiny local escape (so this file works standalone)
+function escapeHtml(str=""){
+  return String(str)
+    .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;").replaceAll("'","&#039;");
 }
