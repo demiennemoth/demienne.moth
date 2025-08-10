@@ -5,9 +5,10 @@
   <title>FORUM.EXE</title>
   <link rel="stylesheet" href="style.css" />
   <script type="module">
+    import './firebase.js';
     import { mountForum95 } from './forum.js';
     window.addEventListener("DOMContentLoaded", () => {
-      document.body.classList.add("win95-bg"); // dark background
+      document.body.classList.add("win95-bg");
       mountForum95(document.getElementById("forum-root"));
     });
   </script>
