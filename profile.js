@@ -44,41 +44,74 @@ function setIntroEnabled(uid, on){
       ]);
 
       container.innerHTML = `
-        <div class="window95" style="max-width:960px; margin:24px auto 60px;">
-          <div class="titlebar95"><div class="icon"></div><div class="title">Profile — ${escapeHtml(shortUid(anonId))}</div></div>
-          <div class="panel95">
-            <div class="group95">Аккаунт</div>
-            <div class="row95"><label>UID</label><input class="input95" value="${escapeAttr(anonId)}" readonly /></div>
-
-            <div class="group95" style="margin-top:8px;">Настройки профиля</div>
-            <div class="row95">
-              <label>Тред знакомств</label>
-              <label style="display:flex;align-items:center;gap:6px;">
-                <input id="introToggle" type="checkbox" ${getIntroEnabled(anonId) ? 'checked' : ''} />
-                <span id="introStateText">${getIntroEnabled(anonId) ? 'включен' : 'выключен'}</span>
-              </label>
-            </div>
-            <div class="row95" id="introLinkRow" style="${getIntroEnabled(anonId) ? '' : 'display:none'}">
-              <label>Ссылка</label>
-              <a class="subject95" href="thread.html?id=${encodeURIComponent('intro-' + anonId)}">Перейти в тред знакомств</a>
-            </div>
-
-            <div class="group95" style="margin-top:8px;">Избранное (${fav.length})</div>
-            <ul class="list95">
-              ${fav.map(x => `<li><a href="thread.html?id=${encodeURIComponent(x.threadId)}">${escapeHtml(x.title||x.threadId||"(без названия)")}</a></li>`).join("") || "<li>пусто</li>"}
-            </ul>
-
-            <div class="group95" style="margin-top:8px;">Прочитать потом (${later.length})</div>
-            <ul class="list95">
-              ${later.map(x => `<li><a href="thread.html?id=${encodeURIComponent(x.threadId)}">${escapeHtml(x.title||x.threadId||"(без названия)")}</a></li>`).join("") || "<li>пусто</li>"}
-            </ul>
-
-            <div class="group95" style="margin-top:8px;">Закладки (${marks.length})</div>
-            <ul class="list95">
-              ${marks.map(x => `<li><a href="${escapeAttr(x.url||'#')}">${escapeHtml(x.desc||x.url||"(ссылка)")}</a></li>`).join("") || "<li>пусто</li>"}
-            </ul>
+        <div class="window95" style="max-width:980px; margin:24px auto 60px;">
+          <div class="titlebar95">
+            <div class="icon"></div>
+            <div class="title">Профиль — ${escapeHtml(shortUid(anonId))}</div>
           </div>
-        </div>`;
+          <div class="panel95">
+            <div class="group95">Навигация</div>
+            <div class="row95"><label>Путь</label><div class="subject95">Форум › Пользователи › ${escapeHtml(shortUid(anonId))}</div></div>
+
+            <div class="group95" style="margin-top:8px;">Профиль</div>
+            <div class="row95" style="display:grid; grid-template-columns:260px 1fr; gap:8px;">
+              <!-- Левая колонка -->
+              <div>
+                <div class="row95" style="display:block;">
+                  <div class="subject95" style="margin-bottom:6px;">Аватар</div>
+                  <div style="background:#fff; border:2px solid #fff; border-right-color:#808080; border-bottom-color:#808080; width:100%; aspect-ratio:1/1; overflow:hidden;">
+                    <img src="https://picsum.photos/600?grayscale" alt="Аватар" style="display:block; width:100%; height:100%; object-fit:cover; image-rendering:pixelated;">
+                  </div>
+                </div>
+
+                <div class="row95"><label>Ник</label><div class="subject95">User_${escapeHtml(shortUid(anonId))} <span style="color:#444; font-size:12px;">/ online</span></div></div>
+                <div class="row95"><label>Статус</label><div class="subject95">«Личные выключены. Для общения — тред знакомств.»</div></div>
+
+                <div class="group95" style="margin-top:8px;">Настройки</div>
+                <div class="row95">
+                  <label>Тред знакомств</label>
+                  <label style="display:flex; align-items:center; gap:6px;">
+                    <input id="introToggle" type="checkbox" ${getIntroEnabled(anonId) ? 'checked' : ''} />
+                    <span id="introStateText">${getIntroEnabled(anonId) ? 'включен' : 'выключен'}</span>
+                  </label>
+                </div>
+                <div class="row95" id="introLinkRow" style="${getIntroEnabled(anonId) ? '' : 'display:none'}">
+                  <label>Ссылка</label>
+                  <a class="subject95" href="thread.html?id=${encodeURIComponent('intro-' + anonId)}">Перейти в тред знакомств</a>
+                </div>
+
+                <div class="group95" style="margin-top:8px;">Соц</div>
+                <div class="row95"><label>Подписчики</label><div class="subject95">${(314+fav.length+later.length+marks.length)}</div></div>
+                <div class="row95"><label>Действие</label><button class="btn95" id="followBtn">Подписаться</button></div>
+              </div>
+
+              <!-- Правая колонка -->
+              <div>
+                <div class="group95">Вкладки</div>
+                <div class="row95" role="tablist" aria-label="Вкладки профиля">
+                  <button class="btn95 tab95" data-tab="threads" aria-selected="true">Треды</button>
+                  <button class="btn95 tab95" data-tab="activity" aria-selected="false">Активность</button>
+                  <button class="btn95 tab95" data-tab="about" aria-selected="false">О профиле</button>
+                </div>
+
+                <div class="group95" id="tab-threads">Стена — треды пользователя (${fav.length || 0})</div>
+                <ul class="list95" id="threadsList">
+                  ${fav.map(x => `<li><a href="thread.html?id=${encodeURIComponent(x.threadId)}">${escapeHtml(x.title||x.threadId||"(без названия)")}</a></li>`).join("") || "<li>Пусто</li>"}
+                </ul>
+
+                <div class="group95" id="tab-activity" style="display:none">Лента активности (${later.length || 0})</div>
+                <ul class="list95" id="activityList" style="display:none">
+                  ${later.map(x => `<li><a href="thread.html?id=${encodeURIComponent(x.threadId)}">Ответ в: ${escapeHtml(x.title||x.threadId||"(без названия)")}</a></li>`).join("") || "<li>Пока тишина</li>"}
+                </ul>
+
+                <div class="group95" id="tab-about" style="display:none">О профиле</div>
+                <div class="row95" id="aboutRows" style="display:none">
+                  <label>UID</label><input class="input95" value="${escapeAttr(anonId)}" readonly />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div></div>`;
     }catch(e){
       console.error(e);
       container.innerHTML = `
