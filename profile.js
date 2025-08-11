@@ -24,51 +24,6 @@ function setIntroEnabled(uid, on){
       <div class="titlebar95"><div class="icon"></div><div class="title">Profile</div></div>
       <div class="panel95"><p>Загрузка профиля…</p></div>
     </div>`;
-    // Apply listeners (only when owner)
-    if(isSelf){
-      const userRef = doc(db, 'users', uid);
-      async function safeUpdate(data){
-        try{
-          const snap = await getDoc(userRef);
-          if(snap.exists()) await updateDoc(userRef, data);
-          else await setDoc(userRef, data, {merge:true});
-        }catch(e){ console.error('save failed', e); alert('Не удалось сохранить. Проверь консоль.'); }
-      }
-      const nameInput = container.querySelector('#displayNameInput');
-      const nameView = container.querySelector('#displayNameView');
-      const saveNameBtn = container.querySelector('#saveNameBtn');
-      saveNameBtn && saveNameBtn.addEventListener('click', async ()=>{
-        const v = (nameInput?.value||'').trim();
-        await safeUpdate({ displayName: v });
-        if(nameView) nameView.innerHTML = escapeHtml(v) + ' <span style="color:#444; font-size:12px;">/ online</span>';
-      });
-
-      const statusInput = container.querySelector('#statusInput');
-      const statusView = container.querySelector('#statusView');
-      const saveStatusBtn = container.querySelector('#saveStatusBtn');
-      saveStatusBtn && saveStatusBtn.addEventListener('click', async ()=>{
-        const v = (statusInput?.value||'').trim();
-        await safeUpdate({ status: v });
-        if(statusView) statusView.textContent = v;
-      });
-
-      const aboutInput = container.querySelector('#aboutInput');
-      const saveAboutBtn = container.querySelector('#saveAboutBtn');
-      saveAboutBtn && saveAboutBtn.addEventListener('click', async ()=>{
-        await safeUpdate({ about: (aboutInput?.value||'') });
-        alert('Раздел "О себе" сохранён.');
-      });
-
-      const avatarInput = container.querySelector('#avatarInput');
-      const saveAvatarBtn = container.querySelector('#saveAvatarBtn');
-      saveAvatarBtn && saveAvatarBtn.addEventListener('click', async ()=>{
-        const v = (avatarInput?.value||'').trim();
-        await safeUpdate({ avatarUrl: v });
-        const img = container.querySelector('img[alt="Аватар"]');
-        if(img) img.src = v || img.src;
-      });
-    }
-
     // Replace breadcrumb with working link + correct label
     const crumbs = container.querySelector('.group95 + .row95 .subject95');
     if(crumbs){
@@ -225,6 +180,61 @@ function setIntroEnabled(uid, on){
             </div>
           </div>
         </div></div>`;
+    // Apply listeners (only when owner) — attached AFTER success render
+    if(isSelf){
+      const userRef = doc(db, 'users', uid);
+      async function safeUpdate(data){
+        try{
+          const snap = await getDoc(userRef);
+          if(snap.exists()) await updateDoc(userRef, data);
+          else await setDoc(userRef, data, {merge:true});
+        }catch(e){ console.error('save failed', e); alert('Не удалось сохранить. Проверь консоль.'); }
+      }
+      const nameInput = container.querySelector('#displayNameInput');
+      const nameView = container.querySelector('#displayNameView');
+      const saveNameBtn = container.querySelector('#saveNameBtn');
+      saveNameBtn && saveNameBtn.addEventListener('click', async ()=>{
+        const v = (nameInput?.value||'').trim();
+        await safeUpdate({ displayName: v });
+        if(nameView) nameView.innerHTML = escapeHtml(v) + ' <span style="color:#444; font-size:12px;">/ online</span>';
+      });
+
+      const statusInput = container.querySelector('#statusInput');
+      const statusView = container.querySelector('#statusView');
+      const saveStatusBtn = container.querySelector('#saveStatusBtn');
+      saveStatusBtn && saveStatusBtn.addEventListener('click', async ()=>{
+        const v = (statusInput?.value||'').trim();
+        await safeUpdate({ status: v });
+        if(statusView) statusView.textContent = v;
+      });
+
+      const aboutInput = container.querySelector('#aboutInput');
+      const saveAboutBtn = container.querySelector('#saveAboutBtn');
+      saveAboutBtn && saveAboutBtn.addEventListener('click', async ()=>{
+        await safeUpdate({ about: (aboutInput?.value||'') });
+        alert('Раздел "О себе" сохранён.');
+      });
+
+      const avatarInput = container.querySelector('#avatarInput');
+      const saveAvatarBtn = container.querySelector('#saveAvatarBtn');
+      saveAvatarBtn && saveAvatarBtn.addEventListener('click', async ()=>{
+        const v = (avatarInput?.value||'').trim();
+        await safeUpdate({ avatarUrl: v });
+        const img = container.querySelector('img[alt="Аватар"]');
+        if(img) img.src = v || img.src;
+      });
+    }
+
+    // Follow button only if viewing other user
+    if(!isSelf){
+      const followBtn = container.querySelector('#followBtn');
+      followBtn && followBtn.addEventListener('click', async ()=>{
+        const pressed = followBtn.getAttribute('aria-pressed') === 'true';
+        followBtn.setAttribute('aria-pressed', String(!pressed));
+        followBtn.textContent = pressed ? 'Подписаться' : 'Вы подписаны';
+      });
+    }
+
     }catch(e){
       console.error(e);
       container.innerHTML = `
