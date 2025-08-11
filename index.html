@@ -5,15 +5,69 @@
   <title>FORUM.EXE</title>
   <link rel="stylesheet" href="style.css" />
   <style>
-    html, body { height: 100%; }
-    body { margin: 0; }
+    body.win95-bg { height: 100vh; margin:0; }
+    .window-shell {
+      max-width: 1440px; /* ~20% already narrower than 1800 */
+      min-height: 88vh;
+      margin: 16px auto 32px;
+      box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);
+    }
+    .grid3 {
+      display: grid;
+      grid-template-columns: 420px 1fr 320px; /* left categories / threads / right sidebar */
+      gap: 16px;
+      padding: 12px;
+      box-sizing: border-box;
+    }
+    /* make left column scroll only if really needed */
+    .leftcol, .rightcol {
+      max-height: calc(84vh - 120px);
+      overflow: auto;
+    }
+    .cat-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .cat-table th {
+      text-align: left;
+      padding: 6px 8px;
+      background: #c0c0c0;
+      border: 1px solid #808080;
+    }
+    .cat-group {
+      margin: 10px 0 4px;
+      padding: 4px 8px;
+      background: #d6d6d6;
+      border: 1px solid #9c9c9c;
+      font-weight: bold;
+    }
+    .cat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr)); /* 3 columns inside group */
+      gap: 6px 10px;
+      padding: 8px;
+      border: 1px solid #9c9c9c;
+      background: #eee;
+    }
+    .cat-link {
+      display:inline-block;
+      padding: 2px 4px;
+      border: 1px solid #808080;
+      background: #fff;
+      text-decoration: none;
+      color: #000080;
+    }
+    .toolbar95 .right { margin-left: auto; }
+    .threads95 { width: 100%; border-collapse: collapse; }
+    .threads95 th, .threads95 td { border: 1px solid #808080; padding: 4px 6px; }
+    .status95 { display:flex; justify-content:space-between; margin-top:6px; }
   </style>
   <script type="module">
     import './firebase.js';
-    import { mountForumLayout } from './forum.js';
+    import { mountForumLayoutV2 } from './forum.js';
     window.addEventListener("DOMContentLoaded", () => {
       document.body.classList.add("win95-bg");
-      mountForumLayout(document.getElementById("forum-root"));
+      mountForumLayoutV2(document.getElementById("forum-root"));
     });
   </script>
 </head>
