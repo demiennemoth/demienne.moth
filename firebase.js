@@ -1,40 +1,55 @@
-// Firestore Security Rules — anon users can read and create threads/replies; only admin can update/delete
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
+// firebase.js — auth revamp: admin via Email/Password; others stay anonymous
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+import {
+  getAuth, onAuthStateChanged, signInAnonymously, signInWithEmailAndPassword, signOut
+} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-    function isSignedIn() {
-      return request.auth != null;
-    }
+// --- your project config (unchanged) ---
+const firebaseConfig = {
+  apiKey: "AIzaSyD0cCiWsbsYidFXgzmPmPlQ1CbDZ0aWfqY",
+  authDomain: "mothdemienne.firebaseapp.com",
+  projectId: "mothdemienne",
+  storageBucket: "mothdemienne.firebasestorage.app",
+  messagingSenderId: "199511653439",
+  appId: "1:199511653439:web:e659bc721c660d9340cc8a"
+};
 
-    function isAdmin() {
-      // Admin is a user signed in with email/password matching ADMIN_EMAIL
-      return isSignedIn() && request.auth.token.email == "demienne.moth@gmail.com";
-    }
+export const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);
 
-    // Threads collection
-    match /threads/{threadId} {
-      allow read: if true; // public
-      // Create allowed to ANY signed-in user (anonymous included)
-      allow create: if isSignedIn();
+// === Admin identity ===
+// Replace with your admin email:
+export const ADMIN_EMAIL = "demienne.moth@gmail.com";
 
-      // Update/Delete only admin
-      allow update, delete: if isAdmin();
-
-      // Replies subcollection
-      match /replies/{replyId} {
-        allow read: if true;
-        allow create: if isSignedIn();
-        allow update, delete: if isAdmin();
-      }
-    }
-
-    // User private subcollections (favorites/readlater/bookmarks) — only owner may write/read
-    match /users/{userId} {
-      allow read, write: if isSignedIn() && request.auth.uid == userId;
-      match /{document=**} {
-        allow read, write: if isSignedIn() && request.auth.uid == userId;
-      }
-    }
-  }
+export function isAdminUser(u){
+  return !!u && !!u.email && u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 }
+export function isAdmin(){
+  const u = auth.currentUser;
+  return isAdminUser(u);
+}
+export async function adminSignIn(email, password){
+  return signInWithEmailAndPassword(auth, email, password);
+}
+export async function adminSignOut(){
+  return signOut(auth);
+}
+
+// === Default: anonymous for non-admin visitors ===
+onAuthStateChanged(auth, async (u) => {
+  try{
+    if (!u) {
+      // No user — go anonymous.
+      await signInAnonymously(auth);
+      return;
+    }
+    // keep anon id for UI convenience
+    if (!localStorage.getItem("anon-id")) {
+      localStorage.setItem("anon-id", u.uid);
+    }
+  }catch(e){
+    console.warn("Auth flow warning:", e);
+  }
+});
