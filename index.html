@@ -12,7 +12,16 @@
       mountForum95(document.getElementById("forum-root"));
     });
   </script>
-  <style>html, body { height: 100%; } body { margin: 0; }</style>
+  <style>
+    html, body { height: 100%; }
+    body { margin: 0; }
+    /* Make the main grid two-columns with wider main area */
+    .container95 {
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 10px;
+    }
+  </style>
 </head>
 <body>
   <div id="forum-root"></div>
