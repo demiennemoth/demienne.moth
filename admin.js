@@ -12,7 +12,7 @@ function renderNoAccess(){
     <div class="window95" style="max-width:640px; margin:40px auto;">
       <div class="titlebar95"><div class="icon"></div><div class="title">Доступ запрещён</div></div>
       <div class="panel95">
-        <p>Эта страница только для администратора (<b>${ADMIN_EMAIL}</b>).</p>
+        <p>Эта страница только для администратора.</p>
         <div style="display:flex; gap:8px; justify-content:flex-end;">
           <a class="btn95" href="admin-login.html">Войти</a>
           <a class="btn95" href="index.html">На форум</a>
