@@ -1,35 +1,28 @@
-// admin.js — simple client-side admin panel (guarded by ADMIN_KEY)
-import { db, ADMIN_KEY, isAdmin } from "./firebase.js";
+// admin.js — admin panel guarded by real auth (email/password)
+import { db, auth, isAdmin, ADMIN_EMAIL, adminSignOut } from "./firebase.js";
 import {
   collection, getDocs, doc, getDoc, updateDoc, deleteDoc, query, orderBy
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
 
 const root = document.getElementById("admin-root");
 
-function renderGate(){
+function renderNoAccess(){
   root.innerHTML = `
-    <div class="window95" style="max-width:900px; margin:24px auto;">
-      <div class="titlebar95"><div class="icon"></div><div class="title">Админ-доступ</div></div>
+    <div class="window95" style="max-width:640px; margin:40px auto;">
+      <div class="titlebar95"><div class="icon"></div><div class="title">Доступ запрещён</div></div>
       <div class="panel95">
-        <p>Введи админ-ключ (настроен в <code>firebase.js</code>):</p>
-        <input class="input95" id="key" type="password" placeholder="Ключ" />
-        <button class="btn95" id="go">Войти</button>
-        <p style="margin-top:8px; font-size:12px;">Текущий статус: <b>${isAdmin() ? "админ" : "гость"}</b></p>
+        <p>Эта страница только для администратора (<b>${ADMIN_EMAIL}</b>).</p>
+        <div style="display:flex; gap:8px; justify-content:flex-end;">
+          <a class="btn95" href="admin-login.html">Войти</a>
+          <a class="btn95" href="index.html">На форум</a>
+        </div>
       </div>
     </div>`;
-  root.querySelector("#go").addEventListener("click", ()=>{
-    const key = root.querySelector("#key").value;
-    if (key && key === ADMIN_KEY) {
-      localStorage.setItem("admin-key", key);
-      loadDashboard();
-    } else {
-      alert("Неверный ключ");
-    }
-  });
 }
 
 async function loadDashboard(){
-  if (!isAdmin()) { renderGate(); return; }
+  if (!isAdmin()) { renderNoAccess(); return; }
   const url = new URL(location.href);
   const editId = url.searchParams.get("edit") || "";
 
@@ -39,7 +32,7 @@ async function loadDashboard(){
     <div class="panel95">
       <div class="toolbar95" style="gap:8px;">
         <a class="btn95" href="index.html">На форум</a>
-        <button class="btn95" id="logout">Выйти из админа</button>
+        <button class="btn95" id="logout">Выйти</button>
       </div>
       <div id="flex" style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:8px;">
         <div class="window95" style="padding:6px;">
@@ -54,9 +47,9 @@ async function loadDashboard(){
     </div>
   </div>`;
 
-  root.querySelector("#logout").addEventListener("click", ()=>{
-    localStorage.removeItem("admin-key");
-    renderGate();
+  root.querySelector("#logout").addEventListener("click", async ()=>{
+    await adminSignOut();
+    renderNoAccess();
   });
 
   const listEl = root.querySelector("#threads");
@@ -121,4 +114,4 @@ function escapeAttr(str=""){
   return escapeHtml(str).replaceAll("\n"," ");
 }
 
-loadDashboard();
+onAuthStateChanged(auth, ()=> loadDashboard());
