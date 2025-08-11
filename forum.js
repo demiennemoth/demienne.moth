@@ -1,14 +1,20 @@
-// forum.js — Win95 UI + fixed creation + admin indicators
+// forum.js — enlarged main window + categories table visible at once
 import { db, isAdmin } from "./firebase.js";
 import { collection, addDoc, getDocs, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
-export function mountForumUI(container){
-  mountForum95(container);
-}
+// Flat list of categories (visible as a table)
+const CATEGORIES = [
+  "Философия","Жизнь после смерти","Личные отношения","Знакомства","Советы","Помощь",
+  "Теории заговора","Психология","Наука и научпоп","Космос",
+  "Фильмы","Книги","Музыка","Аниме","Знаменитости","Блогеры","Слухи и сливы",
+  "Видеоигры","Компьютеры","Автомобили",
+  "Животные","Кулинария",
+  "Общение","Всякое"
+];
 
 export function mountForum95(container){
   container.innerHTML = `
-  <div class="window95" style="max-width: min(1400px, calc(100vw - 24px)); margin: 16px auto 40px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
+  <div class="window95" style="max-width: min(1800px, calc(100vw - 24px)); margin: 16px auto 40px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
     <div class="titlebar95">
       <div class="icon" aria-hidden="true"></div>
       <div class="title">МОЛЬ — Форум</div>
@@ -26,22 +32,12 @@ export function mountForum95(container){
       <div class="menu95">Справка</div>
     </div>
 
-    <div class="container95">
-      <aside class="panel95 window95" style="max-height: calc(100vh - 200px); overflow:auto;">
+    <div class="container95" style="grid-template-columns: 420px 1fr;">
+      <aside class="panel95 window95" style="max-height: calc(100vh - 220px); overflow:auto;">
         <div class="group95">Профиль</div>
         <div style="padding:6px;">
           <a href="profile.html" class="btn95" style="display:block; text-align:center;">Твой профиль</a>
         </div>
-
-        <div class="group95" style="margin-top:10px;">Категории</div>
-        <ul class="list95" id="cat-list"></ul>
-
-        <div class="group95" style="margin-top:10px;">Статус</div>
-        <ul class="list95" id="stat-list">
-          <li id="stat-online">Пользователей онлайн: —</li>
-          <li id="stat-guests">Гостей: —</li>
-          <li>Самый активный: moth.exe</li>
-        </ul>
 
         <div class="group95" style="margin-top:10px;">Режим</div>
         <ul class="list95">
@@ -51,6 +47,18 @@ export function mountForum95(container){
       </aside>
 
       <main class="panel95 window95">
+        <style>
+          /* inline tweaks so тебе не лезть в style.css прямо сейчас */
+          .cats95 { width:100%; border-collapse: collapse; table-layout: fixed; margin-bottom: 10px; }
+          .cats95 td, .cats95 th { border: 1px solid #808080; padding: 6px 8px; vertical-align: top; }
+          .cats95 a { display:block; text-decoration:none; }
+          .cats95 a:hover { text-decoration: underline; }
+          .threads95 { width:100%; border-collapse: collapse; table-layout: fixed; }
+          .threads95 th, .threads95 td { border: 1px solid #808080; padding: 6px 8px; }
+          .subject95 a { text-decoration:none; }
+          .subject95 a:hover { text-decoration:underline; }
+        </style>
+
         <div class="toolbar95">
           <button class="btn95" id="newThreadBtn">Новая тема</button>
           <input class="input95" id="searchBox" type="text" placeholder="Поиск по темам…" />
@@ -64,16 +72,25 @@ export function mountForum95(container){
           </span>
         </div>
 
+        <!-- Categories table (always visible) -->
+        <table class="cats95" aria-label="Категории" id="cats-table">
+          <thead>
+            <tr><th colspan="6">Категории</th></tr>
+          </thead>
+          <tbody id="cats-body"></tbody>
+        </table>
+
+        <!-- Threads table -->
         <table class="threads95" aria-label="Список тем">
           <thead>
             <tr>
-              <th>Тема</th>
-              <th>Автор</th>
-              <th>Категория</th>
-              <th>Ответы</th>
-              <th>Просмотры</th>
-              <th>Последнее</th>
-              <th></th>
+              <th style="width:44%;">Тема</th>
+              <th style="width:12%;">Автор</th>
+              <th style="width:18%;">Категория</th>
+              <th style="width:8%;">Ответы</th>
+              <th style="width:8%;">Просмотры</th>
+              <th style="width:10%;">Последнее</th>
+              <th style="width:10%;"></th>
             </tr>
           </thead>
           <tbody id="threads-body"></tbody>
@@ -89,7 +106,7 @@ export function mountForum95(container){
 
   <!-- Modal -->
   <div class="modal95" id="modal95">
-    <div class="window95" style="max-width: min(1400px, calc(100vw - 24px)); margin: 16px auto 40px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
+    <div class="window95" style="max-width: min(900px, calc(100vw - 24px)); margin: 16px auto 40px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
       <div class="titlebar95">
         <div class="icon"></div>
         <div class="title">Новая тема</div>
@@ -105,7 +122,8 @@ export function mountForum95(container){
           </div>
           <div class="row95">
             <label>Категория</label>
-            <input class="input95" id="thread-category" style="flex:1" type="text" placeholder="Например: Общий" required />
+            <input class="input95" id="thread-category" list="cat-datalist" style="flex:1" type="text" placeholder="Выберите из списка" required />
+            <datalist id="cat-datalist"></datalist>
           </div>
           <div class="row95" style="align-items:flex-start">
             <label>Текст</label>
@@ -121,18 +139,44 @@ export function mountForum95(container){
   </div>
   `;
 
-  const threadsBody = container.querySelector("#threads-body");
-  const catList = container.querySelector("#cat-list");
   const adminFlag = container.querySelector("#admin-flag");
+  if (adminFlag) adminFlag.textContent = isAdmin() ? "включён" : "нет";
 
-  adminFlag.textContent = isAdmin() ? "включён" : "нет";
+  // Render categories table 6 columns wide
+  const catsBody = container.querySelector("#cats-body");
+  const catDataList = container.querySelector("#cat-datalist");
+  if (catsBody) {
+    for (let i=0; i<CATEGORIES.length; i+=6) {
+      const row = document.createElement("tr");
+      for (let j=0; j<6; j++) {
+        const idx = i+j;
+        const td = document.createElement("td");
+        if (idx < CATEGORIES.length) {
+          const name = CATEGORIES[idx];
+          td.innerHTML = `<a href="#" data-cat="${escapeAttr(name)}">${escapeHtml(name)}</a>`;
+        } else {
+          td.innerHTML = "&nbsp;";
+        }
+        row.appendChild(td);
+      }
+      catsBody.appendChild(row);
+    }
+  }
+  if (catDataList) {
+    CATEGORIES.forEach(c => {
+      const opt = document.createElement("option");
+      opt.value = c;
+      catDataList.appendChild(opt);
+    });
+  }
+
+  // Data load
+  const threadsBody = container.querySelector("#threads-body");
 
   async function loadThreads(){
     threadsBody.innerHTML = "";
-    catList.innerHTML = "";
     const q = query(collection(db, "threads"), orderBy("createdAt", "desc"));
     const snapshot = await getDocs(q);
-    const categories = new Map();
     let totalPosts = 0;
     let totalThreads = 0;
 
@@ -141,13 +185,13 @@ export function mountForum95(container){
       const id = docSnap.id;
       totalThreads++;
       const cat = (t.category || "Без категории").trim();
-      categories.set(cat, (categories.get(cat) || 0) + 1);
 
       const adminButtons = isAdmin()
         ? `<a class="btn95" href="admin.html?edit=${id}">Редактировать</a>`
         : "";
 
       const tr = document.createElement("tr");
+      tr.dataset.cat = cat.toLowerCase();
       tr.innerHTML = `
         <td class="subject95"><a href="thread.html?id=${id}">${t.title ? escapeHtml(t.title) : "(без названия)"}</a></td>
         <td>${t.author || "анон"}</td>
@@ -161,18 +205,6 @@ export function mountForum95(container){
       totalPosts += (t.repliesCount || 0);
     });
 
-    for(const [cat, count] of categories.entries()){
-      const li = document.createElement("li");
-      li.textContent = `${cat} (${count})`;
-      li.addEventListener("click", () => {
-        [...threadsBody.querySelectorAll("tr")].forEach(tr => {
-          const td = tr.children[2];
-          tr.style.display = (td && td.textContent.startsWith(cat)) ? "" : "none";
-        });
-      });
-      catList.appendChild(li);
-    }
-
     const stat = container.querySelector("#stats-count");
     if(stat) stat.textContent = `Тем: ${totalThreads} • Сообщений: ${totalPosts}`;
   }
@@ -182,10 +214,24 @@ export function mountForum95(container){
     alert("Ошибка загрузки тем. Проверь правила Firestore.");
   });
 
+  // Category click filter
+  container.querySelectorAll("#cats-table a[data-cat]").forEach(a => {
+    a.addEventListener("click", (e)=>{
+      e.preventDefault();
+      const cat = a.dataset.cat.toLowerCase();
+      container.querySelectorAll("#threads-body tr").forEach(tr => {
+        const match = (tr.dataset.cat || "").startsWith(cat);
+        tr.style.display = match ? "" : "none";
+      });
+    });
+  });
+
+  // Modal handlers
   const modal = container.parentElement.querySelector("#modal95");
   container.querySelector("#newThreadBtn").addEventListener("click", ()=> modal.style.display='flex');
   container.querySelector("#cancelNew").addEventListener("click", ()=> modal.style.display='none');
 
+  // Create
   const form = container.querySelector("#new-thread-form");
   form.addEventListener("submit", async (e)=>{
     e.preventDefault();
@@ -205,7 +251,6 @@ export function mountForum95(container){
       });
       modal.style.display='none';
       form.reset();
-      // redirect to the new thread:
       location.href = "thread.html?id=" + ref.id;
     }catch(err){
       console.error("Не удалось создать тему", err);
@@ -216,9 +261,12 @@ export function mountForum95(container){
   });
 }
 
-// tiny local escape (so this file works standalone)
+// escape helpers
 function escapeHtml(str=""){
   return String(str)
     .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
     .replaceAll('"',"&quot;").replaceAll("'","&#039;");
+}
+function escapeAttr(str=""){
+  return escapeHtml(str).replaceAll("\n"," ");
 }
