@@ -6,6 +6,18 @@ import {
 } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 export function mountProfile95(container){
+
+function getIntroEnabled(uid){
+  try{
+    const v = localStorage.getItem('introThreadEnabled:'+uid);
+    if(v === null) return true; // по умолчанию включено
+    return v === '1';
+  }catch(_){ return true; }
+}
+function setIntroEnabled(uid, on){
+  try{ localStorage.setItem('introThreadEnabled:'+uid, on ? '1' : '0'); }catch(_){}
+}
+
   // render loading state
   container.innerHTML = `
     <div class="window95" style="max-width:720px; margin:24px auto;">
@@ -37,6 +49,19 @@ export function mountProfile95(container){
           <div class="panel95">
             <div class="group95">Аккаунт</div>
             <div class="row95"><label>UID</label><input class="input95" value="${escapeAttr(anonId)}" readonly /></div>
+
+            <div class="group95" style="margin-top:8px;">Настройки профиля</div>
+            <div class="row95">
+              <label>Тред знакомств</label>
+              <label style="display:flex;align-items:center;gap:6px;">
+                <input id="introToggle" type="checkbox" ${getIntroEnabled(anonId) ? 'checked' : ''} />
+                <span id="introStateText">${getIntroEnabled(anonId) ? 'включен' : 'выключен'}</span>
+              </label>
+            </div>
+            <div class="row95" id="introLinkRow" style="${getIntroEnabled(anonId) ? '' : 'display:none'}">
+              <label>Ссылка</label>
+              <a class="subject95" href="thread.html?id=${encodeURIComponent('intro-' + anonId)}">Перейти в тред знакомств</a>
+            </div>
 
             <div class="group95" style="margin-top:8px;">Избранное (${fav.length})</div>
             <ul class="list95">
