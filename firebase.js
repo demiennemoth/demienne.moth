@@ -1,44 +1,40 @@
-// firebase.js (updated)
-// NOTE: Admin key approach is not secure for production, but OK for a quick client-only admin panel.
-// For real security, use Firebase Auth + Security Rules + (optionally) custom claims.
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
-import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+// Firestore Security Rules — anon users can read and create threads/replies; only admin can update/delete
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
 
-const firebaseConfig = {
-  apiKey: "AIzaSyD0cCiWsbsYidFXgzmPmPlQ1CbDZ0aWfqY",
-  authDomain: "mothdemienne.firebaseapp.com",
-  projectId: "mothdemienne",
-  storageBucket: "mothdemienne.firebasestorage.app",
-  messagingSenderId: "199511653439",
-  appId: "1:199511653439:web:e659bc721c660d9340cc8a"
-};
-
-export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-
-// --- minimal anon sign-in (optional; helps you have a stable uid) ---
-try {
-  onAuthStateChanged(auth, (u) => {
-    if (!u) signInAnonymously(auth).catch(()=>{});
-    if (u && !localStorage.getItem("anon-id")) {
-      // keep your existing anon-id logic if any
-      localStorage.setItem("anon-id", u.uid);
+    function isSignedIn() {
+      return request.auth != null;
     }
-  });
-} catch (e) { /* ignore */ }
 
-// --- Admin gate (weak client-side) ---
-// Set this to a phrase only you know. Then open /admin.html, enter the key, and you'll get admin tools.
-export const ADMIN_KEY = "CHANGE_ME";
-export function isAdmin() {
-  try {
-    return localStorage.getItem("admin-key") === ADMIN_KEY;
-  } catch (e) {
-    return false;
+    function isAdmin() {
+      // Admin is a user signed in with email/password matching ADMIN_EMAIL
+      return isSignedIn() && request.auth.token.email == "demienne.moth@gmail.com";
+    }
+
+    // Threads collection
+    match /threads/{threadId} {
+      allow read: if true; // public
+      // Create allowed to ANY signed-in user (anonymous included)
+      allow create: if isSignedIn();
+
+      // Update/Delete only admin
+      allow update, delete: if isAdmin();
+
+      // Replies subcollection
+      match /replies/{replyId} {
+        allow read: if true;
+        allow create: if isSignedIn();
+        allow update, delete: if isAdmin();
+      }
+    }
+
+    // User private subcollections (favorites/readlater/bookmarks) — only owner may write/read
+    match /users/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+      match /{document=**} {
+        allow read, write: if isSignedIn() && request.auth.uid == userId;
+      }
+    }
   }
-}
-export function requireAdminOrThrow() {
-  if (!isAdmin()) throw new Error("Not authorized (admin key missing or incorrect).");
 }
