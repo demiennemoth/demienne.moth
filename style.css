@@ -498,3 +498,27 @@ select.input95 {
   border-bottom-color: var(--95-white) !important;
   padding: 3px 7px !important;
 }
+
+
+/* === Categories primary highlight & hover (added) === */
+.group95--primary{
+  background: linear-gradient(var(--95-blue), #000060);
+  color:#fff;
+  border:1px solid var(--95-white);
+  border-right-color: var(--95-dark);
+  border-bottom-color: var(--95-dark);
+}
+
+/* Make subcategory links pop on hover/focus */
+.cat-link{
+  transition: background .15s ease, color .15s ease, border-color .15s ease, box-shadow .15s ease;
+  color: #000080; /* match Win95 blue text */
+}
+.cat-link:hover,
+.cat-link:focus{
+  background:#c6d4ff; /* same hover tint as threads */
+  color:#000;
+  border-color: var(--95-blue);
+  outline: none;
+  box-shadow: inset 0 0 0 1px #ffffff;
+}
