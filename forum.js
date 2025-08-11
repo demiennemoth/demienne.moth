@@ -30,7 +30,7 @@ export function mountForumLayoutV2(root){
     <div class="grid3">
       <!-- Left: categories -->
       <aside class="leftcol window95" style="padding:8px;">
-        <div class="group95">Категории</div>
+        <div class="group95 group95--primary">Категории</div>
         ${CATEGORIES.map(g => `
           <div class="cat-group">${g.group}</div>
           <div class="cat-grid">
