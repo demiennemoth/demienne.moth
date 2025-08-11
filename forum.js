@@ -1,93 +1,91 @@
-// forum.js — 3‑колоночный макет: слева категории (таблицей), центр — темы, справа — профиль/админ/онлайн
+// forum.js — layout v2: narrower main window, left grouped categories, center threads, right sidebar
 import { db, isAdmin } from "./firebase.js";
 import { collection, addDoc, getDocs, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
 const CATEGORIES = [
-  "Философия","Теории заговора","Жизнь после смерти","Психология","Наука и научпоп","Космос",
-  "Музыка","Аниме","Фильмы","Книги","Знаменитости","Блогеры","Слухи и сливы",
-  "Видеоигры","Компьютеры","Автомобили","Животные","Кулинария","Знакомства","Личные отношения",
-  "Советы","Помощь","Общение","Всякое"
+  { group: "Общество", items: ["Знакомства","Личные отношения","Советы","Помощь","Общение","Всякое"] },
+  { group: "Мысль и наука", items: ["Философия","Теории заговора","Психология","Наука и научпоп","Космос"] },
+  { group: "Культура и медиа", items: ["Фильмы","Книги","Музыка","Аниме","Знаменитости","Блогеры","Слухи и сливы"] },
+  { group: "Игры и техника", items: ["Видеоигры","Компьютеры","Автомобили"] },
+  { group: "Природа", items: ["Животные"] },
+  { group: "Быт", items: ["Кулинария"] },
 ];
 
-export function mountForumLayout(root){
+export function mountForumLayoutV2(root){
   root.innerHTML = `
-  <div class="window95 forum-window" style="
-      max-width: min(1900px, calc(100vw - 24px));
-      min-height: min(88vh, 1200px);
-      margin: 16px auto 40px;
-      display: grid;
-      grid-template-rows: auto 1fr;
-      box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);
-    ">
+  <div class="window95 window-shell">
     <div class="titlebar95">
-      <div class="icon" aria-hidden="true"></div>
-      <div class="title">МОЛЬ — Форум</div>
+      <div class="icon"></div><div class="title">МОЛЬ — Форум</div>
       <div class="controls95">
-        <button class="btn95 tb95" title="Minimize">_</button>
-        <button class="btn95 tb95" title="Maximize">▢</button>
-        <button class="btn95 tb95" title="Close" onclick="history.back()">×</button>
+        <button class="btn95 tb95" onclick="history.back()">×</button>
       </div>
     </div>
+    <div class="menubar95">
+      <div class="menu95">Файл</div>
+      <div class="menu95">Правка</div>
+      <div class="menu95">Вид</div>
+      <div class="menu95">Справка</div>
+    </div>
 
-    <div class="panel95" style="display:grid; grid-template-columns: 380px 1fr 360px; gap:12px; align-items:start;">
-      <!-- ЛЕВЫЙ СТОЛБЕЦ: КАТЕГОРИИ -->
-      <aside class="window95" style="padding:6px; min-height: 70vh; overflow:auto;">
+    <div class="grid3">
+      <!-- Left: categories -->
+      <aside class="leftcol window95" style="padding:8px;">
         <div class="group95">Категории</div>
-        <div id="cat-grid" class="cat-grid"></div>
+        ${CATEGORIES.map(g => `
+          <div class="cat-group">${g.group}</div>
+          <div class="cat-grid">
+            ${g.items.map(name => `<a href="#" class="cat-link" data-cat="${escapeAttr(name)}">${escapeHtml(name)}</a>`).join("")}
+          </div>
+        `).join("")}
       </aside>
 
-      <!-- ЦЕНТР: ТЕМЫ -->
-      <main class="window95" style="padding:6px; min-height: 70vh; display:flex; flex-direction:column;">
-        <div class="toolbar95" style="gap:8px; align-items:center;">
+      <!-- Center: threads -->
+      <main class="window95" style="padding:8px;">
+        <div class="toolbar95">
           <button class="btn95" id="newThreadBtn">Новая тема</button>
-          <input class="input95" id="searchBox" type="text" placeholder="Поиск по темам…" style="flex:1"/>
+          <input class="input95" id="searchBox" type="text" placeholder="Поиск по темам…" />
           <button class="btn95" id="searchBtn">Поиск</button>
-          <span style="margin-left:auto">Сортировка:
-            <select class="input95" id="sortSelect" style="padding:1px 2px;">
+          <span class="right">Сортировка:
+            <select class="input95" id="sortSelect">
               <option value="date">по дате</option>
+              <option value="replies">по ответам</option>
+              <option value="views">по просмотрам</option>
             </select>
           </span>
         </div>
 
-        <table class="threads95" aria-label="Список тем" style="margin-top:8px;">
+        <table class="threads95" aria-label="Список тем">
           <thead>
             <tr>
-              <th>Тема</th>
-              <th>Автор</th>
-              <th>Категория</th>
-              <th>Ответы</th>
-              <th>Просмотры</th>
-              <th>Последнее</th>
-              <th></th>
+              <th>Тема</th><th>Автор</th><th>Категория</th>
+              <th>Ответы</th><th>Просмотры</th><th>Последнее</th><th></th>
             </tr>
           </thead>
           <tbody id="threads-body"></tbody>
         </table>
 
-        <div class="status95" style="margin-top:auto;">
+        <div class="status95">
           <span id="stats-count">Тем: — • Сообщений: —</span>
           <span id="pager">Страница 1</span>
         </div>
       </main>
 
-      <!-- ПРАВЫЙ СТОЛБЕЦ: ПРОФИЛЬ/АДМИН/ОНЛАЙН -->
-      <aside class="window95" style="padding:6px; min-height: 70vh;">
+      <!-- Right: profile/admin/online -->
+      <aside class="rightcol window95" style="padding:8px;">
         <div class="group95">Профиль</div>
         <div style="padding:6px;">
           <a href="profile.html" class="btn95" style="display:block; text-align:center;">Твой профиль</a>
         </div>
-
         <div class="group95" style="margin-top:10px;">Режим</div>
         <ul class="list95">
           <li>Админ: <b id="admin-flag"></b></li>
           <li><a href="admin.html">Открыть админку</a></li>
           <li><a href="admin-login.html">Войти как админ</a></li>
         </ul>
-
         <div class="group95" style="margin-top:10px;">Онлайн</div>
-        <ul class="list95" id="online-list">
-          <li>Пользователей онлайн: —</li>
-          <li>Гостей: —</li>
+        <ul class="list95" id="stat-list">
+          <li id="stat-online">Пользователей онлайн: —</li>
+          <li id="stat-guests">Гостей: —</li>
           <li>Самый активный: moth.exe</li>
         </ul>
       </aside>
@@ -96,10 +94,9 @@ export function mountForumLayout(root){
 
   <!-- Modal -->
   <div class="modal95" id="modal95">
-    <div class="window95" style="max-width: min(900px, calc(100vw - 24px)); margin: 16px auto 40px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
+    <div class="window95" style="max-width: 720px; margin: 16px auto 40px; box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);">
       <div class="titlebar95">
-        <div class="icon"></div>
-        <div class="title">Новая тема</div>
+        <div class="icon"></div><div class="title">Новая тема</div>
         <div class="controls95">
           <button class="btn95 tb95" title="Close" onclick="document.getElementById('modal95').style.display='none'">×</button>
         </div>
@@ -112,12 +109,14 @@ export function mountForumLayout(root){
           </div>
           <div class="row95">
             <label>Категория</label>
-            <input class="input95" id="thread-category" style="flex:1" list="cats" placeholder="Выберите категорию" required />
-            <datalist id="cats">${CATEGORIES.map(c=>`<option value="${escapeHtml(c)}">`).join("")}</datalist>
+            <input list="catlist" class="input95" id="thread-category" style="flex:1" type="text" placeholder="Выберите категорию" required />
+            <datalist id="catlist">
+              ${CATEGORIES.flatMap(g=>g.items).map(c=>`<option value="${escapeAttr(c)}"></option>`).join("")}
+            </datalist>
           </div>
           <div class="row95" style="align-items:flex-start">
             <label>Текст</label>
-            <textarea class="input95" id="thread-body" placeholder="Тут ваш пост…" required></textarea>
+            <textarea class="input95" id="thread-body" placeholder="Тут ваш тёмно-атмосферный пост…" required></textarea>
           </div>
           <div style="display:flex; gap:8px; justify-content:flex-end">
             <button type="button" class="btn95" id="cancelNew">Отмена</button>
@@ -129,68 +128,57 @@ export function mountForumLayout(root){
   </div>
   `;
 
-  // render categories grid (таблица вида 6 колонок)
-  const catGrid = root.querySelector("#cat-grid");
-  catGrid.innerHTML = `
-    <table class="threads95">
-      <thead><tr><th colspan="6" style="text-align:left;">Категории</th></tr></thead>
-      <tbody>
-        ${chunk(CATEGORIES, 6).map(row => `
-          <tr>
-            ${row.map(c=> `<td><a href="#" data-cat="${escapeAttr(c)}">${escapeHtml(c)}</a></td>`).join("")}
-            ${Array.from({length: 6 - row.length}).map(()=>"<td></td>").join("")}
-          </tr>`).join("")}
-      </tbody>
-    </table>`;
-
   const threadsBody = root.querySelector("#threads-body");
   const adminFlag = root.querySelector("#admin-flag");
   adminFlag.textContent = isAdmin() ? "включён" : "нет";
 
-  async function loadThreads(){
-    threadsBody.innerHTML = "";
-    const q = query(collection(db, "threads"), orderBy("createdAt", "desc"));
-    const snapshot = await getDocs(q);
-    let totalThreads = 0;
-    let totalPosts = 0;
-    snapshot.forEach(docSnap => {
-      const t = docSnap.data();
-      const id = docSnap.id;
-      totalThreads++;
-      const tr = document.createElement("tr");
-      tr.dataset.cat = (t.category || "").toLowerCase();
-      const adminButtons = isAdmin()
-        ? `<a class="btn95" href="admin.html?edit=${id}">Редактировать</a>`
-        : "";
-      tr.innerHTML = `
-        <td class="subject95"><a href="thread.html?id=${id}">${escapeHtml(t.title || "(без названия)")}</a></td>
-        <td>${t.author || "анон"}</td>
-        <td>${escapeHtml(t.category || "")}</td>
-        <td>${t.repliesCount || 0}</td>
-        <td>${t.views || 0}</td>
-        <td>${t.createdAt?.seconds ? new Date(t.createdAt.seconds*1000).toLocaleString() : ""}</td>
-        <td>${adminButtons}</td>`;
-      threadsBody.appendChild(tr);
-      totalPosts += (t.repliesCount || 0);
-    });
-    const stat = root.querySelector("#stats-count");
-    if (stat) stat.textContent = `Тем: ${totalThreads} • Сообщений: ${totalPosts}`;
-  }
-  loadThreads().catch(e=>{console.error(e); alert("Ошибка загрузки тем");});
-
-  // filtering by category
-  catGrid.querySelectorAll('a[data-cat]').forEach(a=>{
-    a.addEventListener('click', (ev)=>{
-      ev.preventDefault();
-      const cat = a.dataset.cat.toLowerCase();
-      [...threadsBody.querySelectorAll("tr")].forEach(tr=>{
-        tr.style.display = !cat || tr.dataset.cat === cat ? "" : "none";
+  // filter by clicking category
+  root.querySelectorAll(".cat-link").forEach(a => {
+    a.addEventListener("click", (e)=>{
+      e.preventDefault();
+      const cat = a.dataset.cat;
+      [...threadsBody.querySelectorAll("tr")].forEach(tr => {
+        const td = tr.children[2];
+        tr.style.display = (td && td.textContent.trim() === cat) ? "" : "none";
       });
     });
   });
 
-  // modal
-  const modal = document.getElementById("modal95");
+  async function loadThreads(){
+    threadsBody.innerHTML = "";
+    const qy = query(collection(db, "threads"), orderBy("createdAt", "desc"));
+    const snapshot = await getDocs(qy);
+    let totalPosts = 0;
+    let totalThreads = 0;
+    snapshot.forEach(docSnap => {
+      const t = docSnap.data();
+      const id = docSnap.id;
+      totalThreads++;
+      const adminButtons = isAdmin()
+        ? `<a class="btn95" href="admin.html?edit=${id}">Редактировать</a>`
+        : "";
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td class="subject95"><a href="thread.html?id=${id}">${t.title ? escapeHtml(t.title) : "(без названия)"}</a></td>
+        <td>${t.author || "анон"}</td>
+        <td>${escapeHtml(t.category || "—")}</td>
+        <td>${t.repliesCount || 0}</td>
+        <td>${t.views || 0}</td>
+        <td>${t.createdAt?.seconds ? new Date(t.createdAt.seconds*1000).toLocaleString() : ""}</td>
+        <td>${adminButtons}</td>
+      `;
+      threadsBody.appendChild(tr);
+      totalPosts += (t.repliesCount || 0);
+    });
+    const stat = root.querySelector("#stats-count");
+    if(stat) stat.textContent = `Тем: ${totalThreads} • Сообщений: ${totalPosts}`;
+  }
+  loadThreads().catch(err => {
+    console.error(err);
+    alert("Ошибка загрузки тем. Проверь правила Firestore.");
+  });
+
+  const modal = document.getElementById('modal95');
   root.querySelector("#newThreadBtn").addEventListener("click", ()=> modal.style.display='flex');
   root.querySelector("#cancelNew").addEventListener("click", ()=> modal.style.display='none');
 
@@ -206,7 +194,6 @@ export function mountForumLayout(root){
       const anonId = localStorage.getItem("anon-id");
       if(!title || !body || !category){ alert("Все поля обязательны"); btn.disabled=false; return; }
       if(!anonId){ alert("Сначала получи анонимный ID"); btn.disabled=false; return; }
-
       const ref = await addDoc(collection(db, "threads"), {
         title, body, category, author: anonId,
         createdAt: serverTimestamp(), repliesCount: 0, views: 0
@@ -223,11 +210,6 @@ export function mountForumLayout(root){
   });
 }
 
-function chunk(arr, n){
-  const out = [];
-  for(let i=0;i<arr.length;i+=n) out.push(arr.slice(i,i+n));
-  return out;
-}
 function escapeHtml(str=""){
   return String(str)
     .replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;")
