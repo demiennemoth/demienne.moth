@@ -6,14 +6,13 @@ import {
   signInAnonymously
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
-// !!! ЗАМЕНИ на свои ключи из консоли Firebase
 const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
-  projectId: 'YOUR_PROJECT_ID',
-  storageBucket: 'YOUR_PROJECT_ID.appspot.com',
-  messagingSenderId: 'YOUR_SENDER_ID',
-  appId: 'YOUR_APP_ID'
+  apiKey: "AIzaSyD0cCiWsbsYidFXgzmPmPlQ1CbDZ0aWfqY",
+  authDomain: "mothdemienne.firebaseapp.com",
+  projectId: "mothdemienne",
+  storageBucket: "mothdemienne.firebasestorage.app",
+  messagingSenderId: "199511653439",
+  appId: "1:199511653439:web:e659bc721c660d9340cc8a"
 };
 
 export const app = initializeApp(firebaseConfig);
