@@ -1,4 +1,4 @@
-// broadcast.firebase.js
+// broadcast.firebase.js (EN labels + sane fallbacks)
 import { db, auth } from './firebase.js';
 import {
   collection, addDoc, serverTimestamp, onSnapshot,
@@ -34,7 +34,7 @@ function msToHMM(ms) {
   const totalMin = Math.max(0, Math.floor(ms / 60000));
   const h = Math.floor(totalMin / 60);
   const m = totalMin % 60;
-  return (h > 0 ? h + 'ч ' : '') + m + 'м';
+  return (h > 0 ? h + 'h ' : '') + m + 'm';
 }
 
 function escapeHtml(s = '') {
@@ -43,6 +43,11 @@ function escapeHtml(s = '') {
           .replaceAll('>', '&gt;')
           .replaceAll('"', '&quot;')
           .replaceAll("'", '&#039;');
+}
+
+// Prefer nick; if missing (old docs), use mask; else "Guest"
+function displayName(d) {
+  return (d.nick && d.nick.trim()) || (d.mask && d.mask.trim()) || 'Guest';
 }
 
 function renderRow(docSnap) {
@@ -57,9 +62,9 @@ function renderRow(docSnap) {
 
   const meta = document.createElement('div');
   meta.className = 'meta';
-  meta.innerHTML = `<div><b>${escapeHtml(d.nick || 'Гость')}</b></div>
-    <div class="muted">создано: ${created.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
-    <div class="muted">исчезнет: ${expires.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>`;
+  meta.innerHTML = `<div><b>${escapeHtml(displayName(d))}</b></div>
+    <div class="muted">created: ${created.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
+    <div class="muted">expires: ${expires.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>`;
 
   const text = document.createElement('div');
   text.className = 'post-text';
@@ -71,12 +76,9 @@ function renderRow(docSnap) {
     del.className = 'btn95 delbtn';
     del.textContent = 'Del';
     del.addEventListener('click', async () => {
-      if (confirm('Удалить сообщение?')) {
-        try {
-          await deleteDoc(doc(db, 'broadcast', docSnap.id));
-        } catch (e) {
-          alert('Не удалось удалить: ' + e.message);
-        }
+      if (confirm('Delete this message?')) {
+        try { await deleteDoc(doc(db, 'broadcast', docSnap.id)); }
+        catch (e) { console.error(e); }
       }
     });
     actions.appendChild(del);
@@ -102,7 +104,7 @@ function subscribeFeed() {
       const empty = document.createElement('div');
       empty.style.padding = '8px';
       empty.style.color = '#000';
-      empty.textContent = 'Пусто. Ночь ждёт первый шёпот.';
+      empty.textContent = 'Empty. The night waits for a first whisper.';
       feedEl.appendChild(empty);
     }
   });
@@ -110,12 +112,9 @@ function subscribeFeed() {
 
 sendBtn?.addEventListener('click', async () => {
   const text = (msgEl.value || '').trim();
-  const nick = (nicknameEl?.value || 'Гость').trim().slice(0,20);
+  const nick = (nicknameEl?.value || 'Guest').trim().slice(0,20);
   if (!text) return;
-  if (text.length > 600) {
-    alert('Слишком длинно (макс 600).');
-    return;
-  }
+  if (text.length > 600) { return; }
   const ttlMin = Number(ttlEl?.value || 30);
   const now = new Date();
   const candidate = new Date(now.getTime() + ttlMin*60000);
@@ -132,7 +131,7 @@ sendBtn?.addEventListener('click', async () => {
     });
     msgEl.value = '';
   } catch (e) {
-    alert('Ошибка отправки: ' + e.message);
+    console.error(e);
   }
 });
 
@@ -142,7 +141,7 @@ function tick() {
   const left = cutoff - now;
   if (leftEl) leftEl.textContent = msToHMM(left);
   if (sessionLabelEl) {
-    const s = new Intl.DateTimeFormat('ru-RU', { timeZone: 'Europe/Amsterdam', hour:'2-digit', minute:'2-digit' }).format(now);
+    const s = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Amsterdam', hour:'2-digit', minute:'2-digit' }).format(now);
     sessionLabelEl.textContent = s;
   }
   if (left <= 0) subscribeFeed();
