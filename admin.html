@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <title>ADMIN.EXE</title>
@@ -19,22 +19,22 @@
   <div class="window95" style="max-width:1080px; margin:24px auto 80px;">
     <div class="titlebar95">
       <div class="icon"></div>
-      <div class="title">ADMIN.EXE — Панель</div>
+      <div class="title">ADMIN.EXE — Panel</div>
       <div class="controls95">
         <button class="btn95 tb95" onclick="location.href='index.html'">⌂</button>
-        <button class="btn95 tb95" id="logoutBtn" title="Выйти">⎋</button>
+        <button class="btn95 tb95" id="logoutBtn" title="Log out">⎋</button>
       </div>
     </div>
 
     <div class="panel95">
       <div class="toolbar95" style="justify-content:space-between;">
         <div>
-          <span class="group95">Состояние</span>
-          <span class="badge95">Пользователь: <span id="who"></span></span>
+          <span class="group95">Status</span>
+          <span class="badge95">User: <span id="who"></span></span>
         </div>
         <div>
-          <button class="btn95" id="refreshBtn">Обновить</button>
-          <label style="color:#000; margin-left:8px;"><input type="checkbox" id="showExpired"/> Показывать истёкшие</label>
+          <button class="btn95" id="refreshBtn">Refresh</button>
+          <label style="color:#000; margin-left:8px;"><input type="checkbox" id="showExpired"/> Show expired</label>
         </div>
       </div>
 
@@ -42,11 +42,11 @@
         <table class="table95" id="table">
           <thead>
             <tr>
-              <th>Создано</th>
-              <th>Истекает</th>
-              <th>Маска</th>
-              <th>Текст</th>
-              <th>Действия</th>
+              <th>Created</th>
+              <th>Expires</th>
+              <th>Nick</th>
+              <th>Text</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>
