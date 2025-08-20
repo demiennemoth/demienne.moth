@@ -549,3 +549,22 @@ select.input95 {
 .tb95:active {
   border-style: inset;
 }
+
+/* --- Win95 UI FIX: real menu button and centered titlebar glyphs --- */
+.menubtn95{
+  padding: 2px 12px;
+  height: 22px;
+  font: 13px "Tahoma", sans-serif;
+  cursor: default;
+}
+.controls95 .tb95{
+  width: 20px;
+  height: 20px;
+  display: grid;
+  place-items: center;
+  font: 12px "Tahoma", sans-serif;
+  line-height: 1;
+  padding: 0;
+  margin-left: 2px;
+}
+.controls95 .tb95:active{ border-style: inset; }
