@@ -1,55 +1,32 @@
-// firebase.js — auth revamp: admin via Email/Password; others stay anonymous
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+// firebase.js
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import {
-  getAuth, onAuthStateChanged, signInAnonymously, signInWithEmailAndPassword, signOut
-} from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  getAuth, onAuthStateChanged, setPersistence, browserLocalPersistence,
+  signInAnonymously
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
-// --- your project config (unchanged) ---
+// !!! ЗАМЕНИ на свои ключи из консоли Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyD0cCiWsbsYidFXgzmPmPlQ1CbDZ0aWfqY",
-  authDomain: "mothdemienne.firebaseapp.com",
-  projectId: "mothdemienne",
-  storageBucket: "mothdemienne.firebasestorage.app",
-  messagingSenderId: "199511653439",
-  appId: "1:199511653439:web:e659bc721c660d9340cc8a"
+  apiKey: 'YOUR_API_KEY',
+  authDomain: 'YOUR_PROJECT_ID.firebaseapp.com',
+  projectId: 'YOUR_PROJECT_ID',
+  storageBucket: 'YOUR_PROJECT_ID.appspot.com',
+  messagingSenderId: 'YOUR_SENDER_ID',
+  appId: 'YOUR_APP_ID'
 };
 
 export const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const auth = getAuth(app);
 
-// === Admin identity ===
-// Replace with your admin email:
-export const ADMIN_EMAIL = "demienne.moth@gmail.com";
-
-export function isAdminUser(u){
-  return !!u && !!u.email && u.email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
-}
-export function isAdmin(){
-  const u = auth.currentUser;
-  return isAdminUser(u);
-}
-export async function adminSignIn(email, password){
-  return signInWithEmailAndPassword(auth, email, password);
-}
-export async function adminSignOut(){
-  return signOut(auth);
+await setPersistence(auth, browserLocalPersistence);
+// Гостям — анонимный вход (админ залогинится на своей странице)
+if (!auth.currentUser) {
+  try { await signInAnonymously(auth); } catch (e) { console.warn('anon auth failed', e); }
 }
 
-// === Default: anonymous for non-admin visitors ===
-onAuthStateChanged(auth, async (u) => {
-  try{
-    if (!u) {
-      // No user — go anonymous.
-      await signInAnonymously(auth);
-      return;
-    }
-    // keep anon id for UI convenience
-    if (!localStorage.getItem("anon-id")) {
-      localStorage.setItem("anon-id", u.uid);
-    }
-  }catch(e){
-    console.warn("Auth flow warning:", e);
-  }
+onAuthStateChanged(auth, (user) => {
+  // можно логировать состояние
+  // console.debug('auth:', user ? (user.isAnonymous ? 'anon' : (user.email||user.uid)) : 'none');
 });
