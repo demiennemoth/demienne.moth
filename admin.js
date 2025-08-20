@@ -12,8 +12,8 @@ const logoutBtn = document.getElementById('logoutBtn');
 const showExpiredEl = document.getElementById('showExpired');
 
 // Разрешённые админы — укажи свои email/uid
-const ALLOWED_EMAILS = ['you@example.com']; // TODO: замени
-const ALLOWED_UIDS = []; // например: ['abc123uid']
+const ALLOWED_EMAILS = ["demienne.moth@gmail.com"];
+const ALLOWED_UIDS = ["JQaPc2051CWnV3KEFMPSt3Gvbj92"];
 
 function isAdmin(user) {
   if (!user || user.isAnonymous) return false;
