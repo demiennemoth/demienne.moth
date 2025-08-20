@@ -1,12 +1,50 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>ADMIN-LOGIN.EXE</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="admin-login.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .login-form95 { padding:8px; background:var(--95-light); border:1px solid var(--95-white);
+      border-right-color:var(--95-dark); border-bottom-color:var(--95-dark); }
+    .login-form95 label { display:block; margin:6px 0 2px; }
+  </style>
 </head>
 <body class="win95-bg">
-  <div id="login-root"></div>
+  <div class="window95" style="max-width:520px; margin:80px auto;">
+    <div class="titlebar95">
+      <div class="icon"></div>
+      <div class="title">ADMIN-LOGIN.EXE</div>
+      <div class="controls95">
+        <button class="btn95 tb95" onclick="history.back()">×</button>
+      </div>
+    </div>
+
+    <div class="panel95">
+      <div class="login-form95">
+        <div class="row95">
+          <label>Статус:</label>
+          <span id="authStatus" style="color:#000;">Гость</span>
+        </div>
+        <label for="email" style="color:#000;">E-mail</label>
+        <input id="email" class="input95" type="email" placeholder="you@example.com" />
+
+        <label for="password" style="color:#000;">Пароль</label>
+        <input id="password" class="input95" type="password" placeholder="••••••••" />
+
+        <div class="row95" style="justify-content:flex-end;">
+          <button class="btn95" id="doLogin">Войти</button>
+        </div>
+        <div id="loginError" style="color:#900; margin-top:6px;"></div>
+      </div>
+      <div class="status95">
+        <span>После входа вас перекинет в ADMIN.EXE</span>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="admin-login.js"></script>
 </body>
 </html>
