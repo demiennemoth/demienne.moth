@@ -1,72 +1,551 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>MOTHDEMIENNE.EXE — Night Broadcast</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css" />
-  <style>
-    .badge95{ display:inline-block; padding:2px 6px; border:1px solid var(--95-dark,#808080); background:#efefef; color:#000; font-size:12px; }
-    .feed95{ height:60vh; min-height:360px; max-height:70vh; overflow:auto;
-      background:#fff; color:#000;
-      border:2px solid #000; border-right-color:#fff; border-bottom-color:#fff; }
-    .row95{ display:grid; grid-template-columns:160px 1fr auto; gap:8px; align-items:flex-start;
-      border-bottom:1px solid #9e9e9e; padding:6px 8px; }
-    .row95.dim { opacity:.55; }
-    .post-text { white-space:pre-wrap; word-break:break-word; }
-    .row95 .meta { font-size:12px; color:#333; }
-    .row95 .delbtn { margin-left:8px; }
-  </style>
-</head>
-<body class="win95-bg">
-  <div class="window95" style="max-width:980px; margin:24px auto 80px;">
-    <div class="titlebar95">
-      <div class="icon"></div>
-      <div class="title">MOTHDEMIENNE.EXE — Night Broadcast</div>
-      <div class="controls95">
-        <button class="btn95 tb95" onclick="history.back()">×</button>
-      </div>
-    </div>
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #000; /* fallback */
+  background-image: url('images/background.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: 'VT323', monospace;
+  color: #fff;
+}
+.icon {
+  width: 96px;
+  text-align: center;
+  color: #dcdcdc;
+  cursor: pointer;
+  font-size: 16px;
+}
+.icon img {
+  width: 96px;
+  height: 96px;
+}
 
-    <!-- Menu bar -->
-    <div class="menubar95">
-      <div class="menu95" id="menu-admin" title="Login as admin / open panel">Admin ▾</div>
-    </div>
+/* === Общие стили === */
+* {
+  cursor: url('images/cursor.png'), auto !important;
+}
 
-    <div class="toolbar95" style="justify-content:space-between;">
-      <div>Nick:&nbsp;
-        <input id="nickname" class="input95" placeholder="Enter nickname" maxlength="20" style="width:140px;" />
-      </div>
-      <div style="display:flex; gap:8px; align-items:center;">
-        <label for="ttl" style="color:#000;">Lifetime:</label>
-        <select id="ttl" class="input95">
-          <option value="10">10 minutes</option>
-          <option value="20">20 minutes</option>
-          <option value="30" selected>30 minutes</option>
-        </select>
-        <span class="badge95">Session: <span id="sessionLabel"></span></span>
-        <span class="badge95">Until dawn: <span id="left"></span></span>
-      </div>
-    </div>
+body {
+  margin: 0;
+  background-color: #000;
+  background-image: url('images/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #dcdcdc;
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+}
 
-    <div class="panel95">
-      <div id="feed" class="feed95"></div>
-      <div class="status95" style="gap:8px; align-items:center; flex-wrap:wrap;">
-        <input id="msg" class="input95" placeholder="Say something…" maxlength="600" style="flex:1; min-width:240px;" />
-        <button class="btn95" id="send">Send</button>
-      </div>
-      <div class="status95" style="margin-top:6px; font-size:12px; color:#000;">
-        ⚠️ Nicknames are not reserved and can be taken by anyone. Be careful who you trust.
-      </div>
-      <div class="status95" style="margin-top:6px; font-size:12px;">
-        Messages older than 10 minutes fade, older than 30 disappear. The feed resets at 06:00 (Europe/Amsterdam).
-      </div>
-    </div>
-  </div>
+/* === Рабочий стол === */
+.desktop {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 20px;
+  gap: 30px;
+}
 
-  <!-- Scripts -->
-  <script type="module" src="firebase.js"></script>
-  <script type="module" src="admin-menu.js"></script>
-  <script type="module" src="broadcast.firebase.js"></script>
-</body>
-</html>
+
+
+
+
+/* === Панель задач === */
+.taskbar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  height: 40px;
+  background: #c0c0c0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 6px;
+  border-top: 2px solid #ffffff;
+  box-shadow: inset 0 1px 0 #808080;
+  z-index: 9999;
+}
+
+#start-menu {
+  position: fixed;
+  left: 10px;
+  bottom: 48px;
+  background: #c0c0c0;
+  border: 2px solid #ffffff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  color: #000;
+  width: 240px;
+  min-height: 140px;
+  padding: 6px;
+  box-shadow: inset -1px -1px 0 #808080, inset 1px 1px 0 #ffffff;
+  z-index: 10000;
+}
+
+#start-menu.hidden {
+  display: none;
+}
+
+#start-menu div {
+  padding: 6px 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  color: #000;
+  font-family: Tahoma, sans-serif;
+  font-size: 13px;
+}
+
+#start-menu div:hover {
+  background: #000080;
+  color: #ffffff;
+}
+
+.taskbar-time {
+  margin-left: auto;
+  padding: 0 15px;
+  color: #000000;
+  font-size: 14px;
+  user-select: none;
+}
+
+#start-btn {
+  all: unset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  height: 32px;
+  background: #c0c0c0;
+  border: 2px solid #ffffff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  padding: 2px 12px;
+  margin: 4px;
+  cursor: pointer;
+  color: #000;
+  font-family: Tahoma, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+/* === Окна (форум/треды/новости) === */
+.window {
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  width: 400px;
+  height: 300px;
+  background: #b7b5a8;
+  border: 2px solid #000;
+  box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080;
+  display: flex;
+  flex-direction: column;
+  font-family: Tahoma, sans-serif;
+}
+
+.window-header {
+  background: #1a4876;
+  height: 22px;
+  padding: 5px 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 13px;
+  border-bottom: 2px solid #000;
+  box-shadow: inset 0 1px #fff, inset 0 -1px #000;
+  cursor: move;
+  font-family: Tahoma, sans-serif;
+}
+
+.window-content {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  color: #000000 !important;
+  font-family: Tahoma, sans-serif;
+}
+
+/* === Меню === */
+.menu {
+  background: #1a1a1a;
+  padding: 10px;
+  border-bottom: 2px solid #333;
+  text-align: center;
+  font-size: 16px;
+  box-shadow: 0 0 10px #000 inset;
+}
+.menu a {
+  margin: 0 10px;
+  color: #e0e0e0;
+  text-decoration: none;
+  position: relative;
+}
+.menu a::before {
+  content: "▣ ";
+  color: #ff0040;
+}
+.menu a:hover {
+  color: #ff0040;
+  text-shadow: 0 0 5px #ff0040, 0 0 10px #ff0040;
+}
+
+/* === Форум плитками === */
+.board {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 12px;
+  width: 90%;
+  margin: 20px auto;
+}
+.thread-link {
+  display: block;
+  padding: 12px;
+  background: #b7b5a8;
+  border: 1px solid #333;
+  transition: 0.2s;
+  color: #e0e0e0;
+  text-decoration: none;
+  box-shadow: 0 0 8px rgba(255,0,64,0.1);
+}
+.thread-link img {
+  width: 100%;
+  height: 120px;
+  object-fit: cover;
+  display: block;
+  margin-bottom: 8px;
+  border: 1px solid #333;
+}
+.thread-link:hover {
+  background: #1e1e1e;
+  border-color: #ff0040;
+  color: #ff0040;
+  transform: scale(1.02);
+  box-shadow: 0 0 12px #ff0040;
+}
+.meta {
+  font-size: 12px;
+  color: #777;
+  margin-top: 4px;
+}
+
+/* === Тред и посты === */
+.thread {
+  margin: 20px auto;
+  width: 90%;
+  background: #111;
+  padding: 15px;
+  border: 1px solid #333;
+  box-shadow: 0 0 12px rgba(255,0,64,0.2);
+}
+.post {
+  margin: 15px 0;
+  padding: 12px;
+  border: 1px dashed #444;
+  background: #1a1a1a;
+  transition: background 0.2s, border 0.2s;
+  position: relative;
+}
+.post:hover {
+  background: #151515;
+  border: 1px solid #ff0040;
+  box-shadow: 0 0 10px rgba(255,0,64,0.2);
+}
+.post-header {
+  font-size: 12px;
+  color: #999;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.post-number {
+  color: #ff0040;
+  margin-right: 10px;
+  cursor: pointer;
+}
+.collapse-btn {
+  cursor: pointer;
+  color: #ff0040;
+  margin-left: auto;
+  font-size: 12px;
+}
+.post img {
+  max-width: 200px;
+  display: block;
+  margin: 6px 0;
+  border: 1px solid #444;
+}
+.quote {
+  color: #ff0040;
+  display: block;
+  border-left: 2px solid #ff0040;
+  padding-left: 6px;
+  margin: 4px 0;
+}
+
+/* === Форма ответа === */
+.form-box, #reply-form {
+  background: #222;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: 2px solid #444;
+  box-shadow: 0 0 8px rgba(255,0,64,0.1);
+}
+textarea, input[type="text"] {
+  background: #000;
+  color: #e0e0e0;
+  border: 1px solid #555;
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  width: 100%;
+}
+textarea {
+  height: 90px;
+  line-height: 1.4;
+}
+input[type="submit"], button {
+  margin-top: 6px;
+  background: #111;
+  color: #e0e0e0;
+  border: 1px solid #666;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+input[type="submit"]:hover, button:hover {
+  background: #1a4876;
+  color: #fff;
+  border-color: #ff0040;
+}
+
+
+.window-header .close-btn {
+  width: 22px;
+  height: 22px;
+  background: #c0c0c0 !important;
+  border: 2px solid #000;
+  box-shadow: inset -1px -1px 0 #fff, inset 1px 1px 0 #808080;
+  color: black !important;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 18px;
+  text-align: center;
+  cursor: pointer;
+  margin-left: 8px;
+}
+.window-header .close-btn:hover {
+  background: #808080;
+}
+
+#start-btn:active {
+  border: 2px solid #808080;
+  border-right-color: #ffffff;
+  border-bottom-color: #ffffff;
+  padding: 3px 11px;
+}
+
+#start-menu.hidden { display: none; }
+
+
+/* ===== Win95 forum/profile skin ===== */
+:root{
+  --95-gray:#c0c0c0;
+  --95-dark:#808080;
+  --95-light:#dfdfdf;
+  --95-blue:#000080;
+  --95-white:#ffffff;
+  --95-black:#000000;
+}
+body.win95-bg {
+  background-color: #0b0b0b;
+  background-image: url('images/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #e4e4e4;
+}
+.window95{
+  margin: 24px auto 80px auto;
+  max-width: 1180px;
+  background: var(--95-gray);
+  border: 2px solid var(--95-light);
+  border-right-color: var(--95-black);
+  border-bottom-color: var(--95-black);
+  box-shadow: inset -1px -1px 0 var(--95-dark), inset 1px 1px 0 var(--95-white);
+  font-family: Tahoma, sans-serif;
+  color: #000;
+}
+.titlebar95{
+  background: linear-gradient(var(--95-blue), #000060);
+  color: #fff;
+  padding: 4px 6px;
+  display:flex; align-items:center; gap:6px;
+  user-select:none;
+}
+.titlebar95 .icon{width:16px;height:16px;background:#00a;box-shadow:inset 1px 1px 0 #5af, inset -1px -1px 0 #003;}
+.titlebar95 .title{font-weight:bold; font-size:13px;}
+.controls95{margin-left:auto; display:flex; gap:2px;}
+.btn95{
+  background: var(--95-gray);
+  border:2px solid var(--95-white);
+  border-right-color: var(--95-dark); border-bottom-color: var(--95-dark);
+  padding:2px 8px; cursor:pointer; font-size:13px; color:#000;
+}
+.btn95:active{
+  border:2px solid var(--95-dark);
+  border-right-color: var(--95-white); border-bottom-color: var(--95-white);
+  padding:3px 7px;
+}
+.tb95{width:18px;height:18px;display:grid;place-items:center;}
+.menubar95{display:flex; gap:8px; padding:3px 6px; border-bottom:1px solid var(--95-white);}
+.menu95{padding:1px 6px; cursor:default;}
+.menu95:hover{background:var(--95-blue); color:#fff;}
+.container95{display:grid; grid-template-columns: 240px 1fr; gap:8px; padding:8px;}
+.panel95{padding:6px;}
+.group95{font-weight:bold; background:var(--95-light); padding:3px 4px; border:1px solid var(--95-white); border-right-color:var(--95-dark); border-bottom-color:var(--95-dark);}
+.list95{list-style:none; padding:0; margin:6px 0 0 0;}
+.list95 li{margin:0; padding:2px 4px; cursor:default;}
+.list95 li:hover{background:#c6d4ff;}
+.toolbar95{display:flex; gap:6px; align-items:center; padding:4px; border:1px solid var(--95-white); border-right-color:var(--95-dark); border-bottom-color:var(--95-dark); background:var(--95-light);}
+.input95{
+  background:#fff; border:2px solid var(--95-dark);
+  border-right-color:var(--95-white); border-bottom-color:var(--95-white);
+  padding:3px 4px; font-size:13px; min-width:220px; color:#000;
+}
+table.threads95{width:100%; border-collapse:collapse; margin-top:8px; background:#fff; font-size:13px; color:#000;}
+table.threads95 th, table.threads95 td{border:1px solid var(--95-dark); padding:6px 8px;}
+table.threads95 th{background:var(--95-light); text-align:left;}
+table.threads95 tr:hover td{background:#c6d4ff;}
+.subject95 a{color:#000; text-decoration:none;}
+.subject95 a:hover{text-decoration:underline;}
+.status95{display:flex; justify-content:space-between; padding:3px 6px; background:var(--95-gray);
+  border-top:2px solid var(--95-white); border-left:2px solid var(--95-white);
+  border-right:2px solid var(--95-dark); border-bottom:2px solid var(--95-dark);
+  font-size:12px; color:#000;
+}
+.modal95{position:fixed; inset:0; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,.35);}
+.modal95 .window95{width:560px; max-width:95%;}
+.row95{display:flex; gap:8px; margin:8px 0;}
+.row95 label{min-width:90px;}
+textarea.input95{width:100%; min-height:120px; resize:vertical;}
+@media (max-width: 860px){ .container95{grid-template-columns:1fr;} }
+
+/* === Win95 textarea fix: white background & 3D border === */
+textarea.input95 {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid var(--95-dark);
+  border-right-color: var(--95-white);
+  border-bottom-color: var(--95-white);
+  padding: 4px;
+  font-size: 13px;
+  font-family: inherit;
+}
+
+/* === Win95 form overrides (stronger specificity) === */
+input.input95[type="text"],
+textarea.input95,
+select.input95 {
+  background: #fff !important;
+  color: #000 !important;
+  border: 2px solid var(--95-dark) !important;
+  border-right-color: var(--95-white) !important;
+  border-bottom-color: var(--95-white) !important;
+  box-shadow: none !important;
+}
+
+/* Target the exact fields as a fallback */
+#reply-form textarea#reply-input,
+.toolbar95 input#searchBox[type="text"] {
+  background: #fff !important;
+  color: #000 !important;
+}
+
+/* === Win95 reply form container & button overrides === */
+.window95 .form-box,
+.window95 #reply-form {
+  background: var(--95-light) !important;
+  color: #000 !important;
+  padding: 6px !important;
+  border: 1px solid var(--95-white) !important;
+  border-right-color: var(--95-dark) !important;
+  border-bottom-color: var(--95-dark) !important;
+  box-shadow: none !important;
+}
+
+/* Кнопка "Ответить" под Win95 */
+.window95 #reply-form button,
+.window95 .form-box button {
+  background: var(--95-gray) !important;
+  color: #000 !important;
+  border: 2px solid var(--95-white) !important;
+  border-right-color: var(--95-dark) !important;
+  border-bottom-color: var(--95-dark) !important;
+  padding: 2px 8px !important;
+  font-size: 13px !important;
+  font-family: Tahoma, sans-serif !important;
+  cursor: pointer;
+}
+.window95 #reply-form button:active,
+.window95 .form-box button:active {
+  border: 2px solid var(--95-dark) !important;
+  border-right-color: var(--95-white) !important;
+  border-bottom-color: var(--95-white) !important;
+  padding: 3px 7px !important;
+}
+
+
+/* === Categories primary highlight & hover (added) === */
+.group95--primary{
+  background: linear-gradient(var(--95-blue), #000060);
+  color:#fff;
+  border:1px solid var(--95-white);
+  border-right-color: var(--95-dark);
+  border-bottom-color: var(--95-dark);
+}
+
+/* Make subcategory links pop on hover/focus */
+.cat-link{
+  transition: background .15s ease, color .15s ease, border-color .15s ease, box-shadow .15s ease;
+  color: #000080; /* match Win95 blue text */
+}
+.cat-link:hover,
+.cat-link:focus{
+  background:#c6d4ff; /* same hover tint as threads */
+  color:#000;
+  border-color: var(--95-blue);
+  outline: none;
+  box-shadow: inset 0 0 0 1px #ffffff;
+}
+
+/* Win95-style menu button */
+.menubtn95 {
+  padding: 2px 12px;
+  font-size: 13px;
+  font-family: "Tahoma", sans-serif;
+  cursor: default;
+  margin: 0;
+  height: 22px;
+}
+
+/* Win95-style titlebar buttons (close, minimize) */
+.tb95 {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Tahoma", sans-serif;
+  font-size: 12px;
+  line-height: 1;
+  padding: 0;
+  margin-left: 2px;
+}
+.tb95:active {
+  border-style: inset;
+}
