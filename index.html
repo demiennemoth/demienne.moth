@@ -36,14 +36,8 @@
     </div>
 
     <div class="toolbar95" style="justify-content:space-between;">
-      <div>Маска:&nbsp;
-        <select id="mask" class="input95">
-          <option>Гость</option>
-          <option>Ночной наблюдатель</option>
-          <option>Тень</option>
-          <option>Усталый клоун</option>
-          <option>Грустный киборг</option>
-        </select>
+      <div>Ник:&nbsp;
+        <input id="nickname" class="input95" placeholder="Введите ник" maxlength="20" style="width:140px;" />
       </div>
       <div style="display:flex; gap:8px; align-items:center;">
         <label for="ttl" style="color:#000;">Время жизни:</label>
@@ -62,6 +56,9 @@
       <div class="status95" style="gap:8px; align-items:center; flex-wrap:wrap;">
         <input id="msg" class="input95" placeholder="Сказать в эфир…" maxlength="600" style="flex:1; min-width:240px;" />
         <button class="btn95" id="send">Отправить</button>
+      </div>
+      <div class="status95" style="margin-top:6px; font-size:12px; color:#000;">
+        ⚠️ Ник не закрепляется и может быть занят кем угодно. Проверяйте, кому верить.
       </div>
       <div class="status95" style="margin-top:6px; font-size:12px;">
         Сообщения старше 10 минут блекнут, старше 30 — исчезают. Лента обнуляется в 06:00 (Europe/Amsterdam).
