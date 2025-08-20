@@ -24,13 +24,14 @@
       <div class="icon"></div>
       <div class="title">MOTHDEMIENNE.EXE — Night Broadcast</div>
       <div class="controls95">
-        <button class="btn95 tb95" onclick="history.back()">×</button>
+        <button class="btn95 tb95" id="minBtn" title="Minimize">_</button>
+        <button class="btn95 tb95" id="closeBtn" title="Close" onclick="history.back()">×</button>
       </div>
     </div>
 
     <!-- Menu bar -->
-    <div class="menubar95">
-      <div class="menu95" id="menu-admin" title="Login as admin / open panel">Admin ▾</div>
+    <div class="menubar95" style="gap:6px; padding:3px 4px;">
+      <button id="menu-admin" class="btn95 menubtn95" title="Login as admin / open panel">Admin</button>
     </div>
 
     <div class="toolbar95" style="justify-content:space-between;">
