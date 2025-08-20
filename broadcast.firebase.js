@@ -6,7 +6,7 @@ import {
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const feedEl = document.getElementById('feed');
-const maskEl = document.getElementById('mask');
+const nicknameEl = document.getElementById('nickname');
 const ttlEl = document.getElementById('ttl');
 const msgEl = document.getElementById('msg');
 const sendBtn = document.getElementById('send');
@@ -57,16 +57,15 @@ function renderRow(docSnap) {
 
   const meta = document.createElement('div');
   meta.className = 'meta';
-  meta.innerHTML = `<div><b>${d.mask || 'Гость'}</b></div>
-  <div class="muted">создано: ${created.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
-  <div class="muted">исчезнет: ${expires.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>`;
+  meta.innerHTML = `<div><b>${escapeHtml(d.nick || 'Гость')}</b></div>
+    <div class="muted">создано: ${created.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>
+    <div class="muted">исчезнет: ${expires.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}</div>`;
 
   const text = document.createElement('div');
   text.className = 'post-text';
   text.innerHTML = escapeHtml(d.text || '');
 
   const actions = document.createElement('div');
-  // Кнопка удаления — только для админа
   if (window.__ADMIN__) {
     const del = document.createElement('button');
     del.className = 'btn95 delbtn';
@@ -87,7 +86,6 @@ function renderRow(docSnap) {
   return row;
 }
 
-// Realtime подписка (только ещё не истёкшие)
 let unsub = null;
 function subscribeFeed() {
   if (unsub) unsub();
@@ -110,9 +108,9 @@ function subscribeFeed() {
   });
 }
 
-// Отправка
 sendBtn?.addEventListener('click', async () => {
   const text = (msgEl.value || '').trim();
+  const nick = (nicknameEl?.value || 'Гость').trim().slice(0,20);
   if (!text) return;
   if (text.length > 600) {
     alert('Слишком длинно (макс 600).');
@@ -127,7 +125,7 @@ sendBtn?.addEventListener('click', async () => {
   try {
     await addDoc(postsRef, {
       text,
-      mask: maskEl?.value || 'Гость',
+      nick,
       createdAt: serverTimestamp(),
       expiresAt: Timestamp.fromDate(expires),
       by: auth.currentUser ? (auth.currentUser.isAnonymous ? null : (auth.currentUser.uid || null)) : null
@@ -138,7 +136,6 @@ sendBtn?.addEventListener('click', async () => {
   }
 });
 
-// Сессия и таймер до 06:00
 function tick() {
   const now = new Date();
   const cutoff = nextSixAMEuropeAmsterdam(now);
@@ -148,14 +145,12 @@ function tick() {
     const s = new Intl.DateTimeFormat('ru-RU', { timeZone: 'Europe/Amsterdam', hour:'2-digit', minute:'2-digit' }).format(now);
     sessionLabelEl.textContent = s;
   }
-  // В 06:00 — авто-обновление подписки (лента станет пустой)
   if (left <= 0) subscribeFeed();
 }
 setInterval(tick, 1000);
 tick();
 subscribeFeed();
 
-// Экспорт для админки, если понадобится
 export async function deletePostById(id) {
   await deleteDoc(doc(db, 'broadcast', id));
 }
