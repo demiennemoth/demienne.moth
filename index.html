@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
   <link rel="icon" href="data:,">
   <meta charset="UTF-8" />
@@ -17,6 +17,13 @@
     .post-text { white-space:pre-wrap; word-break:break-word; }
     .row95 .meta { font-size:12px; color:#333; }
     .row95 .delbtn { margin-left:8px; }
+    /* Добавки для заметки и правил */
+    .note95{ background:var(--95-light); border:1px solid var(--95-white); border-right-color:var(--95-dark); border-bottom-color:var(--95-dark); padding:6px; color:#000; }
+    .rules95{ background:#fff; color:#000; padding:8px; border:2px solid var(--95-dark); border-right-color:var(--95-white); border-bottom-color:var(--95-white); }
+    .rules95 ul{ list-style:none; padding:0; margin:0; }
+    .rules95 li{ padding:4px 0; border-bottom:1px dashed #b7b7b7; }
+    .rules95 li:last-child{ border-bottom:none; }
+    .rules95 .tag{ display:inline-block; font-weight:bold; padding:0 6px; margin-right:6px; background:#000080; color:#fff; border:1px solid #ffffff; }
   </style>
 </head>
 <body class="win95-bg">
@@ -36,32 +43,52 @@
     </div>
 
     <div class="toolbar95" style="justify-content:space-between;">
-      <div>Nick:&nbsp;
-        <input id="nickname" class="input95" placeholder="Enter nickname" maxlength="20" style="width:140px;" />
+      <div>Ник:&nbsp;
+        <input id="nickname" class="input95" placeholder="Введите ник" maxlength="20" style="width:140px;" />
       </div>
       <div style="display:flex; gap:8px; align-items:center;">
-        <label for="ttl" style="color:#000;">Lifetime:</label>
+        <label for="ttl" style="color:#000;">Время жизни:</label>
         <select id="ttl" class="input95">
-          <option value="10">10 minutes</option>
-          <option value="20">20 minutes</option>
-          <option value="30" selected>30 minutes</option>
+          <option value="10">10 минут</option>
+          <option value="20">20 минут</option>
+          <option value="30" selected>30 минут</option>
         </select>
-        <span class="badge95">Session: <span id="sessionLabel"></span></span>
-        <span class="badge95">Until dawn: <span id="left"></span></span>
+        <span class="badge95">Сессия: <span id="sessionLabel"></span></span>
+        <span class="badge95">До рассвета: <span id="left"></span></span>
+      </div>
+    </div>
+
+    <!-- Блок "О чате" и Правила -->
+    <div class="panel95" style="display:grid; gap:8px;">
+      <div class="group95 group95--primary">О чате</div>
+      <div class="note95">
+        Ночной эфир. Сообщения исчезают сами: старые тускнеют через ~10 минут и пропадают к ~30 минутам. 
+        Каждый день в <b>06:00 (Europe/Amsterdam)</b> сессия обнуляется. Ник не резервируется — будь осторожна, кто пишет под твоим именем.
+      </div>
+      <div class="group95 group95--primary">Правила</div>
+      <div class="rules95">
+        <ul>
+          <li><span class="tag">Мат</span> Запрещён. Ловим и с пробелами/символами, и на латинице.</li>
+          <li><span class="tag">Флуд</span> Не спамим. Отправка ограничена по времени.</li>
+          <li><span class="tag">Призывы</span> Никакого насилия/террора/дискриминации.</li>
+          <li><span class="tag">Наркотики</span> Упоминания/пропаганда — баним.</li>
+          <li><span class="tag">Политика</span> Агитация и разжигание — мимо.</li>
+          <li><span class="tag">Ссылки</span> Опасные домены и мусорные ссылки не проходят.</li>
+        </ul>
       </div>
     </div>
 
     <div class="panel95">
       <div id="feed" class="feed95"></div>
       <div class="status95" style="gap:8px; align-items:center; flex-wrap:wrap;">
-        <input id="msg" class="input95" placeholder="Say something…" maxlength="600" style="flex:1; min-width:240px;" />
-        <button class="btn95" id="send">Send</button>
+        <input id="msg" class="input95" placeholder="Напиши что-нибудь…" maxlength="600" style="flex:1; min-width:240px;" />
+        <button class="btn95" id="send">Отправить</button>
       </div>
       <div class="status95" style="margin-top:6px; font-size:12px; color:#000;">
-        ⚠️ Nicknames are not reserved and can be taken by anyone. Be careful who you trust.
+        ⚠️ Ники не закреплены и могут быть заняты кем угодно. Не доверяй незнакомцам.
       </div>
       <div class="status95" style="margin-top:6px; font-size:12px;">
-        Messages older than 10 minutes fade, older than 30 disappear. The feed resets at 06:00 (Europe/Amsterdam).
+        Посты старше 10 минут тускнеют, старше 30 — скрываются. Лента обнуляется в 06:00 (Europe/Amsterdam).
       </div>
     </div>
   </div>
