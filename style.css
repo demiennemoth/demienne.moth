@@ -568,3 +568,23 @@ select.input95 {
   margin-left: 2px;
 }
 .controls95 .tb95:active{ border-style: inset; }
+
+/* --- Night Broadcast additions: notice & rules blocks --- */
+.note95{
+  background: var(--95-light);
+  border: 1px solid var(--95-white);
+  border-right-color: var(--95-dark);
+  border-bottom-color: var(--95-dark);
+  padding: 6px;
+  color: #000;
+}
+.rules95{
+  background:#fff; color:#000; padding:8px;
+  border:2px solid var(--95-dark);
+  border-right-color:var(--95-white);
+  border-bottom-color:var(--95-white);
+}
+.rules95 ul{ list-style:none; padding:0; margin:0; }
+.rules95 li{ padding:4px 0; border-bottom:1px dashed #b7b7b7; }
+.rules95 li:last-child{ border-bottom:none; }
+.rules95 .tag{ display:inline-block; font-weight:bold; padding:0 6px; margin-right:6px; background:#000080; color:#fff; border:1px solid #ffffff; }
