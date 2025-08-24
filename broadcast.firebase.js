@@ -1,133 +1,175 @@
-// broadcast.firebase.js — FIXED to use CDN Firestore ESM (no bare 'firebase/firestore')
-// Collection: "broadcast"
-// Requires: firebase.js exports { db, auth }, filters.js exports startFiltersWatcher/getFiltersOnce/applyFiltersToText
+// broadcast.firebase.js — with 5s cooldown + toast + users/{uid}.lastWrite update
+// (Обновлено: русская заглушка «Пока тут тихо.»)
+import {
+  collection, addDoc, serverTimestamp, Timestamp,
+  query, orderBy, limit, onSnapshot,
+  writeBatch, doc, setDoc
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { db, auth } from './firebase.js';
+import { startFiltersWatcher, getFiltersOnce, applyFiltersToText } from './filters.js';
 
-import { collection, addDoc, serverTimestamp, Timestamp, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { db, auth } from "./firebase.js";
-import { startFiltersWatcher, getFiltersOnce, applyFiltersToText } from "./filters.js";
+// --- DOM ---
+const feed = document.getElementById('feed');
+const sendBtn = document.getElementById('send');
+const msgEl = document.getElementById('msg');
+const nicknameEl = document.getElementById('nickname');
+const ttlEl = document.getElementById('ttl');
 
-// References
-const postsRef = collection(db, "broadcast");
+// --- Cooldown (5 seconds) ---
+const COOLDOWN_MS = 5000;
+let uid = 'anon';
+function cooldownKey(){ return `nb_lastSend_${uid}`; }
+function now(){ return Date.now(); }
+function msLeft(){ const last = +(localStorage.getItem(cooldownKey())||0); return Math.max(0, COOLDOWN_MS - (now()-last)); }
+function armCooldown(){
+  localStorage.setItem(cooldownKey(), String(now()));
+  disableSend(msLeft());
+}
+function disableSend(ms){
+  if (!sendBtn) return;
+  sendBtn.disabled = true;
+  const orig = sendBtn.textContent || 'Send';
+  const tick = () => {
+    const left = msLeft();
+    if (left <= 0) {
+      sendBtn.disabled = false;
+      sendBtn.textContent = orig;
+      return;
+    }
+    const s = Math.ceil(left/1000);
+    sendBtn.textContent = `Подожди ${s}с`;
+    setTimeout(tick, 250);
+  };
+  tick();
+}
+// arm on load if needed
+setTimeout(()=>{ const left = msLeft(); if (left>0) disableSend(left); }, 0);
 
-// DOM elements (match index.html)
-const sendBtn = document.getElementById("send");
-const msgEl = document.getElementById("msg");
-const nicknameEl = document.getElementById("nickname");
-const ttlEl = document.getElementById("ttl");
-const feed = document.getElementById("feed");
-const left = document.getElementById("left");
-const sessionLabel = document.getElementById("sessionLabel");
+// --- Toasts ---
+let toastTimer = null;
+function toast(msg, type='info'){
+  let el = document.getElementById('nb_toast');
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'nb_toast';
+    el.style.position = 'fixed';
+    el.style.bottom = '16px';
+    el.style.left = '50%';
+    el.style.transform = 'translateX(-50%)';
+    el.style.padding = '8px 12px';
+    el.style.background = '#222';
+    el.style.color = '#fff';
+    el.style.border = '1px solid #555';
+    el.style.font = '12px/1.3 monospace';
+    el.style.zIndex = '9999';
+    el.style.borderRadius = '6px';
+    document.body.appendChild(el);
+  }
+  el.textContent = msg;
+  el.style.background = (type==='error') ? '#7a1b1b' : (type==='ok' ? '#0e4f0e' : '#222');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>{ el.remove(); }, 2500);
+}
 
-// Show today's session label (YYYY-MM-DD)
-(function setSessionLabel(){
-  if (!sessionLabel) return;
-  const d = new Date();
-  const k = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
-  sessionLabel.textContent = k;
-})();
-
-// Start watching filters from Firestore
+// --- Firestore ---
+const postsRef = collection(db, 'broadcast');
 startFiltersWatcher();
 
-// Helper: next 06:00 Europe/Amsterdam cutoff (uses local time on client)
-function nextSixAMEuropeAmsterdam(now = new Date()) {
-  const d = new Date(now);
-  const next = new Date(d);
-  next.setHours(6, 0, 0, 0);
-  if (d >= next) next.setDate(next.getDate() + 1);
-  return next;
-}
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
 
-function fmtMs(ms) {
-  const s = Math.max(0, Math.floor(ms / 1000));
-  const h = Math.floor(s / 3600);
-  const m = Math.floor((s % 3600) / 60);
-  const ss = s % 60;
-  return `${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(ss).padStart(2,"0")}`;
-}
-
-function updateLeft() {
-  if (!left) return;
-  const ms = nextSixAMEuropeAmsterdam().getTime() - Date.now();
-  left.textContent = fmtMs(ms);
-}
-updateLeft();
-setInterval(updateLeft, 1000);
-
-// Render feed
-function renderMessages(items) {
+function renderMessages(items){
   if (!feed) return;
+  let html = '';
   const now = Date.now();
-  let html = "";
   for (const it of items) {
-    const createdAt = it.createdAt?.toDate ? it.createdAt.toDate() : (it.createdAt instanceof Date ? it.createdAt : null);
-    const expiresAt = it.expiresAt?.toDate ? it.expiresAt.toDate() : (it.expiresAt instanceof Date ? it.expiresAt : null);
-    if (expiresAt && expiresAt.getTime() <= now) continue; // hide expired
-    const ageMin = createdAt ? Math.floor((now - createdAt.getTime()) / 60000) : 0;
-    const dim = ageMin >= 10 ? " dim" : "";
-    const when = createdAt ? createdAt.toLocaleTimeString([], {hour:"2-digit", minute:"2-digit"}) : "--:--";
-    const nick = (it.nick || "Guest").slice(0, 20);
-    const txt = (it.text || "").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-    html += `
-      <div class="row95${dim}">
-        <div class="meta">${when}<br><b>${nick}</b></div>
-        <div class="post-text">${txt}</div>
-        <div class="meta"></div>
-      </div>`;
+    const age = now - (it.createdAt?.toMillis?.() || now);
+    const dim = age > 10*60*1000 ? ' dim' : '';
+    const when = (it.createdAt?.toDate?.() || new Date()).toLocaleTimeString().slice(0,5);
+    const nick = escapeHtml(it.nick || 'Guest');
+    const txt = escapeHtml(it.text || '');
+    html += `<div class="row95${dim}">
+      <div class="meta">${when}<br><b>${nick}</b></div>
+      <div class="post-text">${txt}</div>
+      <div class="meta"></div>
+    </div>`;
   }
-  feed.innerHTML = html || "<div class='row95'><div class='meta'>—</div><div>Silence before the storm.</div><div class='meta'></div></div>";
+  feed.innerHTML = html || "<div class='row95'><div class='meta'></div><div class='post-text'>Пока тут тихо.</div><div class='meta'></div></div>";
   feed.scrollTop = feed.scrollHeight;
 }
 
-// Realtime subscription (latest 100)
-const q = query(postsRef, orderBy("createdAt", "desc"), limit(100));
+// Realtime: last 100
+const q = query(postsRef, orderBy('createdAt','desc'), limit(100));
 onSnapshot(q, (snap) => {
   const items = [];
-  snap.forEach(doc => items.push({ id: doc.id, ...doc.data() }));
-  renderMessages(items.reverse()); // oldest → newest
-}, (err) => {
-  console.error("feed error", err);
+  snap.forEach(d => items.push({ id:d.id, ...d.data() }));
+  renderMessages(items.reverse());
+}, (err) => console.warn('feed error', err));
+
+// Track uid for cooldown key
+import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js').then(({onAuthStateChanged}) => {
+  onAuthStateChanged(auth, (user) => {
+    uid = (user && !user.isAnonymous) ? (user.uid || 'anon') : 'anon';
+    const left = msLeft();
+    if (left>0) disableSend(left);
+  });
 });
 
-// Send message
-sendBtn?.addEventListener("click", async () => {
-  let text = (msgEl?.value || "").trim();
-  const nick = (nicknameEl?.value || "Guest").trim().slice(0, 20);
+// Send handler with cooldown
+sendBtn?.addEventListener('click', async () => {
+  if (msLeft() > 0) { toast('Не так быстро, дай 5 секунд отдышаться.', 'error'); return; }
+
+  let text = (msgEl?.value || '').trim();
+  const nick = (nicknameEl?.value || 'Guest').trim().slice(0, 20);
   if (!text) return;
 
-  // Filters
+  // Load filters and apply (client-side UX)
   const filters = await getFiltersOnce();
-  const check = applyFiltersToText(text, filters);
-  if (!check.ok && filters.action !== "mask") {
-    console.warn("blocked by filter:", check.reason);
+  const verdict = applyFiltersToText(text, filters);
+  if (!verdict.ok) {
+    toast('Сообщение заблокировано фильтром.', 'error');
     return;
   }
-  text = check.ok ? check.text : text;
+  if (verdict.text !== text) {
+    text = verdict.text;
+  }
 
-  // TTL & daily cutoff at 06:00
-  const ttlMin = Number(ttlEl?.value || 30);
-  const now = new Date();
-  const candidate = new Date(now.getTime() + ttlMin * 60000);
-  const cutoff = nextSixAMEuropeAmsterdam(now);
-  const expires = candidate < cutoff ? candidate : cutoff;
+  // TTL for message
+  const minutes = Number(ttlEl?.value || 30);
+  const expires = new Date(Date.now() + Math.max(1, Math.min(1440, minutes)) * 60 * 1000);
 
+  // Write batch: add post + update users/{uid}.lastWrite (для логов/админки)
   try {
-    await addDoc(postsRef, {
+    const batch = writeBatch(db);
+    const by = (auth.currentUser && !auth.currentUser.isAnonymous) ? (auth.currentUser.uid || null) : null;
+
+    const post = {
       text,
       nick,
+      by,
       createdAt: serverTimestamp(),
-      expiresAt: Timestamp.fromDate(expires),
-      by: auth?.currentUser ? (auth.currentUser.isAnonymous ? null : (auth.currentUser.uid || null)) : null
-    });
-    if (msgEl) msgEl.value = "";
-  } catch (err) {
-    console.error("send error", err);
+      expiresAt: Timestamp.fromDate(expires)
+    };
+    const tempDoc = doc(collection(db, 'broadcast')); // precreate id
+    batch.set(tempDoc, post);
+
+    if (by) {
+      const uref = doc(db, 'users', by);
+      batch.set(uref, { lastWrite: serverTimestamp() }, { merge: true });
+    }
+
+    await batch.commit();
+    armCooldown();
+    if (msgEl) msgEl.value = '';
+    toast('Отправлено.', 'ok');
+  } catch (e) {
+    console.error('send error', e);
+    toast('Не получилось отправить.', 'error');
   }
 });
 
 // Enter to send
-msgEl?.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && !e.shiftKey) {
+msgEl?.addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && !e.shiftKey) {
     e.preventDefault();
     sendBtn?.click();
   }
