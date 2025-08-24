@@ -1,24 +1,44 @@
-// filters.js — Firestore-driven word filter (client-side MVP)
-// FIXED to use CDN Firestore ESM (no bare 'firebase/firestore')
-// Save as: filters.js
-
+// filters.js — PATCH: sanitize empty strings in arrays so filters work correctly
+// Uses CDN ESM imports
 import { doc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 
 let FILTERS = {
-  action: "reject",            // 'reject' | 'mask' | 'shadow' (shadow is noop on client MVP)
-  bannedWords: [],             // array of strings
-  exceptions: [],              // array of strings (whitelist)
-  blockedDomains: []           // array of strings (domains)
+  action: "reject",
+  bannedWords: [],
+  exceptions: [],
+  blockedDomains: []
 };
 
-let unsubFilters = null;
+let unsub = null;
 
-// Start realtime watcher so changes apply without reload
+function cleanArray(arr) {
+  if (!Array.isArray(arr)) return [];
+  const out = [];
+  const seen = new Set();
+  for (const v of arr) {
+    const s = String(v || "").trim();
+    if (!s) continue;                // drop empty strings
+    if (seen.has(s)) continue;       // dedupe
+    seen.add(s);
+    out.push(s);
+  }
+  return out;
+}
+
+function normalizeFilters(raw = {}) {
+  return {
+    action: raw.action === "mask" ? "mask" : "reject",
+    bannedWords: cleanArray(raw.bannedWords),
+    exceptions: cleanArray(raw.exceptions),
+    blockedDomains: cleanArray(raw.blockedDomains)
+  };
+}
+
 export function startFiltersWatcher() {
   try {
     const ref = doc(db, "settings", "filters");
-    unsubFilters = onSnapshot(ref, (snap) => {
+    unsub = onSnapshot(ref, (snap) => {
       if (snap.exists()) FILTERS = normalizeFilters(snap.data());
     }, (err) => console.warn("filters watcher error", err));
   } catch (e) {
@@ -26,11 +46,8 @@ export function startFiltersWatcher() {
   }
 }
 
-export function stopFiltersWatcher() {
-  if (unsubFilters) unsubFilters();
-}
+export function stopFiltersWatcher() { if (unsub) unsub(); }
 
-// One-off fetch (useful before first send)
 export async function getFiltersOnce() {
   try {
     const snap = await getDoc(doc(db, "settings", "filters"));
@@ -42,27 +59,19 @@ export async function getFiltersOnce() {
   }
 }
 
-function normalizeFilters(raw = {}) {
-  return {
-    action: raw.action || "reject",
-    bannedWords: Array.isArray(raw.bannedWords) ? raw.bannedWords : [],
-    exceptions: Array.isArray(raw.exceptions) ? raw.exceptions : [],
-    blockedDomains: Array.isArray(raw.blockedDomains) ? raw.blockedDomains : []
-  };
-}
-
-// --- Text normalization (lightweight) ---
+// --- Text normalization and apply functions ---
 export function normalizeText(s) {
   if (!s) return "";
   return String(s)
     .toLowerCase()
-    .normalize("NFKD").replace(/[\u0300-\u036f]/g, "") // strip diacritics
-    .replace(/[\u200B-\u200D\uFEFF]/g, "")             // zero-width
-    .replace(/\s+/g, " ")                               // collapse spaces
+    .normalize("NFKD").replace(/[\u0300-\u036f]/g, "")
+    .replace(/[\u200B-\u200D\uFEFF]/g, "")
+    .replace(/\s+/g, " ")
     .trim();
 }
 
-// --- Extract bare domains from URLs in original text
+function escapeRegExp(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+
 function extractDomains(original) {
   const urls = original.match(/\bhttps?:\/\/[^\s]+/gi) || [];
   return urls.map(u => {
@@ -70,28 +79,17 @@ function extractDomains(original) {
       const host = new URL(u).hostname.toLowerCase();
       const parts = host.split(".");
       return parts.slice(-2).join(".");
-    } catch {
-      return null;
-    }
+    } catch { return null; }
   }).filter(Boolean);
 }
 
-// Escape for RegExp from plain string
-function escapeRegExp(s) {
-  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
-
-// --- Main check ---
-// Returns { ok: boolean, text: string, reason: string|null }
 export function applyFiltersToText(original, filters = FILTERS) {
   const norm = normalizeText(original);
 
-  // 1) Exceptions (whitelist) — if any present, allow
   if (filters.exceptions.some(ex => norm.includes(normalizeText(ex)))) {
     return { ok: true, text: original, reason: null };
   }
 
-  // 2) Blocked domains
   const domains = extractDomains(original);
   if (domains.some(d => filters.blockedDomains.includes(d))) {
     if (filters.action === "mask") {
@@ -105,18 +103,18 @@ export function applyFiltersToText(original, filters = FILTERS) {
     return { ok: false, text: original, reason: "blocked-domain" };
   }
 
-  // 3) Banned words (substring match on normalized text)
-  const hit = filters.bannedWords.find(w => norm.includes(normalizeText(w)));
-  if (hit) {
+  const hit = filters.bannedWords.find(w => {
+    const nw = normalizeText(w);
+    return nw && norm.includes(nw);
+  });
+
+  if (hit !== undefined) {
     if (filters.action === "mask") {
-      // Mask only the first hit to keep it simple; can expand as needed
       const re = new RegExp(escapeRegExp(hit), "gi");
-      const masked = original.replace(re, "•".repeat(hit.length));
-      return { ok: true, text: masked, reason: "masked" };
+      return { ok: true, text: original.replace(re, "•".repeat(String(hit).length)), reason: "masked" };
     }
     return { ok: false, text: original, reason: "banned-word" };
   }
 
-  // OK
   return { ok: true, text: original, reason: null };
 }
