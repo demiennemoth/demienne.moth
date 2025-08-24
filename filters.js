@@ -1,8 +1,8 @@
 // filters.js — Firestore-driven word filter (client-side MVP)
+// FIXED to use CDN Firestore ESM (no bare 'firebase/firestore')
 // Save as: filters.js
-// If you prefer a .txt for transfer, this same content is in filters.js.txt
 
-import { doc, onSnapshot, getDoc } from "firebase/firestore";
+import { doc, onSnapshot, getDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { db } from "./firebase.js";
 
 let FILTERS = {
