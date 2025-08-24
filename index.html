@@ -8,15 +8,15 @@
   <link rel="stylesheet" href="style.css" />
   <style>
     :root{
-      --outer-margin: 8px;
-      --window-max-width: 1440px;
+      --outer-margin: 0px;
+      --window-max-width: 1500px;
     }
     html, body{ height:100%; }
     body{ overflow:hidden; } /* no page scroll */
     .window95{
       display:flex; flex-direction:column;
       max-width: var(--window-max-width);
-      height: calc(100vh - var(--outer-margin)*2);
+      height: 100vh;
       margin: var(--outer-margin) auto;
     }
 
@@ -36,14 +36,18 @@
 
     /* FEED PANEL grows to fill remaining space */
     .panel95.feed-panel{
-      display:flex; flex-direction:column; min-height:0; /* allow child to shrink */
+      display:flex; flex-direction:column; min-height:0; flex: 1 1 auto;
     }
     .feed95{
-      flex: 1 1 auto; min-height: 240px; max-height: 100%;
+      flex: 1 1 auto; min-height: 0; max-height: 100%;
       overflow:auto;
       background:#fff; color:#000;
       border:2px solid #000; border-right-color:#fff; border-bottom-color:#fff;
     }
+
+    /* Compact status bars to free space */
+    .status95{ padding:3px 6px; line-height:1.2; }
+    .status95 + .status95{ margin-top:2px; }
   </style>
 </head>
 <body class="win95-bg">
@@ -99,14 +103,14 @@
     <!-- FEED takes the rest -->
     <div class="panel95 feed-panel">
       <div id="feed" class="feed95"></div>
-      <div class="status95" style="gap:8px; align-items:center; flex-wrap:wrap;">
+      <div class="status95" style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
         <input id="msg" class="input95" placeholder="Say something…" maxlength="600" style="flex:1; min-width:240px;" />
         <button class="btn95" id="send">Send</button>
       </div>
-      <div class="status95" style="margin-top:6px; font-size:12px; color:#000;">
+      <div class="status95" style="font-size:12px; color:#000;">
         ⚠️ Usernames aren’t reserved — anyone can type as you. Don’t trust strangers.
       </div>
-      <div class="status95" style="margin-top:6px; font-size:12px;">
+      <div class="status95" style="font-size:12px;">
         If you feel lonely or heavy‑hearted — say it. Someone here is listening.
       </div>
     </div>
