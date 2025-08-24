@@ -1,6 +1,6 @@
 // broadcast.firebase.js — feed shows only NON-EXPIRED posts
 // - Query: where('expiresAt','>=', now) + orderBy('expiresAt','asc') (no composite index)
-// - Render: same; placeholder: «Пока тут тихо.»
+// - Render: same; placeholder: “It’s quiet here.”
 // - Cooldown/filters logic left intact
 
 import {
@@ -40,7 +40,7 @@ function disableSend(ms){
       return;
     }
     const s = Math.ceil(left/1000);
-    sendBtn.textContent = `Подожди ${s}с`;
+    sendBtn.textContent = `Wait ${s}s`;
     setTimeout(tick, 250);
   };
   tick();
@@ -95,7 +95,7 @@ function renderMessages(items){
       <div class="meta"></div>
     </div>`;
   }
-  feed.innerHTML = html || "<div class='row95'><div class='meta'></div><div class='post-text'>Пока тут тихо.</div><div class='meta'></div></div>";
+  feed.innerHTML = html || "<div class='row95'><div class='meta'></div><div class='post-text'>It’s quiet here.</div><div class='meta'></div></div>";
   feed.scrollTop = feed.scrollHeight;
 }
 
@@ -129,7 +129,7 @@ import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js').then(({onA
 
 // Send handler with cooldown
 sendBtn?.addEventListener('click', async () => {
-  if (msLeft() > 0) { toast('Не так быстро, дай 5 секунд отдышаться.', 'error'); return; }
+  if (msLeft() > 0) { toast('Not so fast — wait 5 seconds.', 'error'); return; }
 
   let text = (msgEl?.value || '').trim();
   const nick = (nicknameEl?.value || 'Guest').trim().slice(0, 20);
@@ -139,7 +139,7 @@ sendBtn?.addEventListener('click', async () => {
   const filters = await getFiltersOnce();
   const verdict = applyFiltersToText(text, filters);
   if (!verdict.ok) {
-    toast('Сообщение заблокировано фильтром.', 'error');
+    toast('Message blocked by filter.', 'error');
     return;
   }
   if (verdict.text !== text) {
@@ -173,10 +173,10 @@ sendBtn?.addEventListener('click', async () => {
     await batch.commit();
     armCooldown();
     if (msgEl) msgEl.value = '';
-    toast('Отправлено.', 'ok');
+    toast('Sent.', 'ok');
   } catch (e) {
     console.error('send error', e);
-    toast('Не получилось отправить.', 'error');
+    toast('Failed to send.', 'error');
   }
 });
 
