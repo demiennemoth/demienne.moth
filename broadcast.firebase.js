@@ -1,9 +1,12 @@
-// broadcast.firebase.js — with 5s cooldown + toast + users/{uid}.lastWrite update
-// (Обновлено: русская заглушка «Пока тут тихо.»)
+// broadcast.firebase.js — feed shows only NON-EXPIRED posts
+// - Query: where('expiresAt','>=', now) + orderBy('expiresAt','asc') (no composite index)
+// - Render: same; placeholder: «Пока тут тихо.»
+// - Cooldown/filters logic left intact
+
 import {
   collection, addDoc, serverTimestamp, Timestamp,
-  query, orderBy, limit, onSnapshot,
-  writeBatch, doc, setDoc
+  query, orderBy, limit, onSnapshot, where,
+  writeBatch, doc
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { db, auth } from './firebase.js';
 import { startFiltersWatcher, getFiltersOnce, applyFiltersToText } from './filters.js';
@@ -42,7 +45,6 @@ function disableSend(ms){
   };
   tick();
 }
-// arm on load if needed
 setTimeout(()=>{ const left = msLeft(); if (left>0) disableSend(left); }, 0);
 
 // --- Toasts ---
@@ -80,9 +82,9 @@ function escapeHtml(s){ return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','
 function renderMessages(items){
   if (!feed) return;
   let html = '';
-  const now = Date.now();
+  const nowMs = Date.now();
   for (const it of items) {
-    const age = now - (it.createdAt?.toMillis?.() || now);
+    const age = nowMs - (it.createdAt?.toMillis?.() || nowMs);
     const dim = age > 10*60*1000 ? ' dim' : '';
     const when = (it.createdAt?.toDate?.() || new Date()).toLocaleTimeString().slice(0,5);
     const nick = escapeHtml(it.nick || 'Guest');
@@ -97,13 +99,24 @@ function renderMessages(items){
   feed.scrollTop = feed.scrollHeight;
 }
 
-// Realtime: last 100
-const q = query(postsRef, orderBy('createdAt','desc'), limit(100));
-onSnapshot(q, (snap) => {
-  const items = [];
-  snap.forEach(d => items.push({ id:d.id, ...d.data() }));
-  renderMessages(items.reverse());
-}, (err) => console.warn('feed error', err));
+// Realtime: ONLY non-expired posts
+function subscribeFeed(){
+  const nowTs = Timestamp.now();
+  const q = query(
+    postsRef,
+    where('expiresAt','>=', nowTs),
+    orderBy('expiresAt','asc'),
+    limit(200)
+  );
+  return onSnapshot(q, (snap) => {
+    const items = [];
+    snap.forEach(d => items.push({ id:d.id, ...d.data() }));
+    renderMessages(items);
+  }, (err) => console.warn('feed error', err));
+}
+let unsub = subscribeFeed();
+// resubscribe every minute to move the window
+setInterval(()=>{ try{ unsub && unsub(); }catch{} unsub = subscribeFeed(); }, 60*1000);
 
 // Track uid for cooldown key
 import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js').then(({onAuthStateChanged}) => {
@@ -137,7 +150,7 @@ sendBtn?.addEventListener('click', async () => {
   const minutes = Number(ttlEl?.value || 30);
   const expires = new Date(Date.now() + Math.max(1, Math.min(1440, minutes)) * 60 * 1000);
 
-  // Write batch: add post + update users/{uid}.lastWrite (для логов/админки)
+  // Write batch: add post + update users/{uid}.lastWrite
   try {
     const batch = writeBatch(db);
     const by = (auth.currentUser && !auth.currentUser.isAnonymous) ? (auth.currentUser.uid || null) : null;
