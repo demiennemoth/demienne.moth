@@ -1,8 +1,8 @@
-// broadcast.firebase.js — FIXED to match index.html (ids + realtime display)
-// Collection: "broadcast" (kept as in your sender).
+// broadcast.firebase.js — FIXED to use CDN Firestore ESM (no bare 'firebase/firestore')
+// Collection: "broadcast"
 // Requires: firebase.js exports { db, auth }, filters.js exports startFiltersWatcher/getFiltersOnce/applyFiltersToText
 
-import { collection, addDoc, serverTimestamp, Timestamp, query, orderBy, limit, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, Timestamp, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { db, auth } from "./firebase.js";
 import { startFiltersWatcher, getFiltersOnce, applyFiltersToText } from "./filters.js";
 
@@ -16,11 +16,20 @@ const nicknameEl = document.getElementById("nickname");
 const ttlEl = document.getElementById("ttl");
 const feed = document.getElementById("feed");
 const left = document.getElementById("left");
+const sessionLabel = document.getElementById("sessionLabel");
+
+// Show today's session label (YYYY-MM-DD)
+(function setSessionLabel(){
+  if (!sessionLabel) return;
+  const d = new Date();
+  const k = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0");
+  sessionLabel.textContent = k;
+})();
 
 // Start watching filters from Firestore
 startFiltersWatcher();
 
-// Helper: next 06:00 Europe/Amsterdam cutoff
+// Helper: next 06:00 Europe/Amsterdam cutoff (uses local time on client)
 function nextSixAMEuropeAmsterdam(now = new Date()) {
   const d = new Date(now);
   const next = new Date(d);
