@@ -1,6 +1,10 @@
-// admin.js (Win95 status bar style, English UI)
+// admin.js — FIXED: no composite index required
+// Query uses only `expiresAt` for both range and ordering, so Firestore's single-field index suffices.
+
 import { db, auth } from './firebase.js';
-import { collection, onSnapshot, query, orderBy, Timestamp, where, doc, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import {
+  collection, onSnapshot, query, orderBy, Timestamp, where, doc, deleteDoc, limit
+} from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const whoEl = document.getElementById('who');
@@ -44,9 +48,14 @@ function subscribe(showExpired) {
   if (unsub) unsub();
   const posts = collection(db, 'broadcast');
   const nowTs = Timestamp.now();
-  const q = showExpired ?
-    query(posts, orderBy('createdAt', 'desc')) :
-    query(posts, where('expiresAt', '>', nowTs), orderBy('createdAt', 'desc'));
+
+  // IMPORTANT: orderBy the same field that we filter by -> no composite index needed
+  // - Current items: expiresAt >= now, ordered by nearest expiry first (asc)
+  // - Expired items:  expiresAt <  now, ordered by most recently expired first (desc)
+  const q = showExpired
+    ? query(posts, where('expiresAt', '<', nowTs), orderBy('expiresAt', 'desc'), limit(300))
+    : query(posts, where('expiresAt', '>=', nowTs), orderBy('expiresAt', 'asc'), limit(300));
+
   unsub = onSnapshot(q, (snap) => {
     tbody.innerHTML = '';
     let count = 0;
@@ -70,6 +79,7 @@ function subscribe(showExpired) {
           await deleteDoc(doc(db, 'broadcast', docSnap.id));
           setStatus('Record removed.', 'ok');
         } catch (e) {
+          console.error(e);
           setStatus('Operation failed.', 'error');
         }
       });
@@ -77,8 +87,8 @@ function subscribe(showExpired) {
     });
     setStatus(count ? `Loaded ${count} records.` : 'No records.');
   }, (err) => {
-    setStatus('Operation failed.', 'error');
     console.error(err);
+    setStatus('Operation failed.', 'error');
   });
 }
 
