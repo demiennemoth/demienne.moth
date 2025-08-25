@@ -1,0 +1,9 @@
+# robots.txt for Night Broadcast (GitHub Pages)
+User-agent: *
+Allow: /
+
+Sitemap: https://demiennemoth.github.io/demienne.moth/sitemap.xml
+
+# Yandex-specific (optional):
+Host: demiennemoth.github.io
+Clean-param: ref /

@@ -1,0 +1,7 @@
+/* TEAM */
+Owner: Moth Demienne
+Website: Night Broadcast — demiennemoth.github.io/demienne.moth/
+Location: internet
+
+/* THANKS */
+Made with GitHub Pages + Firebase.

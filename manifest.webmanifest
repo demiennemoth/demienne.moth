@@ -1,0 +1,17 @@
+{
+  "name": "MOTHDEMIENNE.EXE — Night Broadcast",
+  "short_name": "NightCast",
+  "start_url": "/demienne.moth/",
+  "scope": "/demienne.moth/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000080",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
