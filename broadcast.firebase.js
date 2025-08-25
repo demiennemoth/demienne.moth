@@ -1,12 +1,9 @@
 // broadcast.firebase.js — feed shows only NON-EXPIRED posts
-// - Query: where('expiresAt','>=', now) + orderBy('expiresAt','asc') (no composite index)
-// - Render: same; placeholder: “It’s quiet here.”
-// - Cooldown/filters logic left intact
+// + Light anti-spam: cooldown, daily cap, honeypot, min page age, duplicate guard
 
 import {
   collection, addDoc, serverTimestamp, Timestamp,
-  query, orderBy, limit, onSnapshot, where,
-  writeBatch, doc
+  query, orderBy, limit, onSnapshot, where
 } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 import { db, auth } from './firebase.js';
 import { startFiltersWatcher, getFiltersOnce, applyFiltersToText } from './filters.js';
@@ -17,34 +14,42 @@ const sendBtn = document.getElementById('send');
 const msgEl = document.getElementById('msg');
 const nicknameEl = document.getElementById('nickname');
 const ttlEl = document.getElementById('ttl');
+const honeyEl = document.getElementById('website'); // honeypot (hidden)
 
-// --- Cooldown (5 seconds) ---
-const COOLDOWN_MS = 5000;
+// --- Anti-spam config ---
+const COOLDOWN_MS = 5000;                // 5s between sends
+const FIRST_MIN_PAGE_AGE_MS = 3000;      // first send allowed after 3s on page
+const DAILY_CAP = 60;                     // per-device cap per day
+const DUP_WINDOW_MS = 60 * 1000;          // don't allow identical text within 60s
+
+// helpers
 let uid = 'anon';
-function cooldownKey(){ return `nb_lastSend_${uid}`; }
 function now(){ return Date.now(); }
-function msLeft(){ const last = +(localStorage.getItem(cooldownKey())||0); return Math.max(0, COOLDOWN_MS - (now()-last)); }
-function armCooldown(){
-  localStorage.setItem(cooldownKey(), String(now()));
-  disableSend(msLeft());
+function todayKey(){
+  const d = new Date();
+  return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 }
+function lsGet(k, def){ try{ const v = localStorage.getItem(k); return v==null?def:JSON.parse(v);}catch{ return def; } }
+function lsSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch{} }
+function cdKey(){ return `nb_lastSend_${uid}`; }
+function dupKey(){ return `nb_lastText_${uid}`; }
+function cntKey(){ return `nb_cnt_${todayKey()}_${uid}`; }
+function msLeft(){ const last = +(localStorage.getItem(cdKey())||0); return Math.max(0, COOLDOWN_MS - (now()-last)); }
+function armCooldown(){ localStorage.setItem(cdKey(), String(now())); disableSend(msLeft()); }
 function disableSend(ms){
   if (!sendBtn) return;
   sendBtn.disabled = true;
   const orig = sendBtn.textContent || 'Send';
   const tick = () => {
     const left = msLeft();
-    if (left <= 0) {
-      sendBtn.disabled = false;
-      sendBtn.textContent = orig;
-      return;
-    }
+    if (left <= 0) { sendBtn.disabled = false; sendBtn.textContent = orig; return; }
     const s = Math.ceil(left/1000);
     sendBtn.textContent = `Wait ${s}s`;
     setTimeout(tick, 250);
   };
   tick();
 }
+// active cooldown on load
 setTimeout(()=>{ const left = msLeft(); if (left>0) disableSend(left); }, 0);
 
 // --- Toasts ---
@@ -77,7 +82,7 @@ function toast(msg, type='info'){
 const postsRef = collection(db, 'broadcast');
 startFiltersWatcher();
 
-function escapeHtml(s){ return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m])); }
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m])); }
 
 function renderMessages(items){
   if (!feed) return;
@@ -89,11 +94,7 @@ function renderMessages(items){
     const when = (it.createdAt?.toDate?.() || new Date()).toLocaleTimeString().slice(0,5);
     const nick = escapeHtml(it.nick || 'Guest');
     const txt = escapeHtml(it.text || '');
-    html += `<div class="row95${dim}">
-      <div class="meta">${when}<br><b>${nick}</b></div>
-      <div class="post-text">${txt}</div>
-      <div class="meta"></div>
-    </div>`;
+    html += `<div class="row95${dim}"><div class="meta">${when}<br><b>${nick}</b></div><div class="post-text">${txt}</div><div class="meta"></div></div>`;
   }
   feed.innerHTML = html || "<div class='row95'><div class='meta'></div><div class='post-text'>It’s quiet here.</div><div class='meta'></div></div>";
   feed.scrollTop = feed.scrollHeight;
@@ -102,78 +103,91 @@ function renderMessages(items){
 // Realtime: ONLY non-expired posts
 function subscribeFeed(){
   const nowTs = Timestamp.now();
-  const q = query(
-    postsRef,
-    where('expiresAt','>=', nowTs),
-    orderBy('expiresAt','asc'),
-    limit(200)
-  );
+  const q = query(postsRef, where('expiresAt','>=', nowTs), orderBy('expiresAt','asc'), limit(200));
   return onSnapshot(q, (snap) => {
-    const items = [];
-    snap.forEach(d => items.push({ id:d.id, ...d.data() }));
+    const items = []; snap.forEach(d => items.push({ id:d.id, ...d.data() }));
     renderMessages(items);
   }, (err) => console.warn('feed error', err));
 }
 let unsub = subscribeFeed();
-// resubscribe every minute to move the window
 setInterval(()=>{ try{ unsub && unsub(); }catch{} unsub = subscribeFeed(); }, 60*1000);
 
 // Track uid for cooldown key
 import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js').then(({onAuthStateChanged}) => {
   onAuthStateChanged(auth, (user) => {
     uid = (user && !user.isAnonymous) ? (user.uid || 'anon') : 'anon';
-    const left = msLeft();
-    if (left>0) disableSend(left);
+    const left = msLeft(); if (left>0) disableSend(left);
   });
 });
 
-// Send handler with cooldown
-sendBtn?.addEventListener('click', async () => {
-  if (msLeft() > 0) { toast('Not so fast — wait 5 seconds.', 'error'); return; }
+// Daily counter helpers
+function incDailyCount(){
+  const c = Number(localStorage.getItem(cntKey()) || '0') + 1;
+  localStorage.setItem(cntKey(), String(c));
+  return c;
+}
+function getDailyCount(){
+  return Number(localStorage.getItem(cntKey()) || '0');
+}
 
-  let text = (msgEl?.value || '').trim();
+// Send handler with anti-spam
+sendBtn?.addEventListener('click', async () => {
+  // honeypot: if filled — block
+  if (honeyEl && honeyEl.value && honeyEl.value.trim() !== '') { toast('Blocked (bot detected).', 'error'); return; }
+
+  // cool-down
+  if (msLeft() > 0) { toast('Not so fast — wait a few seconds.', 'error'); return; }
+
+  // first message must be after a tiny dwell time
+  const firstGateKey = `nb_first_ok_${uid}`;
+  if (!localStorage.getItem(firstGateKey)) {
+    const born = Number(document.body.getAttribute('data-page-born') || Date.now());
+    if (now() - born < FIRST_MIN_PAGE_AGE_MS) {
+      toast('One sec…', 'error'); return;
+    }
+    localStorage.setItem(firstGateKey, '1');
+  }
+
+  // daily per-device cap
+  if (getDailyCount() >= DAILY_CAP) { toast('Daily limit reached. Try tomorrow.', 'error'); return; }
+
+  // text sanitization
+  let text = (msgEl?.value || '').trim().slice(0, 600);
   const nick = (nicknameEl?.value || 'Guest').trim().slice(0, 20);
   if (!text) return;
+
+  // duplicate guard within 60s
+  const lastPack = lsGet(dupKey(), { t:0, v:'' });
+  if (lastPack && (now() - (lastPack.t||0) < DUP_WINDOW_MS) && (lastPack.v||'') === text) {
+    toast('Duplicate too soon.', 'error'); return;
+  }
 
   // Load filters and apply (client-side UX)
   const filters = await getFiltersOnce();
   const verdict = applyFiltersToText(text, filters);
-  if (!verdict.ok) {
-    toast('Message blocked by filter.', 'error');
-    return;
-  }
-  if (verdict.text !== text) {
-    text = verdict.text;
-  }
+  if (!verdict.ok) { toast('Message blocked by filter.', 'error'); return; }
+  if (verdict.text !== text) text = verdict.text;
 
   // TTL for message
   const minutes = Number(ttlEl?.value || 30);
   const expires = new Date(Date.now() + Math.max(1, Math.min(1440, minutes)) * 60 * 1000);
 
-  // Write batch: add post + update users/{uid}.lastWrite
   try {
-    const batch = writeBatch(db);
     const by = (auth.currentUser && !auth.currentUser.isAnonymous) ? (auth.currentUser.uid || null) : null;
 
-    const post = {
-      text,
-      nick,
-      by,
+    await addDoc(postsRef, {
+      text, nick, by,
       createdAt: serverTimestamp(),
       expiresAt: Timestamp.fromDate(expires)
-    };
-    const tempDoc = doc(collection(db, 'broadcast')); // precreate id
-    batch.set(tempDoc, post);
+    });
 
-    if (by) {
-      const uref = doc(db, 'users', by);
-      batch.set(uref, { lastWrite: serverTimestamp() }, { merge: true });
-    }
-
-    await batch.commit();
+    // commit anti-spam bookkeeping
     armCooldown();
+    localStorage.setItem(dupKey(), JSON.stringify({ t: now(), v: text }));
+    const c = incDailyCount();
+
     if (msgEl) msgEl.value = '';
-    toast('Sent.', 'ok');
+    toast(`Sent. (${c}/${DAILY_CAP} today)`, 'ok');
   } catch (e) {
     console.error('send error', e);
     toast('Failed to send.', 'error');
@@ -182,8 +196,5 @@ sendBtn?.addEventListener('click', async () => {
 
 // Enter to send
 msgEl?.addEventListener('keydown', (e) => {
-  if (e.key === 'Enter' && !e.shiftKey) {
-    e.preventDefault();
-    sendBtn?.click();
-  }
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendBtn?.click(); }
 });
