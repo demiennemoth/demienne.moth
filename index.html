@@ -59,11 +59,14 @@
     .status95{ padding:3px 6px; line-height:1.2; }
     .status95 + .status95{ margin-top:2px; }
 
-    /* Honeypot — visible только ботам-формам */
     .hp-field{ position:absolute !important; left:-10000px !important; top:auto !important; width:1px; height:1px; overflow:hidden; }
+
+    /* subtle underline for footer link inside 95 UI */
+    .status95 a{ color:#000; text-decoration: underline; }
+    .status95 a:hover{ text-decoration: none; }
   </style>
 </head>
-<body class="win95-bg" data-page-born="1756121969388">
+<body class="win95-bg">
   <div class="window95">
     <div class="titlebar95">
       <div class="icon"></div>
@@ -126,6 +129,11 @@
       </div>
       <div class="status95" style="font-size:12px;">
         If you feel lonely or heavy‑hearted — say it. Someone here is listening.
+      </div>
+      <!-- Contact / report footer -->
+      <div class="status95" style="font-size:12px;">
+        Feedback, reports or suggestions — email: 
+        <a href="mailto:demienne.moth@gmail.com?subject=Night%20Broadcast%20feedback">demienne.moth@gmail.com</a>
       </div>
     </div>
   </div>
