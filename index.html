@@ -66,7 +66,19 @@
     /* subtle underline for footer link inside 95 UI */
     .status95 a{ color:#000; text-decoration: underline; }
     .status95 a:hover{ text-decoration: none; }
-  </style>
+  
+#secret-admin {
+  position: fixed;
+  bottom: 2px;
+  right: 2px;
+  width: 2px;
+  height: 2px;
+  background: transparent;
+  z-index: 99999;
+  cursor: default;
+}
+
+</style>
 </head>
 <body class="win95-bg">
   <div class="window95">
@@ -80,7 +92,7 @@
     </div>
 
     <div class="menubar95" style="gap:6px; padding:3px 4px;">
-      <button id="menu-admin" class="btn95 menubtn95" title="Login as admin / open panel">Admin</button>
+      <div id="secret-admin"></div>
     </div>
 
     <div class="toolbar95" style="justify-content:space-between;">
@@ -148,5 +160,17 @@
   <script type="module" src="admin-menu.js"></script>
   <script type="module" src="filters.js"></script>
   <script type="module" src="broadcast.firebase.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", ()=>{
+  const secret = document.getElementById("secret-admin");
+  if(secret){
+    secret.addEventListener("click", ()=>{
+      window.location.href = "admin-login.html";
+    });
+  }
+});
+</script>
+
 </body>
 </html>
