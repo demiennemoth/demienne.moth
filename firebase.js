@@ -10,7 +10,7 @@ const firebaseConfig = {
   apiKey: "AIzaSyD0cCiWsbsYidFXgzmPmPlQ1CbDZ0aWfqY",
   authDomain: "mothdemienne.firebaseapp.com",
   projectId: "mothdemienne",
-  storageBucket: "mothdemienne.firebasestorage.app",
+  storageBucket: "mothdemienne.appspot.com",
   messagingSenderId: "199511653439",
   appId: "1:199511653439:web:e659bc721c660d9340cc8a"
 };
