@@ -45,7 +45,7 @@
       localStorage.setItem(LS, JSON.stringify(all));
     }catch(e){}
   }
-  function esc(s){ return s.replace(/[&<>\"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;','\\'':'&#39;'}[m])); }
+  function esc(s){ return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }[m])); }
 
   function addMessage(mask, text){
     const list = load();
