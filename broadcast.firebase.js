@@ -59,6 +59,8 @@ function toast(msg, type='info'){
   if (!el) {
     el = document.createElement('div');
     el.id = 'nb_toast';
+    el.setAttribute('role','status');
+    el.setAttribute('aria-live','polite');
     el.style.position = 'fixed';
     el.style.bottom = '16px';
     el.style.left = '50%';
@@ -141,7 +143,8 @@ sendBtn?.addEventListener('click', async () => {
   // first message must be after a tiny dwell time
   const firstGateKey = `nb_first_ok_${uid}`;
   if (!localStorage.getItem(firstGateKey)) {
-    const born = Number(document.body.getAttribute('data-page-born') || Date.now());
+    const bornAttr = document.body.getAttribute('data-page-born');
+    const born = Number(bornAttr ? bornAttr : (Date.now() - FIRST_MIN_PAGE_AGE_MS - 1));
     if (now() - born < FIRST_MIN_PAGE_AGE_MS) {
       toast('One sec…', 'error'); return;
     }
@@ -198,3 +201,35 @@ sendBtn?.addEventListener('click', async () => {
 msgEl?.addEventListener('keydown', (e) => {
   if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendBtn?.click(); }
 });
+
+
+// === Session date + until-dawn timer ===
+(function(){
+  const leftEl = document.getElementById('left');
+  const sessionEl = document.getElementById('sessionLabel');
+  function nextDawnMs(now=new Date()){
+    const n = new Date(now);
+    const target = new Date(n);
+    target.setHours(6,0,0,0);
+    if (n >= target) target.setDate(target.getDate()+1);
+    return target.getTime();
+  }
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function format(ms){
+    const s = Math.max(0, Math.floor(ms/1000));
+    const h = Math.floor(s/3600);
+    const m = Math.floor((s%3600)/60);
+    const sec = s%60;
+    return `${pad(h)}:${pad(m)}:${pad(sec)}`;
+  }
+  function todayKey(){
+    const d = new Date();
+    return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  }
+  function tick(){
+    if (leftEl) leftEl.textContent = format(nextDawnMs()-Date.now());
+    if (sessionEl) sessionEl.textContent = todayKey();
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
