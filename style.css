@@ -588,3 +588,9 @@ select.input95 {
 .rules95 li{ padding:4px 0; border-bottom:1px dashed #b7b7b7; }
 .rules95 li:last-child{ border-bottom:none; }
 .rules95 .tag{ display:inline-block; font-weight:bold; padding:0 6px; margin-right:6px; background:#000080; color:#fff; border:1px solid #ffffff; }
+
+
+/* === Cursor UX fixes === */
+body { cursor: url('images/cursor.png'), auto; }
+input, textarea { cursor: text !important; }
+button, [role="button"], a { cursor: pointer !important; }
