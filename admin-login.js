@@ -1,3 +1,4 @@
+
 // admin-login.js (Win95 status bar style) — hardened
 import { auth } from './firebase.js';
 import { onAuthStateChanged, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
