@@ -1,3 +1,4 @@
+
 // broadcast.js — Night Broadcast for Win95 skin (no dependencies)
 (function(){
   const feed = document.getElementById('feed');
@@ -45,7 +46,27 @@
       localStorage.setItem(LS, JSON.stringify(all));
     }catch(e){}
   }
-  function esc(s){ return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }[m])); }
+  /**
+   * Escape HTML special characters in a string.
+   * Converts &, <, >, " and ' into their corresponding HTML entities to prevent
+   * injection issues when inserting user‑supplied text into the DOM.
+   *
+   * @param {string} s The input string to escape.
+   * @returns {string} The escaped string.
+   */
+  function esc(s) {
+    // Coerce non‑string values to a string to avoid runtime errors.
+    return String(s).replace(/[&<>"']/g, (ch) => {
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      };
+      return map[ch] || ch;
+    });
+  }
 
   function addMessage(mask, text){
     const list = load();
