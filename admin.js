@@ -1,3 +1,4 @@
+
 // admin.js — secure admin panel logic (ESM)
 import { db, auth } from './firebase.js';
 import {
@@ -83,10 +84,12 @@ function startFeed(){
       delBtn.textContent = 'Del';
       delBtn.title = 'Delete message';
       delBtn.addEventListener('click', async () => {
+        // Confirm deletion
         const ok = confirm('Delete this record?');
         if (!ok) return;
         try {
-          await deleteDoc(doc(db, 'broadcast', docSnap.id));
+          // Use the snapshot's ref to ensure we delete the exact document
+          await deleteDoc(docSnap.ref);
           setStatus('Record removed.', 'ok');
         } catch (e) {
           console.error(e);
