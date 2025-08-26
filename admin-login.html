@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <title>ADMIN-LOGIN.EXE</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://www.gstatic.com">
+<link rel="stylesheet" href="style.css" />
   <style>
     .login-form95 { padding:8px; background:var(--95-light); border:1px solid var(--95-white);
       border-right-color:var(--95-dark); border-bottom-color:var(--95-dark); }
@@ -28,10 +30,10 @@
           <span id="authStatus" style="color:#000;">Guest</span>
         </div>
         <label for="email" style="color:#000;">E-mail</label>
-        <input id="email" class="input95" type="email" placeholder="you@example.com" />
+        <input id="email" class="input95" type="email" placeholder="you@example.com" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" required />
 
         <label for="password" style="color:#000;">Password</label>
-        <input id="password" class="input95" type="password" placeholder="••••••••" />
+        <input id="password" class="input95" type="password" placeholder="••••••••" autocomplete="current-password" autocapitalize="off" spellcheck="false" required />
 
         <div class="row95" style="justify-content:flex-end;">
           <button class="btn95" id="doLogin">Log in</button>
