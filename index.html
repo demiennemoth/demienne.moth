@@ -1,8 +1,11 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  <!-- Ensure proper scaling on mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MOTHDEMIENNE.EXE — Night Broadcast</title>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
 <link rel="dns-prefetch" href="https://www.gstatic.com">
@@ -66,6 +69,51 @@
     /* subtle underline for footer link inside 95 UI */
     .status95 a{ color:#000; text-decoration: underline; }
     .status95 a:hover{ text-decoration: none; }
+
+    /* Responsive adjustments for small screens */
+    @media (max-width: 600px) {
+      /* Expand the window to full width and remove margins */
+      :root {
+        --window-max-width: 100%;
+        --outer-margin: 0;
+      }
+      html, body {
+        overflow-y: auto;
+      }
+      .window95 {
+        max-width: none;
+        margin: 0;
+        height: auto;
+        min-height: 100vh;
+      }
+      /* Stack menu and toolbar vertically on small screens */
+      .menubar95,
+      .toolbar95 {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 6px;
+      }
+      .toolbar95 > div,
+      .toolbar95 select,
+      .toolbar95 input {
+        width: 100% !important;
+      }
+      /* Collapse table rows into single column */
+      .row95 {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .feed95 {
+        max-height: none;
+        height: auto;
+      }
+      .titlebar95 .title {
+        font-size: 14px;
+      }
+      .badge95 {
+        font-size: 10px;
+      }
+    }
   </style>
 </head>
 <body class="win95-bg">
