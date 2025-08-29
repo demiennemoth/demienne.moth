@@ -1,3 +1,4 @@
+
 // broadcast.firebase.js — feed shows only NON-EXPIRED posts
 // + Light anti-spam: cooldown, daily cap, honeypot, min page age, duplicate guard
 
@@ -178,11 +179,18 @@ sendBtn?.addEventListener('click', async () => {
   try {
     const by = (auth.currentUser && !auth.currentUser.isAnonymous) ? (auth.currentUser.uid || null) : null;
 
-    await addDoc(postsRef, {
-      text, nick, by,
+    // Build payload dynamically; omit the "by" field when it's null (e.g. anonymous users)
+    const payload = {
+      text,
+      nick,
       createdAt: serverTimestamp(),
       expiresAt: Timestamp.fromDate(expires)
-    });
+    };
+    if (by) {
+      payload.by = by;
+    }
+
+    await addDoc(postsRef, payload);
 
     // commit anti-spam bookkeeping
     armCooldown();
