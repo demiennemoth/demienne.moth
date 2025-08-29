@@ -1,12 +1,12 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>MOTHDEMIENNE.EXE — Night Broadcast</title>
   <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://www.gstatic.com">
-  <!-- === SEO START === -->
+<link rel="dns-prefetch" href="https://www.gstatic.com">
+<!-- === SEO START === -->
   <link rel="canonical" href="https://demiennemoth.github.io/demienne.moth/"/>
   <meta name="title" content="MOTHDEMIENNE.EXE — Night Broadcast">
   <meta name="description" content="A retro-styled night broadcast. Messages fade in minutes and reset at dawn. Drop a line if you’re awake.">
@@ -15,14 +15,14 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://demiennemoth.github.io/demienne.moth/">
   <meta property="og:title" content="MOTHDEMIENNE.EXE — Night Broadcast">
-  <meta property="og:description" content="A retro-styled night broadcast. Messages fade in minutes and disappear by ~30.">
-  <meta property="og:image" content="https://demiennemoth.github.io/demienne.moth/favicon.ico">
+  <meta property="og:description" content="A retro-styled night broadcast. Messages fade in minutes and reset at dawn.">
+  <meta property="og:image" content="https://demiennemoth.github.io/demienne.moth/favicon.svg">
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="MOTHDEMIENNE.EXE — Night Broadcast">
   <meta name="twitter:description" content="A retro-styled night broadcast. Messages fade in minutes and reset at dawn.">
-  <meta name="twitter:image" content="https://demiennemoth.github.io/demienne.moth/favicon.ico">
+  <meta name="twitter:image" content="https://demiennemoth.github.io/demienne.moth/favicon.svg">
   <link rel="manifest" href="manifest.webmanifest">
-  <link rel="icon" href="favicon.ico">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
@@ -66,17 +66,6 @@
     /* subtle underline for footer link inside 95 UI */
     .status95 a{ color:#000; text-decoration: underline; }
     .status95 a:hover{ text-decoration: none; }
-  
-    #secret-admin {
-      position: fixed;
-      bottom: 4px;
-      right: 4px;
-      width: 14px;
-      height: 14px;
-      background: transparent;
-      z-index: 99999;
-      cursor: pointer;
-    }
   </style>
 </head>
 <body class="win95-bg">
@@ -91,14 +80,8 @@
     </div>
 
     <div class="menubar95" style="gap:6px; padding:3px 4px;">
-      <div id="secret-admin" aria-hidden="true"></div>
+      <button id="menu-admin" class="btn95 menubtn95" title="Login as admin / open panel">Admin</button>
     </div>
-
-    <noscript>
-      <div class="status95" style="font-size:12px; color:#000; padding:8px;">
-        This site needs JavaScript to run. Please enable it to use the Night Broadcast.
-      </div>
-    </noscript>
 
     <div class="toolbar95" style="justify-content:space-between;">
       <div>Nick:&nbsp;
@@ -161,21 +144,9 @@
   document.addEventListener("DOMContentLoaded", ()=>{
     document.body.setAttribute("data-page-born", String(Date.now()));
   });
-  </script>
+</script>
   <script type="module" src="admin-menu.js"></script>
   <script type="module" src="filters.js"></script>
   <script type="module" src="broadcast.firebase.js"></script>
-
-  <script>
-  document.addEventListener("DOMContentLoaded", ()=>{
-    const secret = document.getElementById("secret-admin");
-    if(secret){
-      secret.addEventListener("click", ()=>{
-        window.location.href = "admin-login.html";
-      });
-    }
-  });
-  </script>
-
 </body>
 </html>
