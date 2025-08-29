@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -121,6 +119,12 @@
       #nickname {
         max-width: 180px;
         width: 100%;
+      }
+
+      /* Allow the session and countdown row to wrap on small screens so badges don't overflow */
+      .toolbar95 > div:last-child {
+        flex-wrap: wrap;
+        gap: 4px;
       }
     }
   </style>
